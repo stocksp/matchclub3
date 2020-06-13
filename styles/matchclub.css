@@ -1,0 +1,26 @@
+.dayz.month .days .day .event {
+  height: 80px;
+}
+.currentUser {
+  color: crimson;
+}
+.formError {
+  background-color: crimson;
+  color: white;
+}
+.tinyIcon{
+  font-size: 20px;
+}
+.mediumIcon{
+  font-size: 30px;
+}
+.calendarDate{
+  font-size: 20px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+.btn-primary {
+  color: rgb(255, 217, 0);
+  font-weight: bold;
+  margin: 3px;
+}
