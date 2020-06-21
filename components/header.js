@@ -55,7 +55,7 @@ const Header = () => {
   return (
     <div
       style={{
-        marginBottom: "5%",
+        marginBottom: "1%",
       }}
     >
       <Head>

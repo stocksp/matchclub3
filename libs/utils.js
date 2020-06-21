@@ -259,17 +259,17 @@ function SimpleCard(props) {
     borderRadius: "3px",
     backgroundColor: "gold",
     color: "Black",
-    cursor: "pointer",
+    cursor: "crosshair",
   };
   return (
     <Card>
       <Card.Header
-        style={{ padding: "0.1rem", backgroundColor: "lightblue" }}
+        style={{ padding: "0.1rem", backgroundColor: "lightblue", cursor: "pointer" }}
         as="h6"
       >
         <small>{theHour}</small>
       </Card.Header>
-      <Card.Body style={{ padding: "10px 10px", background: "aqua" }}>
+      <Card.Body style={{ padding: "10px 10px", background: "aqua", cursor: "pointer"  }}>
         <Card.Subtitle style={styles} className="mb-2 text-muted">
           <strong>{host}</strong> hosting
         </Card.Subtitle>
