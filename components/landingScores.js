@@ -35,7 +35,7 @@ const LandingScores = () => {
           as="select"
           custom
           onChange={handleChange}
-          style={{ width: "40%" }}
+          style={{ width: "50%", marginTop: "6px", marginBottom: "6px" }}
         >
           {theDates.map((d, i) => {
             const teamRes = highScores.dateResults.find(
@@ -51,64 +51,82 @@ const LandingScores = () => {
             );
           })}
         </Form.Control>
-        <Row md={2}>
-          <Tab.Container defaultActiveKey="#link1">
-            <Row md={2}>
-              <Col md={4}>
-                <ListGroup>
-                  <ListGroup.Item action href="#link1">
-                    High Game
-                  </ListGroup.Item>
-                  <ListGroup.Item action href="#link2">
-                    High Series
-                  </ListGroup.Item>
-                </ListGroup>
-              </Col>
-              <Col md={8}>
-                <Tab.Content>
-                  <Tab.Pane eventKey="#link1">
-                    {theData.data.scratchGame.map((b, i) => (
-                      <div key={i}>{`${b.alias} ${b.score}`}</div>
-                    ))}
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="#link2">
-                    {theData.data.scratchSeries.map((b, i) => (
-                      <div key={i}>{`${b.alias} ${b.score}`}</div>
-                    ))}
-                  </Tab.Pane>
-                </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-          <Tab.Container defaultActiveKey="#link3">
-            <Row md={2}>
-              <Col md={5}>
-                <ListGroup>
-                  <ListGroup.Item action href="#link3">
-                    High Game Handi
-                  </ListGroup.Item>
-                  <ListGroup.Item action href="#link4">
-                    High Series Handi
-                  </ListGroup.Item>
-                </ListGroup>
-              </Col>
-              <Col md={7}>
-                <Tab.Content>
-                  <Tab.Pane eventKey="#link3">
-                    {theData.data.handiGame.map((b, i) => (
-                      <div key={i}>{`${b.alias} ${b.score}`}</div>
-                    ))}
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="#link4">
-                    {theData.data.handiSeries.map((b, i) => (
-                      <div key={i}>{`${b.alias} ${b.score}`}</div>
-                    ))}
-                  </Tab.Pane>
-                </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-        </Row>
+        <div className="landingScores">
+          <Row md={2}>
+            <Tab.Container defaultActiveKey="#link1">
+              <Row md={2}>
+                <Col md={4}>
+                  <ListGroup>
+                    <ListGroup.Item
+                      action
+                      href="#link1"
+                      class="list-group-item"
+                    >
+                      🔥 High Game
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      action
+                      href="#link2"
+                      class="list-group-item"
+                    >
+                      🔥 High Series
+                    </ListGroup.Item>
+                  </ListGroup>
+                </Col>
+                <Col md={8}>
+                  <Tab.Content>
+                    <Tab.Pane eventKey="#link1">
+                      {theData.data.scratchGame.map((b, i) => (
+                        <div key={i}>{`${b.alias} ${b.score}`}</div>
+                      ))}
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="#link2">
+                      {theData.data.scratchSeries.map((b, i) => (
+                        <div key={i}>{`${b.alias} ${b.score}`}</div>
+                      ))}
+                    </Tab.Pane>
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container>
+            <Tab.Container defaultActiveKey="#link3">
+              <Row md={2}>
+                <Col md={5}>
+                  <ListGroup>
+                    <ListGroup.Item
+                      action
+                      href="#link3"
+                      class="list-group-item"
+                    >
+                      🔥 High Game Handi
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      action
+                      href="#link4"
+                      class="list-group-item"
+                    >
+                      🔥 High Series Handi
+                    </ListGroup.Item>
+                  </ListGroup>
+                </Col>
+                <Col md={7}>
+                  <Tab.Content>
+                    <Tab.Pane eventKey="#link3">
+                      {theData.data.handiGame.map((b, i) => (
+                        <div key={i}>{`${b.alias} ${b.score}`}</div>
+                      ))}
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="#link4">
+                      {theData.data.handiSeries.map((b, i) => (
+                        <div key={i}>{`${b.alias} ${b.score}`}</div>
+                      ))}
+                    </Tab.Pane>
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container>
+          </Row>
+        </div>
       </>
     );
   } else return null;

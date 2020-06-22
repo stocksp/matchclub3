@@ -49,7 +49,7 @@ const Index = () => {
     if (resp.message === "aok") {
       setFooterText("Update Successful!");
     } else {
-      setFooterText("Huston we had a problem!!");
+      setFooterText("Houston we had a problem!!");
     }
     getSquad(dateSelected);
   };
