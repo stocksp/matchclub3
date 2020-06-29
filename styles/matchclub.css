@@ -45,8 +45,8 @@
   margin-left: 0
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1025px) {
   #landingScores select {
-    width: 50%;
+    width: 60%;
   }
 }
