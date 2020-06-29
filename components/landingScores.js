@@ -51,7 +51,7 @@ const LandingScores = () => {
             );
           })}
         </Form.Control>
-        <Row sm={1} md={2}>
+        <Row sm={1} lg={2}>
         <Tab.Container defaultActiveKey="#link1">
               <Row md={2}>
                 <Col md={4}>
