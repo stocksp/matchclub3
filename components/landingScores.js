@@ -30,12 +30,12 @@ const LandingScores = () => {
       (r) => r.dateId === (dateId ? dateId : theDateId)
     );
     return (
-      <>
+      <div id="landingScores">
         <Form.Control
           as="select"
           custom
           onChange={handleChange}
-          style={{ width: "50%", marginTop: "6px", marginBottom: "6px" }}
+          
         >
           {theDates.map((d, i) => {
             const teamRes = highScores.dateResults.find(
@@ -51,9 +51,8 @@ const LandingScores = () => {
             );
           })}
         </Form.Control>
-        <div className="landingScores">
-          <Row md={2}>
-            <Tab.Container defaultActiveKey="#link1">
+        <Row sm={1} md={2}>
+        <Tab.Container defaultActiveKey="#link1">
               <Row md={2}>
                 <Col md={4}>
                   <ListGroup>
@@ -91,25 +90,26 @@ const LandingScores = () => {
             </Tab.Container>
             <Tab.Container defaultActiveKey="#link3">
               <Row md={2}>
-                <Col md={5}>
+                <Col md={4}>
                   <ListGroup>
                     <ListGroup.Item
                       action
                       href="#link3"
                       class="list-group-item"
                     >
-                      🔥 High Game Handi
+                      🔥 Hi Game Handi
                     </ListGroup.Item>
                     <ListGroup.Item
                       action
                       href="#link4"
                       class="list-group-item"
                     >
-                      🔥 High Series Handi
+                      🔥 Hi Seri
+                      es Handi
                     </ListGroup.Item>
                   </ListGroup>
                 </Col>
-                <Col md={7}>
+                <Col md={8}>
                   <Tab.Content>
                     <Tab.Pane eventKey="#link3">
                       {theData.data.handiGame.map((b, i) => (
@@ -125,9 +125,8 @@ const LandingScores = () => {
                 </Col>
               </Row>
             </Tab.Container>
-          </Row>
-        </div>
-      </>
+        </Row>
+      </div>
     );
   } else return null;
 };
