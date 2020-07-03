@@ -24,7 +24,7 @@ const Header = () => {
   const {
     currentDate,
     setCurrentDate,
-    currentUser,
+    user,
     doLoggin,
     active,
   } = useStoreContext();
@@ -44,7 +44,7 @@ const Header = () => {
   const handleLogin = () => {
     console.log("handle login");
 
-    if (currentUser) {
+    if (user) {
       doLoggin();
     } else {
       setShowLogin(true);
@@ -90,7 +90,7 @@ const Header = () => {
         </span>
         <span>
           <Button variant="primary" onClick={handleLogin}>
-            {currentUser ? currentUser.alias + " (log out)" : "log in"}
+            {user ? user.alias + " (log out)" : "log in"}
           </Button>
         </span>
       </div>
@@ -111,16 +111,16 @@ const Header = () => {
             <Link href="/memberStats" passHref>
               <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
             </Link>
-            {currentUser && (
+            {user && (
               <Link
                 href="/member/[id]"
-                as={`/member/${currentUser.memberId}`}
+                as={`/member/${user.memberId}`}
                 passHref
               >
                 <Nav.Link eventKey="member">Your Stuff</Nav.Link>
               </Link>
             )}
-            {currentUser && currentUser.role === "admin" && (
+            {user && user.role === "admin" && (
               <Link href="/admin/games" passHref>
                 <Nav.Link>ADMIN</Nav.Link>
               </Link>

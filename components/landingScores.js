@@ -59,14 +59,14 @@ const LandingScores = () => {
                     <ListGroup.Item
                       action
                       href="#link1"
-                      class="list-group-item"
+                      className="list-group-item"
                     >
                       🔥 High Game
                     </ListGroup.Item>
                     <ListGroup.Item
                       action
                       href="#link2"
-                      class="list-group-item"
+                      className="list-group-item"
                     >
                       🔥 High Series
                     </ListGroup.Item>
@@ -95,14 +95,14 @@ const LandingScores = () => {
                     <ListGroup.Item
                       action
                       href="#link3"
-                      class="list-group-item"
+                      className="list-group-item"
                     >
                       🔥 Hi Game Handi
                     </ListGroup.Item>
                     <ListGroup.Item
                       action
                       href="#link4"
-                      class="list-group-item"
+                      className="list-group-item"
                     >
                       🔥 Hi Seri
                       es Handi

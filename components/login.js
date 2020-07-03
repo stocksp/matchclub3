@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useStoreContext } from "./Store";
 
 const SignupSchema = Yup.object().shape({
-  password: Yup.string().min(4, "Too Short!").required("Required"),
+  //password: Yup.string().min(4, "Too Short!").required("Required"),
   email: Yup.string().email("Invalid email").required("Required"),
 });
 
@@ -17,22 +17,22 @@ const Login = (props) => {
     props.setShow(false);
   };
 
-  const onSubmit = async (data) => {
-    setfailedLogin(false);
-    console.log("submitting", JSON.stringify(data));
-    try {
-      const resp = await doLoggin(data.email, data.password);
+  // const onSubmit = async (data) => {
+  //   setfailedLogin(false);
+  //   console.log("submitting", JSON.stringify(data));
+  //   try {
+  //     const resp = await doLoggin(data.email);
 
-      console.log("onSubmit", resp);
-      if (resp.code == "auth/user-not-found") {
-        setfailedLogin(true);
-      } else {
-        handleClose();
-      }
-    } catch (e) {
-      console.log("error in doLoggin", e);
-    }
-  };
+  //     console.log("onSubmit", resp);
+  //     if (resp.code == "auth/user-not-found") {
+  //       setfailedLogin(true);
+  //     } else {
+  //       handleClose();
+  //     }
+  //   } catch (e) {
+  //     console.log("error in doLoggin", e);
+  //   }
+  // };
 
   return (
     <Formik
@@ -44,7 +44,7 @@ const Login = (props) => {
       onSubmit={async (values, { setSubmitting, setErrors, resetForm }) => {
         // same shape as initial values
         console.log(values);
-        const resp = await doLoggin(values.email, values.password);
+        const resp = await doLoggin(values.email);
         console.log(resp);
         if (resp.user) {
           // try {
@@ -57,7 +57,7 @@ const Login = (props) => {
           //   console.log("token error", e);
           // }
           delete values.email;
-          delete values.password;
+          //delete values.password;
           props.setShow(false);
           return;
         } else {
@@ -101,22 +101,7 @@ const Login = (props) => {
                   className="formError"
                 />
               </Form.Group>
-              <Form.Group controlId="password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  name="password"
-                  type="password"
-                  placeholder="Enter password"
-                  onChange={handleChange}
-                  value={values.password}
-                  onBlur={handleBlur}
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="formError"
-                />
-              </Form.Group>
+              
               <ButtonToolbar className="justify-content-between">
                 <Button variant="secondary" onClick={handleClose}>
                   CANCEL
