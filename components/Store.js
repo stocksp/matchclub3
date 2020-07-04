@@ -9,6 +9,7 @@ import useSWR from "swr";
 
 function fetcher(route) {
   /* our token cookie gets sent with this request */
+  console.log("fetcher", route);
   return fetch(route)
     .then((r) => r.ok && r.json())
     .then((user) => user || null);
@@ -18,6 +19,13 @@ function useAuth() {
   const { data: user, error, mutate } = useSWR("/api/user", fetcher);
   const loading = user === undefined;
 
+  if (user) {
+    user.logout = async () => {
+      await mutate(fetch("/api/logout"));
+      //Router.push("/");
+    };
+  }
+
   return {
     user,
     loading,
@@ -26,7 +34,6 @@ function useAuth() {
 }
 
 function useStore() {
-  const [currentUser, setCurrentUser] = useState(null);
   const [currentDate, setCurrentDate] = useState(moment());
   const [active, setActive] = useState("0");
   const [dates, setDates] = useState([]);
@@ -53,64 +60,14 @@ function useStore() {
     getDates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const doAuthChange = async (user) => {
-    console.log("user is", user ? `${user.email}` : "null");
-    if (user) {
-      const memberId = localStorage.getItem("memberId");
-      const alias = localStorage.getItem("alias");
-      const role = localStorage.getItem("role");
-      if (memberId && alias && role) {
-        user.memberId = parseInt(memberId);
-        user.alias = alias;
-        user.role = role;
 
-        setCurrentUser(user);
-        setStoreLoaded(true);
-        // testing here
-        // const token = await user.getIdToken();
-        // const myHeaders = new Headers({
-        //   "Content-Type": "application/json",
-        //   Authorization: token
-        // });
-        // console.log(token);
-
-        // const rep = await getData(`http://localhost:8080/test`, myHeaders);
-
-        // console.log("resp", rep);
-      } else {
-        const response = await fetch("/api/getMemberId?email=" + user.email);
-
-        const myJson = await response.json();
-        user.memberId = myJson.id;
-        user.alias = myJson.alias;
-        user.role = myJson.role;
-        localStorage.setItem("memberId", myJson.id);
-        localStorage.setItem("alias", myJson.alias);
-        localStorage.setItem("role", myJson.role);
-        setCurrentUser(user);
-        setStoreLoaded(true);
-      }
-    } else {
-      localStorage.removeItem("memberId");
-      localStorage.removeItem("alias");
-      localStorage.removeItem("role");
-      setCurrentUser(user);
-      setStoreLoaded(true);
-      Router.push("/");
-    }
-  };
   const doLoggin = async (email) => {
-    if (currentUser) {
+    if (user) {
       setActive("0");
-      //firebase.auth().signOut();
+      user.logout();
       return;
     }
     try {
-      const response = await fetch(
-        `/api/getData?name=emailExists&email=${email}`
-      );
-      const myJson = await response.json();
-      if (!myJson.member) return false;
       const did = await new Magic(
         process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
       ).auth.loginWithMagicLink({ email });
@@ -444,7 +401,6 @@ function useStore() {
     getDates,
     hasDates,
     dates,
-    currentUser,
     currentDate,
     setCurrentDate,
     active,

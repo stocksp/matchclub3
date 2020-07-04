@@ -1,7 +1,7 @@
 .dayz.month .days .day .event {
   height: 80px;
 }
-.currentUser {
+.user {
   color: crimson;
 }
 .formError {

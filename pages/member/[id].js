@@ -11,12 +11,12 @@ export default function Member() {
   const {
     setActive,
     getMemberData,
-    currentUser,
+    user,
     updateMember,
   } = useStoreContext();
   useEffect(() => {
     setActive("member");
-    if (currentUser) {
+    if (user) {
       const fetchData = async () => {
         const member = await getMemberData(parseInt(id));
         // fix reminders
@@ -32,7 +32,7 @@ export default function Member() {
       };
       fetchData();
     }
-  }, [currentUser]);
+  }, [user]);
 
   const [member, setMember] = useState(null);
 

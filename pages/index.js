@@ -13,7 +13,7 @@ import LandingScores from "components/landingScores";
 
 const Index = () => {
   const {
-    currentUser,
+    user,
     currentDate,
     dates,
     hasDates,
@@ -42,8 +42,8 @@ const Index = () => {
     const resp = await doSquadAction(
       action,
       dateSelected,
-      currentUser.memberId,
-      currentUser.alias
+      user.memberId,
+      user.alias
     );
     console.log(resp);
     if (resp.message === "aok") {
@@ -71,7 +71,7 @@ const Index = () => {
       matchDate.diff(moment().add(3, "hours")) > 0 ? true : false;
     console.log("after", afterMatch);
     setIsAfter(afterMatch);
-    if (currentUser || !afterMatch) {
+    if (user || !afterMatch) {
       setDateSelected(event.data.dateId);
       getSquad(event.data.dateId);
     } else {
@@ -93,8 +93,8 @@ const Index = () => {
     let actionStr = "";
     // see if the current user is in the squad
     // so we can determine sign up or remove
-    if (currentUser && hasSquad) {
-      const found = squad.find((m) => m.id === currentUser.memberId);
+    if (user && hasSquad) {
+      const found = squad.find((m) => m.id === user.memberId);
       if (found) actionStr = "Remove Me";
       else actionStr = "Sign me up!";
     }
@@ -121,7 +121,7 @@ const Index = () => {
               <Button variant="secondary" onClick={handleClose}>
                 CLOSE
               </Button>
-              {isAfter && currentUser && (
+              {isAfter && user && (
                 <Button
                   variant="primary"
                   onClick={() => handleSquadAction(actionStr)}

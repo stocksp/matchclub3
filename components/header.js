@@ -13,10 +13,8 @@ const navbar = {
 };
 const datebar = {
   backgroundColor: "lightblue",
-  padding: "2px"
+  padding: "2px",
 };
-
-
 
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -45,7 +43,7 @@ const Header = () => {
     console.log("handle login");
 
     if (user) {
-      doLoggin();
+      user.logout();
     } else {
       setShowLogin(true);
     }
@@ -78,15 +76,16 @@ const Header = () => {
               today
             </Button>
             <Button variant="primary" onClick={previoustMonth}>
-            ☜
+              ☜
             </Button>
             <Button variant="primary" onClick={nextMonth}>
-            ☞
+              ☞
             </Button>
           </span>
         )}
         <span className="calendarDate">
-        {" "}{currentDate.format("MMMM YYYY")}{" "}
+          {" "}
+          {currentDate.format("MMMM YYYY")}{" "}
         </span>
         <span>
           <Button variant="primary" onClick={handleLogin}>

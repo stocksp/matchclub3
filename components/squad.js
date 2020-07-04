@@ -15,11 +15,11 @@ const makeChunks = (arr, size) => {
 };
 
 const Squad = (props) => {
-  const { currentUser, hasSquad, squad, dates } = useStoreContext();
+  const { user, hasSquad, squad, dates } = useStoreContext();
   const theDate = dates.find((d) => d.dateId === props.date);
 
   const theData = makeChunks(squad, 4);
-  //const hasUser = currentUser && squad.find(b => b.id === currentUser.memberId);
+  //const hasUser = user && squad.find(b => b.id === user.memberId);
   return (
     <Table striped bordered hover>
       <tbody>
@@ -32,16 +32,16 @@ const Squad = (props) => {
                       <td
                         key={i}
                         style={
-                          d.id === (currentUser && currentUser.memberId)
+                          d.id === (user && user.memberId)
                             ? { color: "crimson" }
                             : null
                         }
                         className={
                           d.pos > theDate.teamsizemax &&
-                          d.id === (currentUser && currentUser.memberId)
-                            ? "waiting currentUser"
-                            : d.id === (currentUser && currentUser.memberId)
-                            ? "currentUser"
+                          d.id === (user && user.memberId)
+                            ? "waiting user"
+                            : d.id === (user && user.memberId)
+                            ? "user"
                             : null
                         }
                       >
