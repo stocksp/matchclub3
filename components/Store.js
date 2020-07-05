@@ -2,7 +2,7 @@
 import constate from "constate";
 import { useState, useEffect } from "react";
 import moment from "moment/moment";
-//import { firebase } from "../libs/firebase";
+
 import Router from "next/router";
 import { Magic } from "magic-sdk";
 import useSWR from "swr";
@@ -233,25 +233,7 @@ function useStore() {
       }
     }
   };
-  const pwChange = async (email, pw) => {
-    try {
-      const resp = await fetch("/api/changePW", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          pw,
-        }),
-      });
-      const mesg = await resp.json();
-      console.log(mesg);
-      return mesg;
-    } catch (error) {
-      return error;
-    }
-  };
+  
   const updateMember = async (data) => {
     try {
       console.log("calling updateMember", data);
@@ -425,7 +407,6 @@ function useStore() {
     getAllMembers,
     hasAllMembers,
     allMembers,
-    pwChange,
     updateMember,
     updateSquad,
     getMemberData,
