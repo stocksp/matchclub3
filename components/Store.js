@@ -65,6 +65,7 @@ function useStore() {
     if (user) {
       setActive("0");
       user.logout();
+      Router.push("/");
       return;
     }
     try {
