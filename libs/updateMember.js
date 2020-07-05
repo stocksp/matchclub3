@@ -1,8 +1,4 @@
-
-var admin = require("firebase-admin");
 import { withMongo } from "libs/mongo";
-
-
 
 const handler = async (req, res) => {
   console.log(
@@ -51,9 +47,7 @@ const handler = async (req, res) => {
     if (reminders) data.reminders = reminders.map(r => parseInt(r));
 
     if (memberId) {
-      // update the dateResults
-      if (global.fbAdminApp === null) global.fbAdminApp = admin.initializeApp();
-
+      
       let resp = await req.db
         .collection("members")
         .updateOne(
@@ -69,45 +63,7 @@ const handler = async (req, res) => {
         "upserted",
         resp.result.upserted ? true : false
       );
-      // if new and not a quest then add the Firebase login
-      if (resp.result.upserted && !guest) {
-        try {
-          await global.fbAdminApp.auth().createUser({
-            email,
-            emailVerified: false,
-            password: "abcd1234"
-          });
-        } catch (e) {
-          console.log("failed to add new auth user", e);
-          // delete the just added as we failed!
-          await req.db
-            .collection("members")
-            .deleteOne({ memberId });
-            return({ message: "failed in Firebase adding user" });
-        }
-        
-      }
-      // check if terminate
-      if(req.body.terminate) {
-        try {
-          const userRecord = await global.fbAdminApp.auth().getUserByEmail(email);
-          await global.fbAdminApp.auth().deleteUser(userRecord.uid);
-        } catch (e) {
-          console.log("failed to remove user", e);
-        }
-      }
-      // guest to member
-      if(req.body.add) {
-        try {
-          await global.fbAdminApp.auth().createUser({
-            email,
-            emailVerified: false,
-            password: "abcd1234"
-          });
-        } catch (e) {
-          console.log("failed to remove user", e);
-        }
-      }
+      
       return({ message: "aok",  resp});
     } else return({ message: "not good data" });
   } catch (e) {

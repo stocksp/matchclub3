@@ -12,7 +12,10 @@
     "NEXT_PUBLIC_FIREBASE_DATABASE_URI": "@firebase_database_uri",
     "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "@firebase_messaging_sender_id",
     "EMAIL_API_KEY": "@email_api_key",
-    "EMAIL_DOMAIN": "@email_domain"
+    "EMAIL_DOMAIN": "@email_domain",
+    "NEXT_PUBLIC_MAGIC_PUB_KEY": "@magic_pub_key",
+    "MAGIC_SECRET_KEY": "@magic_secret_key",
+    "ENCRYPTION_SECRET": "@encryption_secret"
   },
   "build": {
     "env": {
@@ -26,7 +29,10 @@
       "NEXT_PUBLIC_FIREBASE_DATABASE_URI": "@firebase_database_uri",
       "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "@firebase_messaging_sender_id",
       "EMAIL_API_KEY": "@email_api_key",
-      "EMAIL_DOMAIN": "@email_domain"
+      "EMAIL_DOMAIN": "@email_domain",
+      "NEXT_PUBLIC_MAGIC_PUB_KEY": "@magic_pub_key",
+      "MAGIC_SECRET_KEY": "@magic_secret_key",
+      "ENCRYPTION_SECRET": "@encryption_secret"
     }
   }
 }

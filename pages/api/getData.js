@@ -9,6 +9,7 @@ import getClubsLocations from "libs/getClubsLocations";
 import getHighScores from "libs/getHighScores";
 import testMail from "libs/testMail";
 import runMailer from "libs/runMailer";
+import emailExists from "libs/emailExists";
 
 const handler = async (req, res) => {
   const name = req.query.name;
@@ -62,6 +63,11 @@ const handler = async (req, res) => {
     if (data.message == "ok") {
       res.json({ results: data.results });
     } else res.json("Error: " + data.toString());
+  } else if (name === "emailExists") {
+    const data = await emailExists(req, res);
+    if (data.member !== undefined) {
+      res.json({ member: data.member });
+    } else res.status(401).end("Error on server.");
   } else {
     console.log("Bad name no go");
     res.json("Error: bad query name");

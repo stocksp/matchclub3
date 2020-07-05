@@ -15,7 +15,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import ChangePW from "components/changePW";
+
 import { useStoreContext } from "components/Store";
 
 function renderTooltip(props) {
@@ -39,7 +39,7 @@ const schema = yup.object().shape({
 
 function EditMember(props) {
   const { updateMember } = useStoreContext();
-  const [showChangePW, setShowChangePW] = useState(false);
+
   const [active, setActive] = useState(
     props.member ? props.member.active : true
   );
@@ -73,7 +73,7 @@ function EditMember(props) {
       delete theData.guest;
     }
     // is member becoming a quest?
-    if(!props.member.guest && data.guest){
+    if (!props.member.guest && data.guest) {
       theData.terminate = true;
     } else if (props.member.guest && !data.guest) {
       theData.add = true;
@@ -109,6 +109,7 @@ function EditMember(props) {
         initialValues={props.member}
         onSubmit={onSubmit}
         validationSchema={schema}
+        enableReinitialize={true}
       >
         {({
           handleSubmit,
@@ -134,9 +135,6 @@ function EditMember(props) {
               >
                 Submit
               </Button>{" "}
-              <Button variant="secondary" onClick={() => setShowChangePW(true)}>
-                Change Password
-              </Button>
               {props.fromAdmin && (
                 <Button variant="link" onClick={() => props.doClose()}>
                   Back to Members List
@@ -370,10 +368,8 @@ function EditMember(props) {
                   name="active"
                   label="Active"
                   onChange={() => {
-                    const newValue = !active;
-                    setActive(newValue);
-                    setFieldValue("active", newValue);
-                    console.log("active", newValue);
+                    setActive(!active);
+                    setFieldValue("active", !active);
                   }}
                   checked={active}
                 />
@@ -394,15 +390,7 @@ function EditMember(props) {
             </Form>
           );
         }}
-        {/* */}
       </Formik>
-      {showChangePW && (
-        <ChangePW
-          setShow={setShowChangePW}
-          showPW={showChangePW}
-          member={props.member}
-        />
-      )}
     </>
   );
 }

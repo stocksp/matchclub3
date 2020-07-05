@@ -2,14 +2,40 @@
 import constate from "constate";
 import { useState, useEffect } from "react";
 import moment from "moment/moment";
-import { firebase } from "../libs/firebase";
+
 import Router from "next/router";
+import { Magic } from "magic-sdk";
+import useSWR from "swr";
+
+function fetcher(route) {
+  /* our token cookie gets sent with this request */
+  console.log("fetcher", route);
+  return fetch(route)
+    .then((r) => r.ok && r.json())
+    .then((user) => user || null);
+}
+
+function useAuth() {
+  const { data: user, error, mutate } = useSWR("/api/user", fetcher);
+  const loading = user === undefined;
+
+  if (user) {
+    user.logout = async () => {
+      await mutate(fetch("/api/logout"));
+      //Router.push("/");
+    };
+  }
+
+  return {
+    user,
+    loading,
+    error,
+  };
+}
 
 function useStore() {
-  const [currentUser, setCurrentUser] = useState(null);
   const [currentDate, setCurrentDate] = useState(moment());
   const [active, setActive] = useState("0");
-  const [storeLoaded, setStoreLoaded] = useState(false);
   const [dates, setDates] = useState([]);
   const [hasDates, setHasDates] = useState(false);
   const [teamStats, setTeamStats] = useState([]);
@@ -24,67 +50,38 @@ function useStore() {
   const [hasAllMembers, setHasAllMembers] = useState(false);
   const [clubsLocations, setClubsLocations] = useState(null);
   const [highScores, setHighScores] = useState(null);
-  //const [storeLoaded, setStoreLoaded] = useState(false);
+
+  //const { data: user, error, mutate } = useSWR("/api/user", fetcher);
+  //const loading = user === undefined;
+  const { user, loading } = useAuth();
+
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(doAuthChange);
+    //const { user, loading } = useAuth();
     getDates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const doAuthChange = async (user) => {
-    console.log("user is", user ? `${user.email}` : "null");
+
+  const doLoggin = async (email) => {
     if (user) {
-      const memberId = localStorage.getItem("memberId");
-      const alias = localStorage.getItem("alias");
-      const role = localStorage.getItem("role");
-      if (memberId && alias && role) {
-        user.memberId = parseInt(memberId);
-        user.alias = alias;
-        user.role = role;
-
-        setCurrentUser(user);
-        setStoreLoaded(true);
-        // testing here
-        // const token = await user.getIdToken();
-        // const myHeaders = new Headers({
-        //   "Content-Type": "application/json",
-        //   Authorization: token
-        // });
-        // console.log(token);
-
-        // const rep = await getData(`http://localhost:8080/test`, myHeaders);
-
-        // console.log("resp", rep);
-      } else {
-        const response = await fetch("/api/getMemberId?email=" + user.email);
-
-        const myJson = await response.json();
-        user.memberId = myJson.id;
-        user.alias = myJson.alias;
-        user.role = myJson.role;
-        localStorage.setItem("memberId", myJson.id);
-        localStorage.setItem("alias", myJson.alias);
-        localStorage.setItem("role", myJson.role);
-        setCurrentUser(user);
-        setStoreLoaded(true);
-      }
-    } else {
-      localStorage.removeItem("memberId");
-      localStorage.removeItem("alias");
-      localStorage.removeItem("role");
-      setCurrentUser(user);
-      setStoreLoaded(true);
-      Router.push("/");
-    }
-  };
-  const doLoggin = async (email, pw) => {
-    if (currentUser) {
       setActive("0");
-      firebase.auth().signOut();
+      user.logout();
+      Router.push("/");
       return;
     }
     try {
-      const resp = await firebase.auth().signInWithEmailAndPassword(email, pw);
-      return resp;
+      const did = await new Magic(
+        process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
+      ).auth.loginWithMagicLink({ email });
+      const authRequest = await fetch("/api/login", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${did}` },
+      });
+      if (authRequest.ok) {
+        console.log("we have logged it!");
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       return error;
     }
@@ -237,25 +234,7 @@ function useStore() {
       }
     }
   };
-  const pwChange = async (email, pw) => {
-    try {
-      const resp = await fetch("/api/changePW", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          pw,
-        }),
-      });
-      const mesg = await resp.json();
-      console.log(mesg);
-      return mesg;
-    } catch (error) {
-      return error;
-    }
-  };
+  
   const updateMember = async (data) => {
     try {
       console.log("calling updateMember", data);
@@ -324,7 +303,7 @@ function useStore() {
       console.log("got clubs and locations");
     }
   };
-  const updateDate = async data => {
+  const updateDate = async (data) => {
     try {
       console.log("calling updateData", data);
       const resp = await fetch("/api/updateData?name=updateDate", {
@@ -342,11 +321,11 @@ function useStore() {
       }
       return resp;
     } catch (error) {
-      console.log("updateDate error", error)
+      console.log("updateDate error", error);
       return error;
     }
   };
-  const updateLocation = async data => {
+  const updateLocation = async (data) => {
     try {
       console.log("calling updateData", data);
       const resp = await fetch("/api/updateData?name=updateLocation", {
@@ -364,11 +343,11 @@ function useStore() {
       }
       return resp;
     } catch (error) {
-      console.log("updateLocation error", error)
+      console.log("updateLocation error", error);
       return error;
     }
   };
-  const updateClub = async data => {
+  const updateClub = async (data) => {
     try {
       console.log("calling updateData", data);
       const resp = await fetch("/api/updateData?name=updateClub", {
@@ -386,7 +365,7 @@ function useStore() {
       }
       return resp;
     } catch (error) {
-      console.log("updateClub error", error)
+      console.log("updateClub error", error);
       return error;
     }
   };
@@ -401,17 +380,14 @@ function useStore() {
     }
   };
 
-
   return {
     getDates,
     hasDates,
     dates,
-    currentUser,
     currentDate,
     setCurrentDate,
     active,
     setActive,
-    storeLoaded,
     doLoggin,
     getTeamStats,
     teamStats,
@@ -432,7 +408,6 @@ function useStore() {
     getAllMembers,
     hasAllMembers,
     allMembers,
-    pwChange,
     updateMember,
     updateSquad,
     getMemberData,
@@ -442,8 +417,9 @@ function useStore() {
     updateLocation,
     updateClub,
     getHighScores,
-    highScores
-    
+    highScores,
+    user,
+    loading,
   };
 }
 

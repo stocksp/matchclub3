@@ -19,6 +19,9 @@
   font-weight: bold;
   vertical-align: middle;
 }
+.day-label{
+  font-weight: bold;
+}
 .btn-primary {
   color: rgb(255, 217, 0);
   font-weight: bold;
@@ -43,6 +46,13 @@
 #landingScores div {
   margin-right: 0;
   margin-left: 0
+}
+#landingScores select {
+  height: 29px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 @media screen and (min-width: 1025px) {
