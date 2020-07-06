@@ -1,21 +1,27 @@
-import Iron from '@hapi/iron'
-import CookieService from 'libs/cookie'
+import Iron from "@hapi/iron";
+import CookieService from "libs/cookie";
 
 export default async (req, res) => {
   let user;
   try {
-    console.log("api/user called")
-    user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET, Iron.defaults)
+    console.log("api/user called");
+    const token = CookieService.getAuthToken(req.cookies);
+    console.log("token", token);
+    user = token && await Iron.unseal(
+      token,
+      process.env.ENCRYPTION_SECRET,
+      Iron.defaults
+    );
   } catch (error) {
-    console.log("catch error in user")
+    console.log("catch error in user", error.message);
     res.finish = true;
-    res.status(401).end()
+    res.status(401).end();
     return;
   }
 
   // now we have access to the data inside of user
   // and we could make database calls or just send back what we have
   // in the token.
-  console.log("user is", user)
-  res.json(user)
-}
+  console.log("user is", user);
+  res.status(200).json({user : user || null});
+};

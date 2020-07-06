@@ -49,7 +49,7 @@ const Header = () => {
     }
   };
 
-  console.log(currentDate.format());
+  console.log("now", currentDate.format(), "user", user);
   return (
     <div
       style={{
