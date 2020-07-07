@@ -5,33 +5,7 @@ import moment from "moment/moment";
 
 import Router from "next/router";
 import { Magic } from "magic-sdk";
-import useSWR from "swr";
-
-function fetcher(route) {
-  /* our token cookie gets sent with this request */
-  console.log("fetcher", route);
-  return fetch(route)
-    .then((r) => r.ok && r.json())
-    .then((user) => user || null);
-}
-
-function useAuth() {
-  const { data: user, error, mutate } = useSWR("/api/user", fetcher);
-  const loading = user === undefined;
-
-  if (user) {
-    user.logout = async () => {
-      await mutate(fetch("/api/logout"));
-      //Router.push("/");
-    };
-  }
-
-  return {
-    user,
-    loading,
-    error,
-  };
-}
+import { useUser } from "libs/hooks";
 
 function useStore() {
   const [currentDate, setCurrentDate] = useState(moment());
@@ -51,9 +25,11 @@ function useStore() {
   const [clubsLocations, setClubsLocations] = useState(null);
   const [highScores, setHighScores] = useState(null);
 
+  const user = useUser();
+
   //const { data: user, error, mutate } = useSWR("/api/user", fetcher);
   //const loading = user === undefined;
-  const { user, loading } = useAuth();
+ 
 
   useEffect(() => {
     //const { user, loading } = useAuth();
@@ -234,7 +210,7 @@ function useStore() {
       }
     }
   };
-  
+
   const updateMember = async (data) => {
     try {
       console.log("calling updateMember", data);
@@ -418,8 +394,6 @@ function useStore() {
     updateClub,
     getHighScores,
     highScores,
-    user,
-    loading,
   };
 }
 

@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import Link from "next/link";
+import Router from "next/router";
 import { useStoreContext } from "./Store";
 const AdminHeader = () => {
-  const { active } = useStoreContext();
+  const { active, user } = useStoreContext();
+
+  useEffect(() => {
+    if(!user || user.role !== 'admin'){
+      Router.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <Navbar expand="sm" collapseOnSelect bg="primary" variant="dark">
