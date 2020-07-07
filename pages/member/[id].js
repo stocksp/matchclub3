@@ -6,14 +6,11 @@ import EditMember from "components/editMember";
 import { Container } from "react-bootstrap";
 
 import { useStoreContext } from "components/Store";
+import { useUser } from "libs/hooks";
 
 export default function Member() {
-  const {
-    setActive,
-    getMemberData,
-    user,
-    updateMember,
-  } = useStoreContext();
+  const user = useUser();
+  const { setActive, getMemberData, updateMember } = useStoreContext();
   useEffect(() => {
     setActive("member");
     if (user) {
@@ -61,13 +58,16 @@ export default function Member() {
     setShowChangePW(true);
   };
 
-
   return (
     <>
       <Header />
       <Container>
         <h2 className="text-center">Stuff for you {id}</h2>
-        {member ? <EditMember member={member} setMember={setMember}/> : <div>Loading</div>}
+        {member ? (
+          <EditMember member={member} setMember={setMember} />
+        ) : (
+          <div>Loading</div>
+        )}
       </Container>
     </>
   );

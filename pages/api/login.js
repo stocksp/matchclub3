@@ -1,9 +1,8 @@
-import { Magic } from "@magic-sdk/admin";
+import { magic } from 'libs/magic'
 import Iron from "@hapi/iron";
-import CookieService from "libs/cookie";
 import { withMongo } from "libs/mongo";
+import { setTokenCookie } from 'libs/auth-cookies'
 
-let magic = new Magic(process.env.MAGIC_SECRET_KEY);
 
 const handler = async (req, res) => {
   if (req.method !== "POST") return res.status(405).end();
@@ -29,7 +28,7 @@ const handler = async (req, res) => {
       process.env.ENCRYPTION_SECRET,
       Iron.defaults
     );
-    CookieService.setTokenCookie(res, token);
+    setTokenCookie(res, token)
 
     res.status(200).send({ done: true });
   } catch (error) {

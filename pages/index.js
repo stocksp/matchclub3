@@ -3,7 +3,7 @@ import Header from "components/header";
 import { Modal, Button, ButtonToolbar, Container } from "react-bootstrap";
 import Squad from "components/squad";
 
-
+import { useUser } from "libs/hooks";
 
 import { useStoreContext } from "../components/Store";
 import { makeCalEvents } from "../libs/utils";
@@ -13,7 +13,6 @@ import LandingScores from "components/landingScores";
 
 const Index = () => {
   const {
-    user,
     currentDate,
     dates,
     hasDates,
@@ -27,6 +26,7 @@ const Index = () => {
   useEffect(() => {
     setActive("0");
   }, []);
+  const user = useUser();
   const [dateSelected, setDateSelected] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
@@ -61,7 +61,7 @@ const Index = () => {
       let theLink = await fetch(
         "/api/getGoogleMap?location=" + event.data.location
       );
-      const url = await theLink.json()
+      const url = await theLink.json();
       window.open(url, "_blank");
       return;
     }
@@ -101,16 +101,16 @@ const Index = () => {
     return (
       <Container>
         <Header />
-        
-          <Dayz
-            display="month"
-            date={currentDate}
-            events={theEvents}
-            onEventClick={onEventClick}
-            highlightDays={[moment()]}
-          />
-          <LandingScores />
-       
+
+        <Dayz
+          display="month"
+          date={currentDate}
+          events={theEvents}
+          onEventClick={onEventClick}
+          highlightDays={[moment()]}
+        />
+        <LandingScores />
+
         <Modal show={hasSquad} onHide={handleClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>{theDisplay}</Modal.Title>

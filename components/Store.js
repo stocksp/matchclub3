@@ -25,9 +25,11 @@ function useStore() {
   const [clubsLocations, setClubsLocations] = useState(null);
   const [highScores, setHighScores] = useState(null);
 
+  const user = useUser();
+
   //const { data: user, error, mutate } = useSWR("/api/user", fetcher);
   //const loading = user === undefined;
-  const user = useUser();
+ 
 
   useEffect(() => {
     //const { user, loading } = useAuth();
@@ -392,7 +394,6 @@ function useStore() {
     updateClub,
     getHighScores,
     highScores,
-    user,
   };
 }
 

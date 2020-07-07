@@ -4,7 +4,9 @@ import Head from "next/head";
 import { Navbar, Nav, NavDropdown, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
 import { useStoreContext } from "./Store";
-import Login from "./login";
+import Router from 'next/router'
+//import Login from "./login";
+import { useUser } from "libs/hooks";
 // user TODO
 const active = "0";
 
@@ -18,14 +20,9 @@ const datebar = {
 
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const user = useUser();
 
-  const {
-    currentDate,
-    setCurrentDate,
-    user,
-    doLoggin,
-    active,
-  } = useStoreContext();
+  const { currentDate, setCurrentDate, doLoggin, active } = useStoreContext();
 
   const today = () => {
     console.log("today");
@@ -45,7 +42,7 @@ const Header = () => {
     if (user) {
       user.logout();
     } else {
-      setShowLogin(true);
+      Router.push('/login')
     }
   };
 
@@ -130,7 +127,7 @@ const Header = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      {showLogin && <Login setShow={setShowLogin} showLogin={showLogin} />}
+      
     </div>
   );
 };
