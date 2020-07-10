@@ -3,8 +3,10 @@ import { Navbar, Nav } from "react-bootstrap";
 import Link from "next/link";
 import Router from "next/router";
 import { useStoreContext } from "./Store";
+import { useUser } from "libs/hooks";
 const AdminHeader = () => {
-  const { active, user } = useStoreContext();
+  const { active } = useStoreContext();
+  const user = useUser();
 
   useEffect(() => {
     if(!user || user.role !== 'admin'){
