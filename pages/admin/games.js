@@ -132,7 +132,7 @@ function Games() {
         <Header />
         <Container
           style={{
-            marginTop: "-5%",
+            marginTop: "-5px",
           }}
         >
           <AdminHeader />
