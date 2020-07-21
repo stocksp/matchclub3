@@ -39,7 +39,7 @@ function Locations() {
         <Header />
         <Container
           style={{
-            marginTop: "-5%",
+            marginTop: "-5px",
             marginLeft: "5%",
             marginRight: "5%",
           }}
@@ -55,7 +55,7 @@ function Locations() {
       <Header />
       <Container
         style={{
-          marginTop: "-5%",
+          marginTop: "-5px",
         }}
       >
         <AdminHeader />
