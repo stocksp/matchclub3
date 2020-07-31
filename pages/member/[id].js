@@ -62,12 +62,13 @@ export default function Member() {
     <>
       <Header />
       <Container>
-        <h2 className="text-center">Stuff for you {id}</h2>
-        {member ? (
-          <EditMember member={member} setMember={setMember} />
-        ) : (
-          <div>Loading</div>
-        )}
+        {member ?
+          <>
+            <h2 className="text-center">Stuff for you {member.alias}</h2>
+            <EditMember member={member} setMember={setMember} />
+          </> : (
+            <div>Loading</div>
+          )}
       </Container>
     </>
   );
