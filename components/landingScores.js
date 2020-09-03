@@ -22,7 +22,7 @@ const LandingScores = () => {
   const handleChange = (event) => {
     setDateId(parseInt(event.target.value));
   };
-  if (highScores) {
+  if (highScores && highScores.dateResults.length > 0) {
     const theDates = getDates();
     const theDateId = dateId ? dateId : theDates[0].dateId;
 
