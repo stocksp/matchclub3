@@ -10,6 +10,7 @@ const AdminHeader = () => {
 
   useEffect(() => {
     if(!user || user.role !== 'admin'){
+      console.log("admin header booting you out!")
       Router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

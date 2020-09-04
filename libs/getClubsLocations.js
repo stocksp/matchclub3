@@ -18,7 +18,7 @@ const handler = async (req, res) => {
       .sort({ name: 1 })
       .toArray();
 
-    console.log("founda clubs and locations", clubs.lenght, locations.lenght);
+    console.log("founda clubs and locations", clubs.length, locations.length);
     return {message: "ok", clubs, locations};
   } catch (error) {
     res.json("Error: " + error.toString());

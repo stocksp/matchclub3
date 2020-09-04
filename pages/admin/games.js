@@ -318,6 +318,20 @@ function Games() {
         </Container>
       </>
     );
+  } else if (dates?.length > 0 && scores?.length === 0) {
+    return (
+      <>
+        <Header />
+        <Container
+          style={{
+            marginTop: "-5px",
+          }}
+        >
+          <AdminHeader />
+          <h2>No Games Bowled this Season!!!</h2>
+        </Container>
+      </>
+    );
   } else {
     return (
       <Container

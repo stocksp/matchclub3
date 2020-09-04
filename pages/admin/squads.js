@@ -118,7 +118,7 @@ function Squads() {
           pos: m.pos,
         };
       });
-    console.log("member", members[0]);
+    console.log("first member", members[0]);
 
     return (
       <>

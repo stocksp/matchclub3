@@ -51,7 +51,7 @@ const handler = async (req, res) => {
         squad.lost = 0;
       }
     });
-    console.log("found", squads.length);
+    console.log("found squads", squads.length);
     res.json(squads);
   } catch (error) {
     res.json("Error: " + error.toString());

@@ -3,7 +3,7 @@ import { getSeason } from "./utils";
 
 const handler = async (req, res) => {
   try {
-    console.log("starting getDates");
+    console.log("starting getHighScores");
     const dateResults = await req.db
     .collection("dateResults")
       .find({ season: getSeason() })
