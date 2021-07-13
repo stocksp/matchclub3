@@ -2,10 +2,11 @@ import { withMongo } from "./mongo";
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
 
-var add = require("date-fns/add");
-var startOfDay = require("date-fns/startOfDay");
-var differenceInDays = require("date-fns/differenceInDays");
-var format = require("date-fns/format");
+const { add } = require("date-fns");
+const { startOfDay } = require("date-fns");
+const { differenceInDays } = require("date-fns");
+//var format = require("date-fns/format");
+const { format } = require("date-fns");
 
 function googleMapLink(mem, date, clubs, locations) {
   const from_location = clubs.find((club) => club.name === mem.club);
@@ -42,7 +43,7 @@ const handler = async (req, res) => {
       const diff = differenceInDays(checking, now);
       if (diff === 0) {
         console.log("Mail already sent today, not sending again!");
-        res.send({ reusedConnection: count, info: "Already sent today" });
+        res.send({ info: "Already sent today" });
         return;
       }
     }
@@ -84,7 +85,7 @@ const handler = async (req, res) => {
     let resp = null;
     console.log("first date", dates[0]);
     for (const date of dates) {
-      console.log("in loop")
+      console.log("in loop");
       console.log("the date", date);
       let theDate = startOfDay(date.date);
       let now = startOfDay(new Date());
@@ -147,12 +148,14 @@ const handler = async (req, res) => {
                </html>`,
             });
           } else {
-            console.log("not sending", mem.alias)
+            console.log("not sending", mem.alias);
           }
         }
       }
     }
-    await req.db.collection("emailSent").insertOne({ when: new Date() });
+    await req.db
+      .collection("emailSent")
+      .insertOne({ when: new Date(), who: all });
 
     return { message: "ok", resp };
   } catch (error) {

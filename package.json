@@ -16,6 +16,7 @@
     "constate": "^2.0.0",
     "cookie": "^0.4.1",
     "cross-env": "^7.0.2",
+    "date-fns": "^2.22.1",
     "dayz": "^2.9.0",
     "formik": "^2.1.4",
     "magic-sdk": "^2.1.0",
