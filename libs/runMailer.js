@@ -1,4 +1,6 @@
 import { withMongo } from "./mongo";
+import AbortController from 'node-abort-controller';
+global.AbortController = AbortController;
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
 
@@ -43,8 +45,7 @@ const handler = async (req, res) => {
       const diff = differenceInDays(checking, now);
       if (diff === 0) {
         console.log("Mail already sent today, not sending again!");
-        res.send({ info: "Already sent today" });
-        return;
+        return { message: "Already sent today" };
       }
     }
     const api_key = process.env.EMAIL_API_KEY;
@@ -119,9 +120,9 @@ const handler = async (req, res) => {
 
             resp = await nodemailerMailgun.sendMail({
               from: "admin@cornerpins.com",
-              to: [process.env.EMAIL_PAUL], // An array if you have multiple recipients.
+              to: [mem.email], // An array if you have multiple recipients.
               subject: `${mem.club} Match Club Reminder`,
-              "h:Reply-To": process.env.EMAIL_PAUL,
+              "h:Reply-To": 'admin@cornerpins.com',
               html:
                 `<html>
                <p>Hello ${mem.first ? mem.first : mem.alias},</p>
@@ -157,9 +158,10 @@ const handler = async (req, res) => {
       .collection("emailSent")
       .insertOne({ when: new Date(), who: all });
 
-    return { message: "ok", resp };
+    return { message: "ok" };
   } catch (error) {
-    return error;
+    console.log("runMailer exception", error);
+    return { message: "something bad happened" };
   }
 };
 

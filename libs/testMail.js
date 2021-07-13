@@ -1,4 +1,6 @@
 import { withMongo } from "./mongo";
+const AbortController = require('node-abort-controller');
+global.AbortController = AbortController;
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
 
@@ -29,6 +31,7 @@ const handler = async (req, res) => {
     });
     return {message: "ok", resp};
   } catch (error) {
+    console.log('testMail exception', error);
     return error;
     
   }
