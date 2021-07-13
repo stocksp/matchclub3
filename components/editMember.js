@@ -68,10 +68,10 @@ function EditMember(props) {
       delete theData.email;
     }
     delete theData._id;
-    if (!props.fromAdmin) {
+    /* if (!props.fromAdmin) {
       delete theData.active;
       delete theData.guest;
-    }
+    } */
     // is member becoming a quest?
     if (!props.member.guest && data.guest) {
       theData.terminate = true;
