@@ -6,7 +6,7 @@ const mg = require("nodemailer-mailgun-transport");
 
 const handler = async (req, res) => {
   try {
-    console.log("starting testMail me:", process.env.EMAIL_ME);
+    console.log("starting testMail");
     const api_key = process.env.EMAIL_API_KEY;
     //Your domain, from the Mailgun Control Panel
     const domain = process.env.EMAIL_DOMAIN;
