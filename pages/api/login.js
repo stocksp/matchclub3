@@ -11,7 +11,7 @@ const handler = async (req, res) => {
     // exchange the DID from Magic for some user data
     const did = magic.utils.parseAuthorizationHeader(req.headers.authorization);
     const user = await magic.users.getMetadataByToken(did);
-
+    console.log('magic', process.env.MAGIC_SECRET_KEY);
     const doc = await req.db
       .collection("members")
       .findOne({ email: user.email });
