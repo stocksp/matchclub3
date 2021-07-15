@@ -1,5 +1,5 @@
 import { withMongo } from "./mongo";
-import AbortController from 'node-abort-controller';
+import AbortController from "node-abort-controller";
 global.AbortController = AbortController;
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
@@ -122,7 +122,7 @@ const handler = async (req, res) => {
               from: "admin@cornerpins.com",
               to: [mem.email], // An array if you have multiple recipients.
               subject: `${mem.club} Match Club Reminder`,
-              "h:Reply-To": 'admin@cornerpins.com',
+              "h:Reply-To": "admin@cornerpins.com",
               html:
                 `<html>
                <p>Hello ${mem.first ? mem.first : mem.alias},</p>
@@ -140,7 +140,7 @@ const handler = async (req, res) => {
                   "hh:mm a"
                 )}.</p>
                 ${
-                  date.host != mem.club
+                  date.location != "Double Decker Lanes"
                     ? googleMapLink(mem, date, clubs, locations)
                     : ``
                 }
