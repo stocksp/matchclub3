@@ -31,6 +31,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Resources
 https://react-icons.github.io/react-icons/
+
 https://react-bootstrap.github.io/components/
+
 https://getbootstrap.com/docs/4.5/getting-started/introduction/
-Stuff
+
+## TODO
+- [] Figure out active and guest: Can Guests log in?
