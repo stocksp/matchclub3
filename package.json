@@ -19,7 +19,7 @@
     "date-fns": "^2.22.1",
     "dayz": "^2.9.0",
     "formik": "^2.1.4",
-    "magic-sdk": "^2.1.0",
+    "magic-sdk": "^4.3.0",
     "moment": "2.24.0",
     "moment-range": "^4.0.2",
     "mongodb": "^3.5.7",

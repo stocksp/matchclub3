@@ -16,7 +16,7 @@ const Login = (props) => {
   const { doLoggin } = useStoreContext();
 
   const handleClose = () => {
-    setShowLogin(false);
+    Router.push('/')
   };
 
   return (

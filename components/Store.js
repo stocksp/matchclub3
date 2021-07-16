@@ -29,7 +29,6 @@ function useStore() {
 
   //const { data: user, error, mutate } = useSWR("/api/user", fetcher);
   //const loading = user === undefined;
- 
 
   useEffect(() => {
     //const { user, loading } = useAuth();
@@ -44,21 +43,31 @@ function useStore() {
       Router.push("/");
       return;
     }
+    const body = {
+      email: email,
+    }
     try {
-      const did = await new Magic(
+      const didToken = await new Magic(
         process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
       ).auth.loginWithMagicLink({ email });
       const authRequest = await fetch("/api/login", {
         method: "POST",
-        headers: { Authorization: `Bearer ${did}` },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + didToken,
+        },
+        body: JSON.stringify(body),
       });
+      console.log('authRequest', authRequest);
       if (authRequest.ok) {
-        console.log("we have logged it!");
+        console.log("we have logged in!");
+        console.log("authRequest", authRequest);
         return true;
       } else {
         return false;
       }
     } catch (error) {
+      console.log("doLoggin failed", error);
       return error;
     }
   };
