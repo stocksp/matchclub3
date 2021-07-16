@@ -122,7 +122,7 @@ const handler = async (req, res) => {
               from: "admin@cornerpins.com",
               to: [mem.email], // An array if you have multiple recipients.
               subject: `${mem.club} Match Club Reminder`,
-              "h:Reply-To": "admin@cornerpins.com",
+              "h:Reply-To": "fireater1959@gmail.com",
               html:
                 `<html>
                <p>Hello ${mem.first ? mem.first : mem.alias},</p>
