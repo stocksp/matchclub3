@@ -6,14 +6,14 @@ import { setTokenCookie } from "libs/auth-cookies";
 const handler = async (req, res) => {
   console.log("starting api/login");
   if (req.method !== "POST") return res.status(405).end();
-  const email =  req.body.email;
+  const email = req.body.email;
 
   try {
     const doc = await req.db
       .collection("members")
-      .findOne({ email: email });
+      .findOne({ email: email, active: true, guest: false });
     if (!doc) {
-      console.log(`Didn't find user from magic`)
+      console.log(`Didn't find user from magic`);
       res.status(403).json({ done: false });
       return;
     }
@@ -22,8 +22,7 @@ const handler = async (req, res) => {
     const user = await magic.users.getMetadataByToken(did);
     //console.log('magic', process.env.MAGIC_SECRET_KEY);
 
-    
-    console.log('found user');
+    console.log("found user");
     user.alias = doc.alias;
     user.memberId = doc.memberId;
     user.role = doc.role ? doc.role : "";
