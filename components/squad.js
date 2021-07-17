@@ -1,18 +1,8 @@
 import React, { useContext } from "react";
 import { useStoreContext } from "../components/Store";
 import { Table, Button, Row, Col } from "react-bootstrap";
+import { makeChunks } from "libs/utils";
 
-// make array of array to feed
-// table tr and td
-const makeChunks = (arr, size) => {
-  const chunks = [];
-  arr.forEach((item) => {
-    if (!chunks.length || chunks[chunks.length - 1].length === size)
-      chunks.push([]);
-    chunks[chunks.length - 1].push(item);
-  });
-  return chunks;
-};
 
 const Squad = (props) => {
   const { user, hasSquad, squad, dates } = useStoreContext();

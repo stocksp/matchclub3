@@ -14,11 +14,20 @@ function Squads() {
     content: () => componentRef.current,
   });
   const findDate = () => {
-    const theDateId =dateId ? dateId : dates[0].dateId
+    const theDateId = dateId ? dateId : dates[0].dateId;
+    console.log("DateId", theDateId);
     const theDate = dates.find((d) => {
       return d.dateId === theDateId;
     });
     return theDate.date;
+  };
+  const maxTeamSize = () => {
+    const theDateId = dateId ? dateId : dates[0].dateId;
+    console.log("DateId", theDateId);
+    const theDate = squads.find((d) => {
+      return d.dateId === theDateId;
+    });
+    return theDate.teamsizemax;
   };
 
   const [dateId, setDateId] = useState(null);
@@ -185,10 +194,21 @@ function Squads() {
 
             <Col>
               {theSquad.map((m, i) => {
-                return (
-                  <Button key={i} style={squadButtom} onClick={() => remove(m)}>
-                    {m.name}{" "}
-                  </Button>
+                return i === maxTeamSize() ? (
+                  <>
+                    <div>========== waiting ==========</div>
+                    <button
+                      key={i}
+                      style={squadButtom}
+                      onClick={() => remove(m)}
+                    >
+                      {m.name}
+                    </button>
+                  </>
+                ) : (
+                  <button key={i} style={squadButtom} onClick={() => remove(m)}>
+                    {m.name}
+                  </button>
                 );
               })}
             </Col>
@@ -199,7 +219,21 @@ function Squads() {
               <Table striped bordered hover>
                 <tbody>
                   {makeChunks(theSquad, 4).map((r, i) => {
-                    return (
+                    return i * 4 === maxTeamSize() ? (
+                      <>
+                        <tr key={i}>
+                          <td key={i}>Waiting</td>
+                          <td key={i + 1}>=====</td>
+                          <td key={i + 2}>=====</td>
+                          <td key={i + 3}>List</td>
+                        </tr>
+                        <tr key={i}>
+                          {r.map((d, i) => {
+                            return <td key={i}>{d.name}</td>;
+                          })}
+                        </tr>
+                      </>
+                    ) : (
                       <tr key={i}>
                         {r.map((d, i) => {
                           return <td key={i}>{d.name}</td>;
