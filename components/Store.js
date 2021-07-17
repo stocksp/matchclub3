@@ -26,6 +26,7 @@ function useStore() {
   const [highScores, setHighScores] = useState(null);
 
   const user = useUser();
+  console.log('user from store', user);
 
   //const { data: user, error, mutate } = useSWR("/api/user", fetcher);
   //const loading = user === undefined;
@@ -403,6 +404,7 @@ function useStore() {
     updateClub,
     getHighScores,
     highScores,
+    user,
   };
 }
 

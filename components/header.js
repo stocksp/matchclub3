@@ -6,7 +6,7 @@ import moment from "moment";
 import { useStoreContext } from "./Store";
 import Router from 'next/router'
 //import Login from "./login";
-import { useUser } from "libs/hooks";
+//import { useUser } from "libs/hooks";
 // user TODO
 const active = "0";
 
@@ -20,9 +20,9 @@ const datebar = {
 
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
-  const user = useUser();
+  //const user = useUser();
 
-  const { currentDate, setCurrentDate, doLoggin, active } = useStoreContext();
+  const { currentDate, setCurrentDate, doLoggin, active, user } = useStoreContext();
 
   const today = () => {
     console.log("today");

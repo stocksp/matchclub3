@@ -3,7 +3,7 @@ import Header from "components/header";
 import { Modal, Button, ButtonToolbar, Container } from "react-bootstrap";
 import Squad from "components/squad";
 
-import { useUser } from "libs/hooks";
+//import { useUser } from "libs/hooks";
 
 import { useStoreContext } from "../components/Store";
 import { makeCalEvents } from "../libs/utils";
@@ -22,11 +22,12 @@ const Index = () => {
     squad,
     getSquad,
     doSquadAction,
+    user,
   } = useStoreContext();
   useEffect(() => {
     setActive("0");
   }, []);
-  const user = useUser();
+  //const user = useUser();
   const [dateSelected, setDateSelected] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false);

@@ -3,7 +3,6 @@ import { useStoreContext } from "../components/Store";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { makeChunks } from "libs/utils";
 
-
 const Squad = (props) => {
   const { user, hasSquad, squad, dates } = useStoreContext();
   const theDate = dates.find((d) => d.dateId === props.date);
@@ -18,24 +17,24 @@ const Squad = (props) => {
               return (
                 <tr key={i}>
                   {r.map((d, i) => {
+                    const waiting = d.pos > theDate.teamsizemax;
+                    const isUser = d.id === (user && user.memberId);
+                    const name = waiting ? d.name + '==>wait list' : d.name
                     return (
                       <td
                         key={i}
-                        style={
-                          d.id === (user && user.memberId)
-                            ? { color: "crimson" }
-                            : null
-                        }
-                        className={
-                          d.pos > theDate.teamsizemax &&
-                          d.id === (user && user.memberId)
+                        style={isUser ? { color: "crimson" } : null}
+                        /* className={
+                          waiting && isUser
                             ? "waiting user"
-                            : d.id === (user && user.memberId)
+                            : isUser
                             ? "user"
+                            : waiting
+                            ? "waiting"
                             : null
-                        }
+                        } */
                       >
-                        {d.name}
+                        {name}
                       </td>
                     );
                   })}

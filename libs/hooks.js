@@ -14,9 +14,10 @@ export function useUser({ redirectTo, redirectIfFound } = {}) {
   const user = data?.user ? data.user : null;
   const finished = Boolean(data);
   const hasUser = Boolean(user);
-  console.log("user hook", data);
+  console.log("user hook data", data, "user hook data.user", data?.user);
   if (user) {
     user.logout = async () => {
+      console.log("logging out from useUser")
       await mutate(fetch("/api/logout"));
       //Router.push("/");
     };

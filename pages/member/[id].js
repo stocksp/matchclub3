@@ -6,11 +6,11 @@ import EditMember from "components/editMember";
 import { Container } from "react-bootstrap";
 
 import { useStoreContext } from "components/Store";
-import { useUser } from "libs/hooks";
+//import { useUser } from "libs/hooks";
 
 export default function Member() {
-  const user = useUser();
-  const { setActive, getMemberData, updateMember } = useStoreContext();
+  //const user = useUser();
+  const { setActive, getMemberData, updateMember, user } = useStoreContext();
   useEffect(() => {
     setActive("member");
     if (user) {
