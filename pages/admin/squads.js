@@ -1,10 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "components/header";
 import AdminHeader from "components/adminHeader";
 import { useStoreContext } from "components/Store";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
 import moment from "moment";
+
+import { useReactToPrint } from "react-to-print";
+import { makeChunks } from "libs/utils";
+
 function Squads() {
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+  const findDate = () => {
+    const theDateId =dateId ? dateId : dates[0].dateId
+    const theDate = dates.find((d) => {
+      return d.dateId === theDateId;
+    });
+    return theDate.date;
+  };
+
   const [dateId, setDateId] = useState(null);
   const {
     squads,
@@ -130,6 +146,7 @@ function Squads() {
         >
           <AdminHeader />
           <h2 className="text-center">Squads</h2>
+          <button onClick={handlePrint}>Print the squad!</button>
           <Form>
             <Form.Group>
               <Form.Label>Select the Match Date</Form.Label>
@@ -174,6 +191,24 @@ function Squads() {
                   </Button>
                 );
               })}
+            </Col>
+            <Col ref={componentRef} className="hide-on-screen">
+              <h2 className="text-center">
+                Squad for: {moment(findDate()).format("dddd MMM D YYYY")}
+              </h2>
+              <Table striped bordered hover>
+                <tbody>
+                  {makeChunks(theSquad, 4).map((r, i) => {
+                    return (
+                      <tr key={i}>
+                        {r.map((d, i) => {
+                          return <td key={i}>{d.name}</td>;
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </Col>
           </Row>
         </Container>

@@ -289,4 +289,15 @@ function SimpleCard(props) {
     </Card>
   );
 }
-export { startOfSeason, getSeason, makeHandi, calcStats, makeHighScores };
+// make array of array to feed
+// table tr and td used in Sqaud and printing
+const makeChunks = (arr, size) => {
+  const chunks = [];
+  arr.forEach((item) => {
+    if (!chunks.length || chunks[chunks.length - 1].length === size)
+      chunks.push([]);
+    chunks[chunks.length - 1].push(item);
+  });
+  return chunks;
+};
+export { startOfSeason, getSeason, makeHandi, calcStats, makeHighScores, makeChunks };

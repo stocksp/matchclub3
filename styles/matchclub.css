@@ -55,8 +55,13 @@
   margin-bottom: 2px;
 }
 
+.hide-on-screen {display:none;}
+
 @media screen and (min-width: 1025px) {
   #landingScores select {
     width: 60%;
   }
+}
+@media print {
+  .hide-on-screen {display:block;}
 }
