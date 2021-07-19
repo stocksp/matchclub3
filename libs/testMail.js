@@ -1,10 +1,15 @@
 import { withMongo } from "./mongo";
+const { format } = require("date-fns");
 const AbortController = require("node-abort-controller");
 global.AbortController = AbortController;
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
 
 const handler = async (req, res) => {
+  const now = new Date();
+  console.log(
+    `${format(now, "MMMM d yyyy")} at ${format(now, "hh:mm a")}`
+  );
   try {
     console.log("starting testMail");
     const api_key = process.env.EMAIL_API_KEY;
@@ -23,7 +28,7 @@ const handler = async (req, res) => {
       subject: "Testing email in new App",
       "h:Reply-To": process.env.EMAIL_ME,
       //You can use "html:" to send HTML email content. It's magic!
-      html: "<html><p>Greetings from the Continental MatchClub Website</p><p> Info here!! </p></html>",
+      html: "<html><p>Greetings from the Continental MatchClub Website</p>" + `${format(now, "MMMM d yyyy")} at ${format(now, "hh:mm a")}` +"<p> Info here!! </p></html>",
       //You can use "text:" to send plain-text content. It's oldschool!
       text: "League update ... should not see this!!",
     });
