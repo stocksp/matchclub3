@@ -1,5 +1,6 @@
 import { withMongo } from "./mongo";
 import AbortController from "node-abort-controller";
+import { utcToZonedTime } from "date-fns-tz";
 global.AbortController = AbortController;
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
@@ -117,6 +118,7 @@ const handler = async (req, res) => {
             console.log(`reminder needed for ${mem.email}`);
             // for now just push the email into an arry
             all.push(mem.email);
+            const dateLocal = utcToZonedTime(date.date, "America/Los_Angeles");
 
             resp = await nodemailerMailgun.sendMail({
               from: "admin@cornerpins.com",
@@ -135,8 +137,8 @@ const handler = async (req, res) => {
                 `${
                   locations.find((loc) => loc.name === date.location).name
                 } on ` +
-                `${format(date.date, "MMMM d yyyy")} at ${format(
-                  date.date,
+                `${format(dateLocal, "MMMM d yyyy")} at ${format(
+                  dateLocal,
                   "hh:mm a"
                 )}.</p>
                 ${
