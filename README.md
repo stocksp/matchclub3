@@ -36,5 +36,11 @@ https://react-bootstrap.github.io/components/
 
 https://getbootstrap.com/docs/4.5/getting-started/introduction/
 
+## Debugging client side
+
+Our loggin uses the swr package and it constantly revalidates when focus is acquired
+this can cause problems with the debugger.  Temporarly change it to false in hooks.js line19
+Don't check this change in or loggins won't work correctly
+
 ## TODO
 - [] Figure out active and guest: Can Guests log in?
