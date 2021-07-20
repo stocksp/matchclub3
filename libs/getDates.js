@@ -1,12 +1,12 @@
 import { withMongo } from "./mongo";
-import { startOfSeason } from "./utils";
+import { getSeason, startOfSeason } from "./utils";
 
 const handler = async (req, res) => {
   try {
     console.log("starting getDates");
     const docs = await req.db
       .collection("dates")
-      .find({ date: { $gte: startOfSeason() } })
+      .find({ season: getSeason() })
       .project({ squad: 0, _id: 0 })
       .sort({ date: -1 })
       .toArray();
