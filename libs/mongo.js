@@ -17,7 +17,7 @@ const setupMongo = async () => {
         useUnifiedTopology: true,
       }
     );
-    const db = await client.db("matchClub");
+    const db = await client.db();
     global.cachedDb = db;
     console.log("New Mongo connection established");
     return global.cachedDb;
@@ -36,7 +36,7 @@ const setupMongo = async () => {
       useUnifiedTopology: true,
     }
   );
-  const db = await client.db("matchClub");
+  const db = await client.db();
   global.cachedDb = db;
   console.log("New Mongo connection established");
   return global.cachedDb;

@@ -116,8 +116,12 @@ async function makeHandi(db) {
   console.log(handiObj);
   let res = await db
     .collection("handicaps")
-    .updateOne({ season: getSeason(new Date()) }, { $set: handiObj });
-  console.log("write handi obj ", res.result.ok);
+    .updateOne(
+      { season: getSeason(new Date()) },
+      { $set: handiObj },
+      { upsert: true }
+    );
+  console.log("write handi obj ", res.result);
   return handiObj;
 }
 function makeHighScores(scoreArray, handi) {
@@ -264,12 +268,18 @@ function SimpleCard(props) {
   return (
     <Card>
       <Card.Header
-        style={{ padding: "0.1rem", backgroundColor: "lightblue", cursor: "pointer" }}
+        style={{
+          padding: "0.1rem",
+          backgroundColor: "lightblue",
+          cursor: "pointer",
+        }}
         as="h6"
       >
         <small>{theHour}</small>
       </Card.Header>
-      <Card.Body style={{ padding: "10px 10px", background: "aqua", cursor: "pointer"  }}>
+      <Card.Body
+        style={{ padding: "10px 10px", background: "aqua", cursor: "pointer" }}
+      >
         <Card.Subtitle style={styles} className="mb-2 text-muted">
           <strong>{host}</strong> hosting
         </Card.Subtitle>
@@ -300,4 +310,11 @@ const makeChunks = (arr, size) => {
   });
   return chunks;
 };
-export { startOfSeason, getSeason, makeHandi, calcStats, makeHighScores, makeChunks };
+export {
+  startOfSeason,
+  getSeason,
+  makeHandi,
+  calcStats,
+  makeHighScores,
+  makeChunks,
+};

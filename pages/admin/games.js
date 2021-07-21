@@ -126,7 +126,7 @@ function Games() {
       return 0;
     });
 
-    console.log("theScores.squad", theScores.squad);
+    console.log("theScores", theScores);
     return (
       <>
         <Header />
@@ -136,7 +136,7 @@ function Games() {
           }}
         >
           <AdminHeader />
-          <h2>Scores By Date {scores.length}</h2>
+          <h2>Scores By Date</h2>
           <Formik
             enableReinitialize={true}
             initialValues={{
