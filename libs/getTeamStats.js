@@ -1,4 +1,5 @@
 import { withMongo } from "./mongo";
+import { getSeason } from "./utils";
 
 
 const handler = async (req, res) => {
@@ -6,7 +7,7 @@ const handler = async (req, res) => {
     console.log("starting getTeamStats");
     const docs = await req.db
     .collection("memberstats")
-    .find({})
+    .find({season: getSeason()})
     .project({ _id: 0 })
     .sort({ average: -1 })
     .toArray();

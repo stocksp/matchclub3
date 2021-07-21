@@ -69,6 +69,8 @@ const handler = async (req, res) => {
         .project({ _id: 0 })
         .toArray();
       // ids for all the members who have bowled
+      // TODO shouldn't we just filter the above docs
+      // and make theIds instead of another trip to the db??
       const theIds = await req.db
 
         .collection("matchScores")

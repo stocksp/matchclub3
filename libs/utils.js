@@ -75,6 +75,7 @@ function calcStats(scores, handiObj) {
     hiSeriesHandi,
     hiGameHandi,
     handicap,
+    season: getSeason(),
   };
 }
 // compute the members handicap for the whole season
