@@ -3,7 +3,7 @@ import { Modal, Form, Button, ButtonToolbar } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useStoreContext } from "./Store";
-//import { useUser } from "libs/hooks";
+
 import Router from 'next/router'
 
 const SignupSchema = Yup.object().shape({
@@ -11,7 +11,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const Login = (props) => {
-  //useUser({ redirectTo: "/", redirectIfFound: true });
+
   const [failedLogin, setfailedLogin] = useState(false);
   const { doLoggin, user } = useStoreContext();
 

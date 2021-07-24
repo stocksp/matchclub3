@@ -36,7 +36,7 @@ const handler = async (req, res) => {
     );
     setTokenCookie(res, token);
 
-    res.status(200).send({ done: true });
+    res.status(200).send({ done: true, user });
   } catch (error) {
     console.log("login error", error.message);
     res.status(error.status || 500).end(error.message);

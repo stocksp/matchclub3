@@ -5,9 +5,6 @@ import { Navbar, Nav, NavDropdown, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
 import { useStoreContext } from "./Store";
 import Router from 'next/router'
-//import Login from "./login";
-//import { useUser } from "libs/hooks";
-// user TODO
 const active = "0";
 
 const navbar = {
@@ -20,9 +17,8 @@ const datebar = {
 
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
-  //const user = useUser();
 
-  const { currentDate, setCurrentDate, doLoggin, active, user } = useStoreContext();
+  const { currentDate, setCurrentDate, active, user, doLoggin } = useStoreContext();
 
   const today = () => {
     console.log("today");
@@ -40,7 +36,7 @@ const Header = () => {
     console.log("handle login");
 
     if (user) {
-      user.logout();
+      doLoggin();
     } else {
       Router.push('/login')
     }
