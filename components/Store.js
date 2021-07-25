@@ -5,7 +5,7 @@ import moment from "moment/moment";
 
 import Router from "next/router";
 import { Magic } from "magic-sdk";
-import { useUser } from "libs/hooks";
+
 
 function useStore() {
   const [currentDate, setCurrentDate] = useState(moment());
@@ -24,23 +24,30 @@ function useStore() {
   const [hasAllMembers, setHasAllMembers] = useState(false);
   const [clubsLocations, setClubsLocations] = useState(null);
   const [highScores, setHighScores] = useState(null);
+  const [user, setUser] = useState(null)
 
-  const user = useUser();
-  console.log('user from store', user);
-
-  //const { data: user, error, mutate } = useSWR("/api/user", fetcher);
-  //const loading = user === undefined;
+    console.log('user from store', user);
 
   useEffect(() => {
     //const { user, loading } = useAuth();
     getDates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    checkUser();
   }, []);
+
+  const checkUser = async () => {
+    const response = await fetch("/api/user");
+    const theUser = await response.json();
+    console.log("checkUser", theUser);
+    setUser(theUser.user);
+  }
 
   const doLoggin = async (email) => {
     if (user) {
       setActive("0");
-      user.logout();
+      console.log("logging out from store doLoggin");
+      await fetch("/api/logout");
+      setUser(null);
       Router.push("/");
       return;
     }
@@ -63,6 +70,9 @@ function useStore() {
       if (authRequest.ok) {
         console.log("we have logged in!");
         console.log("authRequest", authRequest);
+        // TODO why can't we get the user out of the authRequest response!!
+        // for now just call checkUser ...
+        await checkUser();
         return true;
       } else {
         return false;
