@@ -15,7 +15,7 @@ function TeamStats() {
   }, []);
 
   const sortMe = (who) => {
-    console.log("sortme", who, sortBy)
+    console.log("sortme", who, sortBy);
     if (sortBy === who) {
       setDir(dir === "desc" ? "asc" : "desc");
     } else {
@@ -32,7 +32,7 @@ function TeamStats() {
     return (
       <>
         <Header />
-        <h2 className="text-center">Team Stats {teamStats.length}</h2>
+        <h2 className="text-center">Team Stats</h2>
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
@@ -70,18 +70,10 @@ function TeamStats() {
               return (
                 <tr key={i}>
                   <td key={1}>{r.member}</td>
-                  <td key={2}>
-                    {r.average}
-                  </td>
-                  <td key={3}>
-                    {r.hiGame}
-                  </td>
-                  <td key={4}>
-                    {r.hiSeries}
-                  </td>
-                  <td key={5}>
-                    {r.hiGameHandi}
-                  </td>
+                  <td key={2}>{r.average}</td>
+                  <td key={3}>{r.hiGame}</td>
+                  <td key={4}>{r.hiSeries}</td>
+                  <td key={5}>{r.hiGameHandi}</td>
                   <td key={6}>{r.hiSeriesHandi}</td>
                   <td key={7}>{r.hiSeriesGames.join(",")}</td>
                   <td key={8}>{r.hiSeriesHandiGames.join(",")}</td>
