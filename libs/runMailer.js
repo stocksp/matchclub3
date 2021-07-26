@@ -147,7 +147,7 @@ const handler = async (req, res) => {
                     : ``
                 }
                 <p>Thanks,<br />${mem.club} Matchmaker<p>
-                <h6><p style=\"color:#007777\">If you would like to have these reminders sent to another email address, or would like to change the scheduling, please logon to the MatchClub site and change the reminder settings in the Your Stuff tab.</p></h6>
+                <h6><p style=\"color:#007777\">If you would like to change the scheduling of these reminders, please logon to the MatchClub site and change the reminder settings in the Your Stuff tab.</p></h6>
                </html>`,
             });
           } else {
