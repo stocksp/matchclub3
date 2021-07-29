@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
+import Router from "next/router";
 import Header from "components/header";
 import { Modal, Button, ButtonToolbar, Container } from "react-bootstrap";
 import Squad from "components/squad";
 
 import { useStoreContext } from "../components/Store";
-import { makeCalEvents } from "../libs/utils";
+import { getFirstWeek, getNextWeek } from "../libs/utils";
 import moment from "moment";
 import Dayz from "dayz";
 import LandingScores from "components/landingScores";
+import DayCard from "components/dayCard";
+import EmptyCard from "components/emptyCard";
+import {
+  format,
+  addMonths,
+  getDay,
+  getDaysInMonth,
+  differenceInHours,
+  addHours,
+} from "date-fns";
 
 const Index = () => {
   const {
@@ -25,9 +36,9 @@ const Index = () => {
   useEffect(() => {
     setActive("0");
   }, []);
-  
+
   const [dateSelected, setDateSelected] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
+  //const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
   const [footerText, setFooterText] = useState("");
 
@@ -53,41 +64,44 @@ const Index = () => {
     getSquad(dateSelected);
   };
 
-  const onEventClick = async (ev, event) => {
-    console.log("event click ev:", ev.target, "event:", event);
+  const onDayClick = async (ev, data) => {
+    console.log("event click ev:", ev.target, "event:", data);
     //check if map click
     if (ev.target.innerText === "Map") {
       let theLink = await fetch(
-        "/api/getGoogleMap?location=" + event.data.location
+        "/api/getGoogleMap?location=" + data.date.location
       );
       const url = await theLink.json();
       window.open(url, "_blank");
       return;
     }
-    const matchDate = moment(event.data.date);
-    console.log("match date", matchDate);
+    //const matchDate = moment(data.date.date);
+    console.log("match date", data.date.date);
     const afterMatch =
-      matchDate.diff(moment().add(3, "hours")) > 0 ? true : false;
+      differenceInHours(new Date(), addHours(data.date.date, 3)) > 0
+        ? true
+        : false;
     console.log("after", afterMatch);
     setIsAfter(afterMatch);
-    if (user || !afterMatch) {
-      setDateSelected(event.data.dateId);
-      getSquad(event.data.dateId);
+    if (user || afterMatch) {
+      setDateSelected(data.date.dateId);
+      getSquad(data.date.dateId);
     } else {
-      setShowLogin(true);
+      Router.push("/login");
     }
   };
 
   //console.log("dates", dates);
   if (hasDates) {
-    const theEvents = makeCalEvents(dates);
+    //const theEvents = makeCalEvents(dates);
     const theDate = dates.find((d) => d.dateId === dateSelected);
     // for the modal won't have data till clicked
     let theDisplay = "waiting";
     if (theDate) {
-      theDisplay = `${isAfter ? "Who will bowl on " : "Who bowled on "}${moment(
-        theDate.date
-      ).format("ddd MMMM D")}`;
+      theDisplay = `${isAfter ? "Who bowled on " : "Who will bowl on "}${format(
+        theDate.date,
+        "ddd MMMM d"
+      )}`;
     }
     let actionStr = "";
     // see if the current user is in the squad
@@ -97,17 +111,54 @@ const Index = () => {
       if (found) actionStr = "Remove Me";
       else actionStr = "Sign me up!";
     }
+    const weeks = [];
+    const day1 = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastMonth = addMonths(day1, -1);
+    const daysInMonth = getDaysInMonth(day1);
+    let theWeek = getFirstWeek(
+      getDay(day1),
+      getDaysInMonth(lastMonth),
+      dates,
+      currentDate
+    );
+    weeks.push(theWeek);
+    while (!theWeek.find((d) => d.day === daysInMonth) || weeks.length === 1) {
+      theWeek = getNextWeek(
+        theWeek[theWeek.length - 1].day,
+        daysInMonth,
+        dates,
+        currentDate
+      );
+      //console.log(theWeek);
+      weeks.push(theWeek);
+    }
+    console.log("the weeks", weeks);
     return (
       <Container>
         <Header />
+        <Container fluid className="grid text-center">
+          <div>Sunday</div>
+          <div>Monday</div>
+          <div>Tuesday</div>
+          <div>Wednesday</div>
+          <div>Thursday</div>
+          <div>Friday</div>
+          <div>Saturday</div>
+          {weeks.map((w, i) =>
+            w.map((d, i2) => {
+              if (d.date)
+                return (
+                  <DayCard
+                    key={(i + 1) * i2}
+                    data={d}
+                    onClick={(e) => onDayClick(e, d)}
+                  />
+                );
+              else return <EmptyCard key={(i + 1) * i2} data={d} />;
+            })
+          )}
+        </Container>
 
-        <Dayz
-          display="month"
-          date={currentDate}
-          events={theEvents}
-          onEventClick={onEventClick}
-          highlightDays={[moment()]}
-        />
         <LandingScores />
 
         <Modal show={hasSquad} onHide={handleClose} size="lg">
@@ -120,7 +171,7 @@ const Index = () => {
               <Button variant="secondary" onClick={handleClose}>
                 CLOSE
               </Button>
-              {isAfter && user && (
+              {!isAfter && user && (
                 <Button
                   variant="primary"
                   onClick={() => handleSquadAction(actionStr)}

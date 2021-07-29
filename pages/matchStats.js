@@ -2,7 +2,7 @@ import Header from "../components/header";
 import React, { useState, useEffect } from "react";
 import { useStoreContext } from "../components/Store";
 import { Table, Form } from "react-bootstrap";
-import moment from "moment";
+import { format, parseISO } from "date-fns";
 
 function MatchStats() {
   const [sortBy, setSortBy] = useState("average");
@@ -65,8 +65,9 @@ function MatchStats() {
                 const teamRes = matchStats[1].find(
                   (t) => t.dateId === d.dateId
                 );
-                const title = `${moment(d.date).format(
-                  "MMM. D, YYYY"
+                const title = `${format(
+                  parseISO(d.date),
+                  "MMM. d, yyyy"
                 )} ${d.match.replace("-", " hosting ")} [Won ${
                   teamRes.won
                 } Lost ${teamRes.lost}]  `;

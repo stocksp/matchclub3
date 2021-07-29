@@ -1,14 +1,16 @@
 //import createUseContext from "constate";
 import constate from "constate";
 import { useState, useEffect } from "react";
-import moment from "moment/moment";
+
+import { startOfDay } from "date-fns";
 
 import Router from "next/router";
 import { Magic } from "magic-sdk";
 
 
 function useStore() {
-  const [currentDate, setCurrentDate] = useState(moment());
+  // removes time component makes comparison simpler
+  const [currentDate, setCurrentDate] = useState(startOfDay(new Date()));
   const [active, setActive] = useState("0");
   const [dates, setDates] = useState([]);
   const [hasDates, setHasDates] = useState(false);
@@ -29,7 +31,6 @@ function useStore() {
     console.log('user from store', user);
 
   useEffect(() => {
-    //const { user, loading } = useAuth();
     getDates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     checkUser();
@@ -91,7 +92,7 @@ function useStore() {
         console.log("getDates called", myJson);
         // convert the Json date
         myJson.forEach((d) => {
-          d.date = moment(d.date).toDate();
+          d.date = new Date(d.date);
         });
         setDates(myJson);
         setHasDates(true);

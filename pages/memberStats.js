@@ -2,7 +2,7 @@ import Header from "../components/header";
 import React, { useContext, useState, useEffect } from "react";
 import { Table, Form, Row, Container } from "react-bootstrap";
 import { useStoreContext } from "../components/Store";
-import moment from "moment";
+import { format, parseISO } from "date-fns";
 
 function MemberStats() {
   const { setActive, getMatchStats, matchStats } = useStoreContext();
@@ -126,7 +126,7 @@ function MemberStats() {
                 return (
                   <tr key={i}>
                     <td key={1}>{r.match}</td>
-                    <td key={2}>{moment(r.date).format("MM/DD/YY")}</td>
+                    <td key={2}>{format(parseISO(r.date), "MM/dd/yy")}</td>
                     <td key={3}>{r.average}</td>
                     <td key={4}>{r.series}</td>
                     <td key={5}>{r.hiGame}</td>

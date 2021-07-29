@@ -3,6 +3,7 @@ import React from "react";
 import moment from "moment";
 import Card from "react-bootstrap/Card";
 import { BsTypeBold } from "react-icons/bs";
+import { getDay, getDaysInMonth, addMonths, format } from "date-fns";
 
 function startOfSeason() {
   const now = new Date();
@@ -311,6 +312,94 @@ const makeChunks = (arr, size) => {
   });
   return chunks;
 };
+/*
+// this is a date object from the db
+date:Sun Aug 22 2021 13:00:00 GMT-0700 (Pacific Daylight Time)
+dateId:334
+guest:'Double Decker'
+hasmeeting:false
+host:'Continental'
+location:'Double Decker Lanes'
+season:'20-21'
+teamsizemax:16
+*/
+// startDay is Sunday = 0  through Saturday = 6
+// lastMonthDays is the ending day of last month
+// We need these if the 1st does not fall on Sunday
+// so we show the last days of last month in the first week
+function getFirstWeek(startDay, lastMonthDays, dates, curDate) {
+  const week = [];
+  const curMonth = curDate.getMonth();
+  const curYear = curDate.getFullYear();
+  const lastMonth = addMonths(curDate, -1).getMonth();
+  // not last year but the year of last month
+  const lastYear = addMonths(curDate, -1).getFullYear();
+
+  if (startDay === 0) {
+    for (let x = 1; x < 8; x++) {
+      const found = dates.find(
+        (d) =>
+          d.date.getFullYear() === curYear &&
+          d.date.getMonth() === curMonth &&
+          d.date.getDate() === x
+      );
+      if (found) week.push({ day: x, month: "current", date: found });
+      else week.push({ day: x, month: "current" });
+    }
+    return week;
+  }
+  let start = lastMonthDays - startDay + 1;
+  for (let x = start; x <= lastMonthDays; x++) {
+    const found = dates.find(
+      (d) =>
+        d.date.getFullYear() === lastYear &&
+        d.date.getMonth() === lastMonth &&
+        d.date.getDate() === x
+    );
+    if (found) week.push({ day: x, month: "last", date: found });
+    else week.push({ day: x, month: "last" });
+  }
+  for (let x = 1; week.length < 7; x++) {
+    const found = dates.find(
+      (d) =>
+        d.date.getFullYear() === curYear &&
+        d.date.getMonth() === curMonth &&
+        d.date.getDate() === x
+    );
+    if (found) week.push({ day: x, month: "current", date: found });
+    else week.push({ day: x, month: "current" });
+  }
+  return week;
+}
+// end day is the last day number of the previous week
+// dayInMonth are just that and we have to fill out the week
+// starting at 1 for next month if our last day doesn't fall
+// on Saturday
+function getNextWeek(endDay, daysInMonth, dates, curDate) {
+  const week = [];
+  const curMonth = curDate.getMonth();
+  const curYear = curDate.getFullYear();
+  const nextMonth = addMonths(curDate, 1).getMonth();
+  // not next year but the year of next month
+  const nextYear = addMonths(curDate, 1).getFullYear();
+  for (let x = endDay + 1, start = 1; week.length < 7; x++) {
+    const found = dates.find(
+      (d) =>
+        d.date.getFullYear() === (x <= daysInMonth ? curYear : nextYear) &&
+        d.date.getMonth() === (x <= daysInMonth ? curMonth : nextMonth) &&
+        d.date.getDate() === x
+    );
+    if (x <= daysInMonth) {
+      if (found) week.push({ day: x, month: "current", date: found });
+      else week.push({ day: x, month: "current" });
+    } else {
+      if (found) week.push({ day: start++, month: "next", date: found });
+      else week.push({ day: start++, month: "next" });
+    }
+  }
+  return week;
+}
+
 export {
   startOfSeason,
   getSeason,
@@ -318,4 +407,6 @@ export {
   calcStats,
   makeHighScores,
   makeChunks,
+  getFirstWeek,
+  getNextWeek,
 };

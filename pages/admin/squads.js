@@ -3,7 +3,7 @@ import Header from "components/header";
 import AdminHeader from "components/adminHeader";
 import { useStoreContext } from "components/Store";
 import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
-import moment from "moment";
+import { format, compareAsc, parseISO } from "date-fns";
 
 import { useReactToPrint } from "react-to-print";
 import { makeChunks } from "libs/utils";
@@ -167,8 +167,9 @@ function Squads() {
                   style={{ width: "33%" }}
                 >
                   {dates.map((d, i) => {
-                    const title = `${moment(d.date).format(
-                      "MMM. D, YYYY"
+                    const title = `${format(
+                      parseISO(d.date),
+                      "MMM. d, yyyy"
                     )} ${d.match.replace("-", " hosting ")} `;
                     return (
                       <option key={i} value={d.dateId}>
@@ -214,7 +215,7 @@ function Squads() {
             </Col>
             <Col ref={componentRef} className="hide-on-screen">
               <h2 className="text-center">
-                Squad for: {moment(findDate()).format("dddd MMM D YYYY")}
+                Squad for: {format(parseISO(findDate()), "E MMM d yyyy")}
               </h2>
               <Table striped bordered hover>
                 <tbody>

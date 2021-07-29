@@ -54,6 +54,11 @@
   margin-top: 2px;
   margin-bottom: 2px;
 }
+.grid {
+	display: grid;
+	grid-gap: 1px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
 
 .hide-on-screen {display:none;}
 

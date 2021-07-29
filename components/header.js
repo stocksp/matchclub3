@@ -2,9 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { Navbar, Nav, NavDropdown, Button, Modal, Form } from "react-bootstrap";
-import moment from "moment";
+
 import { useStoreContext } from "./Store";
-import Router from 'next/router'
+import Router from "next/router";
+import { format, addMonths, getDay, getDaysInMonth, startOfDay } from "date-fns";
 const active = "0";
 
 const navbar = {
@@ -18,19 +19,18 @@ const datebar = {
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
 
-  const { currentDate, setCurrentDate, active, user, doLoggin } = useStoreContext();
+  const { currentDate, setCurrentDate, active, user, doLoggin } =
+    useStoreContext();
 
   const today = () => {
     console.log("today");
-    setCurrentDate(moment());
+    setCurrentDate(startOfDay(new Date()));
   };
   const nextMonth = () => {
-    const date = currentDate.clone().add(1, "months");
-    setCurrentDate(date);
+    setCurrentDate(addMonths(currentDate, +1));
   };
   const previoustMonth = () => {
-    const date = currentDate.clone().subtract(1, "months");
-    setCurrentDate(date);
+    setCurrentDate(addMonths(currentDate, -1));
   };
   const handleLogin = () => {
     console.log("handle login");
@@ -38,11 +38,11 @@ const Header = () => {
     if (user) {
       doLoggin();
     } else {
-      Router.push('/login')
+      Router.push("/login");
     }
   };
 
-  console.log("now", currentDate.format(), "user", user);
+  console.log("now", currentDate.toLocaleDateString, "user", user);
   return (
     <div
       style={{
@@ -78,7 +78,7 @@ const Header = () => {
         )}
         <span className="calendarDate">
           {" "}
-          {currentDate.format("MMMM YYYY")}{" "}
+          {format(currentDate, "MMMM yyyy")}{" "}
         </span>
         <span>
           <Button variant="primary" onClick={handleLogin}>
@@ -123,7 +123,6 @@ const Header = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      
     </div>
   );
 };

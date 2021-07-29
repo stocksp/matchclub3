@@ -1,5 +1,5 @@
 import { withMongo } from "libs/mongo";
-import moment from "moment";
+import { isValid } from "date-fns";
 
 const handler = async (req, res) => {
   console.log("running updateDate", req.body.dateId);
@@ -20,7 +20,7 @@ const handler = async (req, res) => {
       guest &&
       location &&
       !isNaN(teamsizemax) &&
-      moment(date).isValid()
+      isValid(date)
     ) {
       let resp = await req.db.collection("dates").updateOne(
         { dateId },

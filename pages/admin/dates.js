@@ -11,7 +11,7 @@ import {
   Form,
   Spinner,
 } from "react-bootstrap";
-import moment from "moment";
+import { format, compareAsc } from "date-fns";
 import { useStoreContext } from "components/Store";
 import EditDate from "../../components/editDate";
 
@@ -48,7 +48,7 @@ function Dates() {
       hasmeeting: false,
     });
   };
-  const inFuture = (date) => moment(date).isAfter(moment());
+  const inFuture = (date) => compareAsc(date, new Date()) === 1;
   if (!clubsLocations)
     return (
       <>
@@ -101,7 +101,7 @@ function Dates() {
                   return (
                     <tr key={i}>
                       <td align="left">
-                        {moment(d.date).format("MMM D YYYY")}
+                        {format(d.date, "MMM d yyyy")}
                       </td>
                       <td align="left">{d.host}</td>
                       <td align="left">{d.guest}</td>

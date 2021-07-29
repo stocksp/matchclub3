@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header";
 import AdminHeader from "../../components/adminHeader";
 import { Container } from "react-bootstrap";
+import { format, compareAsc } from "date-fns";
 
-import moment from "moment";
+//import moment from "moment";
 import { Table, Button, Row, Col, Form, Spinner } from "react-bootstrap";
 import { Formik, Field, FieldArray, getIn, ErrorMessage } from "formik";
 import * as yup from "yup";
@@ -42,13 +43,8 @@ function Games() {
   // const { register, handleSubmit, errors, contro, getValues } = useForm({
   //   mode: "onChange",
   // });
-  const {
-    dates,
-    setActive,
-    scores,
-    getScores,
-    updateScores,
-  } = useStoreContext();
+  const { dates, setActive, scores, getScores, updateScores } =
+    useStoreContext();
   useEffect(() => {
     setActive("admin.games");
     getScores();
@@ -59,17 +55,11 @@ function Games() {
     setDateId(parseInt(event.target.value));
   };
 
-  const makeDates = () => {
-    // taken from https://stackoverflow.com/questions/36032179/remove-duplicates-in-an-object-array-javascript
-    let thedates = dates.filter(
-      (elem, index, self) =>
-        self.findIndex((m) => {
-          return (
-            m.dateId === elem.dateId &&
-            moment(elem.date).isSameOrBefore(moment())
-          );
-        }) === index
-    );
+  const filterDates = () => {
+    const now = new Date();
+    let thedates = dates.filter((elem, index) => {
+      return compareAsc(new Date(), elem.date) === 1;
+    });
 
     return thedates;
   };
@@ -113,7 +103,7 @@ function Games() {
 
   if (dates?.length > 0 && scores?.length > 0) {
     //console.log("errors", errors, "values", getValues());
-    const theDates = makeDates(dates);
+    const theDates = filterDates(dates);
     const theScores = scores.find(
       (s) => s.dateId === (dateId ? dateId : theDates[0].dateId)
     );
@@ -144,7 +134,7 @@ function Games() {
               won: theScores.won,
               lost: theScores.lost,
               updateScores: updateScores,
-              date: theDates.find((d) => d.dateId === theScores.dateId),
+              date: dates.find((d) => d.dateId === theScores.dateId),
             }}
             validationSchema={schema}
             onSubmit={fsubmit}
@@ -185,9 +175,9 @@ function Games() {
                         style={{ width: "40%" }}
                       >
                         {theDates.map((d, i) => {
-                          const title = `${moment(d.date).format(
-                            "MMM. D, YYYY"
-                          )} ${d.host} hosting ${d.guest}`;
+                          const title = `${format(d.date, "MMM. d, yyyy")} ${
+                            d.host
+                          } hosting ${d.guest}`;
                           return (
                             <option key={i} value={d.dateId}>
                               {title}

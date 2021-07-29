@@ -1,4 +1,4 @@
-import moment from "moment/moment";
+import { parseISO } from "date-fns";
 import { withMongo } from "../../libs/mongo";
 import {
   makeHandi,
@@ -6,7 +6,6 @@ import {
   calcStats,
   makeHighScores,
 } from "../../libs/utils";
-
 
 const handler = async (req, res) => {
   console.log(
@@ -47,7 +46,7 @@ const handler = async (req, res) => {
       const keys = Object.keys(scores);
       const scoreArray = [];
       keys.forEach((k) => {
-        scores[k].date = moment(scores[k].date).toDate();
+        scores[k].date = parseISO(scores[k].date);
         scores[k].memberId = parseInt(scores[k].memberId);
         scores[k].dateId = parseInt(scores[k].dateId);
         scores[k].games = scores[k].games.map((g) => parseInt(g));
@@ -110,7 +109,7 @@ const handler = async (req, res) => {
       );
       console.log("resp", resp.result.nModified);
 
-      res.json({ message: "aok"});
+      res.json({ message: "aok" });
     } else res.json({ message: "not good" });
   } catch (e) {
     console.log("catch error", e);

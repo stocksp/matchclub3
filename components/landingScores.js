@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 
 import { Tab, Row, Col, ListGroup, Form } from "react-bootstrap";
-import moment from "moment";
+import { format,  } from "date-fns";
 import { useStoreContext } from "./Store";
 
 const LandingScores = () => {
@@ -36,7 +36,7 @@ const LandingScores = () => {
             const teamRes = highScores.dateResults.find(
               (t) => t.dateId === d.dateId
             );
-            const title = `${moment(d.date).format("MMM. D, YYYY")} ${
+            const title = `${format(d.date, "MMM. d, yyyy")} ${
               d.host
             } hosting ${d.guest} [Won ${teamRes.won} Lost ${teamRes.lost}]  `;
             return (
