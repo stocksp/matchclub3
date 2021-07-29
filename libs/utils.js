@@ -1,7 +1,5 @@
-import Dayz from "dayz";
 import React from "react";
-import moment from "moment";
-import Card from "react-bootstrap/Card";
+
 import { BsTypeBold } from "react-icons/bs";
 import { getDay, getDaysInMonth, addMonths, format } from "date-fns";
 
@@ -208,99 +206,9 @@ function makeHighScores(scoreArray, handi) {
 
   return highScores;
 }
-export function makeCalEvents(arr) {
-  const events = new Dayz.EventsCollection();
-  arr.forEach((d) => {
-    const tmp = new MyEvent({
-      range: moment.range(moment(d.date), moment(d.date).add(3, "hours")),
-      data: d,
-    });
-    events.events.push(tmp);
-  });
-  //events.events.push(theEvents);
-  // events.events.push(new MyEvent({
-  //   range: moment.range(new Date(), moment().add(3, "hours")),
-  //   data: "testing2"
-  // }))
-  // const events = [];
-  // arr.forEach(d => {
-  //   events.push({
-  //     id: d._id,
-  //     start: d.date,
-  //     title: `\n${d.host} hosting\n ${d.guest} at\n ${d.location}`
-  //     // color: 'purple'
-  //   });
-  // });
-  return events;
-}
-class MyEvent extends Dayz.EventsCollection.Event {
-  constructor(props) {
-    super(props);
-    //console.log('props', props);
-    this.data = props.data;
-  }
-  handleClick = (ev) => console.log("button click", ev.target);
-  defaultRenderImplementation() {
-    return <SimpleCard data={this.data} map={this.handleClick} />;
-  }
-}
-function SimpleCard(props) {
-  // const classes = useStyles();
 
-  // //console.log("data", props.data);
-  const { host, guest, location, date } = props.data;
-  const theHour = moment(date).format("h a");
-  const styles = {
-    fontSize: "0.675rem",
-    marginBottom: "0",
-    marginTop: "1",
-  };
-  const mapStyle = {
-    fontSize: "11px",
-    position: "absolute",
-    top: "1px",
-    right: "2px",
-    border: "2px outset orange",
-    padding: "0px 2px 0px 1px",
-    borderRadius: "3px",
-    backgroundColor: "gold",
-    color: "Black",
-    cursor: "crosshair",
-  };
-  return (
-    <Card>
-      <Card.Header
-        style={{
-          padding: "0.1rem",
-          backgroundColor: "lightblue",
-          cursor: "pointer",
-        }}
-        as="h6"
-      >
-        <small>{theHour}</small>
-      </Card.Header>
-      <Card.Body
-        style={{ padding: "10px 10px", background: "aqua", cursor: "pointer" }}
-      >
-        <Card.Subtitle style={styles} className="mb-2 text-muted">
-          <strong>{host}</strong> hosting
-        </Card.Subtitle>
-        <Card.Subtitle style={styles} className="mb-2 text-muted">
-          <strong>{guest}</strong> at
-        </Card.Subtitle>
-        <Card.Subtitle style={styles} className="mb-2 text-muted">
-          <strong>{location}</strong>
-        </Card.Subtitle>
-        {location !== "Double Decker Lanes" ? (
-          <div style={mapStyle} onClick={props.map.handleClick}>
-            {" "}
-            Map
-          </div>
-        ) : null}
-      </Card.Body>
-    </Card>
-  );
-}
+  
+
 // make array of array to feed
 // table tr and td used in Sqaud and printing
 const makeChunks = (arr, size) => {

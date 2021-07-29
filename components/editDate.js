@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
-import moment from "moment";
+
+import { isSameDay } from "date-fns";
 import { useStoreContext } from "components/Store";
 import { Formik, Field } from "formik";
 import { getSeason } from "libs/utils";
@@ -27,7 +28,7 @@ const EditDate = (props) => {
   // ignore the case where the date is compared to itself
   const dateIsUsed = (date) => {
     return props.dates.some((d) => {
-      const same = moment(d.date).isSame(date, "day");
+      const same = isSameDay(date, d.date);
       return same && d.dateId !== props.date.dateId;
     });
   };
@@ -40,9 +41,8 @@ const EditDate = (props) => {
   };
 
   const onSubmit = (data, form) => {
-    const theDate = moment(data.date);
 
-    const conflict = dateIsUsed(theDate);
+    const conflict = dateIsUsed(data.date);
     console.log("conflict with existing date", conflict);
     if (conflict) setOpenAlert(true);
     else {
@@ -54,7 +54,7 @@ const EditDate = (props) => {
         host: data.host,
         location: data.location,
         teamsizemax: data.teamsizemax,
-        date: theDate.toJSON(),
+        date: data.date.toJSON(),
         hasmeeting: data.hasmeeting,
         season: getSeason(data.date),
       };

@@ -6,8 +6,7 @@ import Squad from "components/squad";
 
 import { useStoreContext } from "../components/Store";
 import { getFirstWeek, getNextWeek } from "../libs/utils";
-import moment from "moment";
-import Dayz from "dayz";
+
 import LandingScores from "components/landingScores";
 import DayCard from "components/dayCard";
 import EmptyCard from "components/emptyCard";
@@ -75,7 +74,7 @@ const Index = () => {
       window.open(url, "_blank");
       return;
     }
-    //const matchDate = moment(data.date.date);
+    
     console.log("match date", data.date.date);
     const afterMatch =
       differenceInHours(new Date(), addHours(data.date.date, 3)) > 0

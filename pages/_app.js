@@ -1,5 +1,4 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import "styles/dayz.css"
 import "styles/matchclub.css"
 import "react-datepicker/dist/react-datepicker.css";
 
