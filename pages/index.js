@@ -150,10 +150,11 @@ const Index = () => {
                   <DayCard
                     key={(i + 1) * i2}
                     data={d}
+                    day1={day1}
                     onClick={(e) => onDayClick(e, d)}
                   />
                 );
-              else return <EmptyCard key={(i + 1) * i2} data={d} />;
+              else return <EmptyCard key={(i + 1) * i2} data={d} day1={day1} />;
             })
           )}
         </Container>
