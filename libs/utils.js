@@ -207,8 +207,6 @@ function makeHighScores(scoreArray, handi) {
   return highScores;
 }
 
-  
-
 // make array of array to feed
 // table tr and td used in Sqaud and printing
 const makeChunks = (arr, size) => {
@@ -220,6 +218,18 @@ const makeChunks = (arr, size) => {
   });
   return chunks;
 };
+
+// search dates collection to see if the given
+// day has a match
+function findDate(dates, year, month, day) {
+  const found = dates.find(
+    (d) =>
+      d.date.getFullYear() === year &&
+      d.date.getMonth() === month &&
+      d.date.getDate() === day
+  );
+  return found;
+}
 /*
 // this is a date object from the db
 date:Sun Aug 22 2021 13:00:00 GMT-0700 (Pacific Daylight Time)
@@ -242,45 +252,32 @@ function getFirstWeek(startDay, lastMonthDays, dates, curDate) {
   const lastMonth = addMonths(curDate, -1).getMonth();
   // not last year but the year of last month
   const lastYear = addMonths(curDate, -1).getFullYear();
-
+  // no days from last month
   if (startDay === 0) {
     for (let x = 1; x < 8; x++) {
-      const found = dates.find(
-        (d) =>
-          d.date.getFullYear() === curYear &&
-          d.date.getMonth() === curMonth &&
-          d.date.getDate() === x
-      );
+      const found = findDate(dates, curYear, curMonth, x);
       if (found) week.push({ day: x, month: "current", date: found });
       else week.push({ day: x, month: "current" });
     }
     return week;
   }
   let start = lastMonthDays - startDay + 1;
+  // days from the previous month starting the calendar
   for (let x = start; x <= lastMonthDays; x++) {
-    const found = dates.find(
-      (d) =>
-        d.date.getFullYear() === lastYear &&
-        d.date.getMonth() === lastMonth &&
-        d.date.getDate() === x
-    );
+    const found = findDate(dates, lastYear, lastMonth, x);
     if (found) week.push({ day: x, month: "last", date: found });
     else week.push({ day: x, month: "last" });
   }
+  // remaining days in the week which are for the current month
   for (let x = 1; week.length < 7; x++) {
-    const found = dates.find(
-      (d) =>
-        d.date.getFullYear() === curYear &&
-        d.date.getMonth() === curMonth &&
-        d.date.getDate() === x
-    );
+    const found = findDate(dates, curYear, curMonth, x);
     if (found) week.push({ day: x, month: "current", date: found });
     else week.push({ day: x, month: "current" });
   }
   return week;
 }
 // end day is the last day number of the previous week
-// dayInMonth are just that and we have to fill out the week
+// daysInMonth are just that and we have to fill out the week
 // starting at 1 for next month if our last day doesn't fall
 // on Saturday
 function getNextWeek(endDay, daysInMonth, dates, curDate) {
