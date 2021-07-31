@@ -16,7 +16,7 @@ function DayCard(props) {
   const mapStyle = {
     fontSize: "11px",
     position: "absolute",
-    top: "1px",
+    bottom: "2px",
     right: "2px",
     border: "2px outset orange",
     padding: "0px 2px 0px 1px",
@@ -30,26 +30,45 @@ function DayCard(props) {
       <Card.Header
         style={{
           padding: "0.1rem",
-          backgroundColor: "lightblue",
+          height: "28.2px",
+          backgroundColor: "rgb(6, 156, 194)",
           cursor: "pointer",
-          display: "flex"
+          display: "flex",
         }}
         as="h6"
       >
-       <small>{theHour}</small>
         <Badge
           style={{
+            fontSize: "16px",
+            fontWeight: "normal",
+            verticalAlign: "center",
+            color: "gold",
+          }}
+        >
+          {theHour}
+        </Badge>
+        <Badge
+          style={{
+            fontSize: "16px",
+            fontWeight: "normal",
             marginLeft: "auto",
-            justifyContent: "center",
+            justifyContent: "left",
+            verticalAlign: "center",
+            alignContent: "left",
           }}
           variant="light"
         >
           {theDay}
         </Badge>
-        
       </Card.Header>
       <Card.Body
-        style={{ padding: "10px 10px", background: "aqua", cursor: "pointer" }}
+        style={{
+          padding: "10px 10px",
+          background: "aqua",
+          cursor: "pointer",
+          verticalAlign: "center",
+          justifytext: "left",
+        }}
       >
         <Card.Subtitle style={styles} className="mb-2 text-muted">
           <strong>{host}</strong> hosting
@@ -61,10 +80,7 @@ function DayCard(props) {
           <strong>{location}</strong>
         </Card.Subtitle>
         {location !== "Double Decker Lanes" ? (
-          <div style={mapStyle} >
-            {" "}
-            Map
-          </div>
+          <div style={mapStyle}> Map</div>
         ) : null}
       </Card.Body>
     </Card>

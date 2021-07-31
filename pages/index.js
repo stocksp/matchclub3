@@ -99,7 +99,7 @@ const Index = () => {
     if (theDate) {
       theDisplay = `${isAfter ? "Who bowled on " : "Who will bowl on "}${format(
         theDate.date,
-        "ddd MMMM d"
+        "MMMM d"
       )}`;
     }
     let actionStr = "";

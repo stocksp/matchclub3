@@ -30,6 +30,7 @@ function EmptyCard(props) {
       >
         <div
           style={{
+            height: "90px",
             flex: "center",
           }}
           variant="light"
