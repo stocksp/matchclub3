@@ -58,6 +58,9 @@ const EditDate = (props) => {
         hasmeeting: data.hasmeeting,
         season: getSeason(data.date),
       };
+      // if a new add empth squad
+      if(props.date.squad)
+        theData.squad = [];
 
       updateDate(theData);
       form.resetForm({ values: data });

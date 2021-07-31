@@ -22,25 +22,27 @@ const handler = async (req, res) => {
       !isNaN(teamsizemax) &&
       isValid(date)
     ) {
+      const data = {
+        host,
+        guest,
+        location,
+        teamsizemax,
+        date,
+        hasmeeting,
+        season,
+      };
+      if (req.body.squad) data.squad = [];
       let resp = await req.db.collection("dates").updateOne(
         { dateId },
         {
-          $set: {
-            host,
-            guest,
-            location,
-            teamsizemax,
-            date,
-            hasmeeting,
-            season,
-          },
+          $set: data,
         },
         {
           upsert: true,
         }
       );
       console.log("resp", resp.result.nModified);
-      return({ message: "aok", resp });
+      return { message: "aok", resp };
     } else return error;
   } catch (e) {
     console.log("catch error", e);

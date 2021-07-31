@@ -46,6 +46,7 @@ function Dates() {
       location: "Double Decker Lanes",
       teamsizemax: 16,
       hasmeeting: false,
+      squad: [],
     });
   };
   const inFuture = (date) => compareAsc(date, new Date()) === 1;
