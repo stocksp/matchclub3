@@ -12,19 +12,19 @@ const Squad = (props) => {
   return (
     <Table striped bordered hover>
       <tbody>
-        {hasSquad
-          ? theData.map((r, i) => {
-              return (
-                <tr key={i}>
-                  {r.map((d, i) => {
-                    const waiting = d.pos > theDate.teamsizemax;
-                    const isUser = d.id === (user && user.memberId);
-                    const name = waiting ? d.name + '==>wait list' : d.name
-                    return (
-                      <td
-                        key={i}
-                        style={isUser ? { color: "crimson" } : null}
-                        /* className={
+        {hasSquad && theData.length > 0 ? (
+          theData.map((r, i) => {
+            return (
+              <tr key={i}>
+                {r.map((d, i) => {
+                  const waiting = d.pos > theDate.teamsizemax;
+                  const isUser = d.id === (user && user.memberId);
+                  const name = waiting ? d.name + "==>wait list" : d.name;
+                  return (
+                    <td
+                      key={i}
+                      style={isUser ? { color: "crimson" } : null}
+                      /* className={
                           waiting && isUser
                             ? "waiting user"
                             : isUser
@@ -33,15 +33,19 @@ const Squad = (props) => {
                             ? "waiting"
                             : null
                         } */
-                      >
-                        {name}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })
-          : "Gettng the Data....."}
+                    >
+                      {name}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })
+        ) : !hasSquad ? (
+          "Gettng the Data....."
+        ) : (
+          <h2 className="text-center">Be the first to sign up!</h2>
+        )}
       </tbody>
     </Table>
   );
