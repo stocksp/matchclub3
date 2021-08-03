@@ -10,8 +10,9 @@ function DayCard(props) {
   const theDay = props.data.day;
   const styles = {
     fontSize: "0.675rem",
-    marginBottom: "0",
-    marginTop: "1",
+    marginBottom: "7px",
+    textAlign: "left",
+    color: "rgb(100, 100, 100)"
   };
   const mapStyle = {
     fontSize: "11px",
@@ -67,16 +68,15 @@ function DayCard(props) {
           background: "aqua",
           cursor: "pointer",
           verticalAlign: "center",
-          justifytext: "left",
         }}
       >
-        <Card.Subtitle style={styles} className="mb-2 text-muted">
+        <Card.Subtitle style={styles}>
           <strong>{host}</strong> hosting
         </Card.Subtitle>
-        <Card.Subtitle style={styles} className="mb-2 text-muted">
+        <Card.Subtitle style={styles}>
           <strong>{guest}</strong> at
         </Card.Subtitle>
-        <Card.Subtitle style={styles} className="mb-2 text-muted">
+        <Card.Subtitle style={styles}>
           <strong>{location}</strong>
         </Card.Subtitle>
         {location !== "Double Decker Lanes" ? (

@@ -135,14 +135,14 @@ const Index = () => {
     return (
       <Container>
         <Header />
-        <Container fluid className="grid text-center">
-          <div>Sunday</div>
-          <div>Monday</div>
-          <div>Tuesday</div>
-          <div>Wednesday</div>
-          <div>Thursday</div>
-          <div>Friday</div>
-          <div>Saturday</div>
+        <Container fluid className="grid text-center" style={{padding: "0px"}} >
+          <div><strong>Sunday</strong></div>
+          <div><strong>Monday</strong></div>
+          <div><strong>Tuesday</strong></div>
+          <div><strong>Wednesday</strong></div>
+          <div><strong>Thursday</strong></div>
+          <div><strong>Friday</strong></div>
+          <div><strong>Saturday</strong></div>
           {weeks.map((w, i) =>
             w.map((d, i2) => {
               if (d.date)
