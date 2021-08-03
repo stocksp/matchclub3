@@ -74,7 +74,7 @@ const Index = () => {
       window.open(url, "_blank");
       return;
     }
-    
+
     console.log("match date", data.date.date);
     const afterMatch =
       differenceInHours(new Date(), addHours(data.date.date, 3)) > 0
@@ -135,14 +135,32 @@ const Index = () => {
     return (
       <Container>
         <Header />
-        <Container fluid className="grid text-center" style={{padding: "0px"}} >
-          <div><strong>Sunday</strong></div>
-          <div><strong>Monday</strong></div>
-          <div><strong>Tuesday</strong></div>
-          <div><strong>Wednesday</strong></div>
-          <div><strong>Thursday</strong></div>
-          <div><strong>Friday</strong></div>
-          <div><strong>Saturday</strong></div>
+        <Container
+          fluid
+          className="grid text-center"
+          style={{ padding: "0px" }}
+        >
+          <div>
+            <strong>Sunday</strong>
+          </div>
+          <div>
+            <strong>Monday</strong>
+          </div>
+          <div>
+            <strong>Tuesday</strong>
+          </div>
+          <div>
+            <strong>Wednesday</strong>
+          </div>
+          <div>
+            <strong>Thursday</strong>
+          </div>
+          <div>
+            <strong>Friday</strong>
+          </div>
+          <div>
+            <strong>Saturday</strong>
+          </div>
           {weeks.map((w, i) =>
             w.map((d, i2) => {
               if (d.date)

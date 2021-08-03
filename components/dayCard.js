@@ -12,7 +12,7 @@ function DayCard(props) {
     fontSize: "0.675rem",
     marginBottom: "7px",
     textAlign: "left",
-    color: "rgb(100, 100, 100)"
+    color: "rgb(100, 100, 100)",
   };
   const mapStyle = {
     fontSize: "11px",
