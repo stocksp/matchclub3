@@ -25,6 +25,7 @@ function EmptyCard(props) {
           cursor: "pointer",
           display: "flex",
           justifyContent: "flex-end",
+          height: "100%",
         }}
         as="div"
       >
