@@ -1,5 +1,6 @@
 import { withMongo } from "../../libs/mongo";
 import { utcToZonedTime } from "date-fns-tz";
+import { array } from "yup";
 const { format } = require("date-fns");
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
@@ -52,8 +53,8 @@ const handler = async (req, res) => {
       res.json({ message: "aok", result: result.result.nModified });
       resp = await nodemailerMailgun.sendMail({
         from: "admin@cornerpins.com",
-        to: [process.env.EMAIL_CAP], // An array if you have multiple recipients.
-        subject: `Match ClubSignup`,
+        to: [new array("rstocks1@comcast.net", process.env.EMAIL_CAP)], // An array if you have multiple recipients.
+        subject: `MatchClub Signup`,
         "h:Reply-To": "fireater1959@gmail.com",
         html: `<html>
          <p>${bowler.alias} signed up for the ${format(
