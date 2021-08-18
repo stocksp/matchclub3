@@ -1,4 +1,7 @@
+import { date } from "yup";
 import { withMongo } from "../../libs/mongo";
+import { utcToZonedTime } from "date-fns-tz";
+const { format } = require("date-fns");
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
 let resp = null;
@@ -23,6 +26,10 @@ const handler = async (req, res) => {
     const bowler = await req.db
       .collection("members")
       .findOne({ memberId: bowlerId });
+    const dateData = await req.db
+      .collection("dates")
+      .findOne({ dateId: dateId });
+    const dateLocal = utcToZonedTime(new Date(), "America/Los_Angeles");
 
     if (dateId && bowlerId) {
       // get the squad with requested dateId
@@ -51,10 +58,14 @@ const handler = async (req, res) => {
       resp = await nodemailerMailgun.sendMail({
         from: "admin@cornerpins.com",
         to: [process.env.EMAIL_CAP], // An array if you have multiple recipients.
-        subject: `Match Club Dropout`,
+        subject: `MatchClub Dropout`,
         "h:Reply-To": "fireater1959@gmail.com",
         html: `<html>
-         <p>Hello ${bowler.alias} dropped out</p>
+         <p>${bowler.alias} dropped out of the ${format(
+          dateData.date,
+          "MM/dd/yyyy"
+        )} match at ${dateData.location}.</p>
+        <p>This was done at ${format(dateLocal, "h:mma MM/dd/yyyy")}.</p>
          </html>`,
       });
     } else {
