@@ -2,10 +2,18 @@ import React, { useContext } from "react";
 import { useStoreContext } from "../components/Store";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { makeChunks } from "libs/utils";
+import Index from "pages";
 
 const Squad = (props) => {
   const { user, hasSquad, squad, dates } = useStoreContext();
   const theDate = dates.find((d) => d.dateId === props.date);
+
+  const waitingstyle = {
+    fontSize: "8px",
+    position: "relative",
+    textAlign: "left",
+    color: "green",
+  };
 
   const theData = makeChunks(squad, 4);
   //const hasUser = user && squad.find(b => b.id === user.memberId);
@@ -19,21 +27,12 @@ const Squad = (props) => {
                 {r.map((d, i) => {
                   const waiting = d.pos > theDate.teamsizemax;
                   const isUser = d.id === (user && user.memberId);
-                  const name = waiting ? d.name + "==>wait list" : d.name;
+                  const name = d.name;
                   return (
-                    <td
-                      key={i}
-                      style={isUser ? { color: "crimson" } : null}
-                      /* className={
-                          waiting && isUser
-                            ? "waiting user"
-                            : isUser
-                            ? "user"
-                            : waiting
-                            ? "waiting"
-                            : null
-                        } */
-                    >
+                    <td key={i} style={isUser ? { color: "crimson" } : null}>
+                      <div style={waitingstyle}>
+                        {waiting ? "Waiting list" : null}
+                      </div>
                       {name}
                     </td>
                   );
