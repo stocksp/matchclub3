@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import Router from "next/router";
 import Header from "components/header";
-import { Modal, Button, ButtonToolbar, Container } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  ButtonToolbar,
+  Container,
+  Spinner,
+} from "react-bootstrap";
 import Squad from "components/squad";
 
 import { useStoreContext } from "../components/Store";
@@ -203,7 +209,20 @@ const Index = () => {
       </Container>
     );
   } else {
-    return <div>Waiting add Progress indicator here!</div>;
+    return (
+      <>
+        <Button variant="primary" disabled>
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          <span> Loading...</span>
+        </Button>
+      </>
+    );
   }
 };
 

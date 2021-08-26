@@ -7,7 +7,6 @@ import { startOfDay } from "date-fns";
 import Router from "next/router";
 import { Magic } from "magic-sdk";
 
-
 function useStore() {
   // removes time component makes comparison simpler
   const [currentDate, setCurrentDate] = useState(startOfDay(new Date()));
@@ -26,9 +25,9 @@ function useStore() {
   const [hasAllMembers, setHasAllMembers] = useState(false);
   const [clubsLocations, setClubsLocations] = useState(null);
   const [highScores, setHighScores] = useState(null);
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
-    console.log('user from store', user);
+  console.log("user from store", user);
 
   useEffect(() => {
     getDates();
@@ -41,7 +40,7 @@ function useStore() {
     const theUser = await response.json();
     console.log("checkUser", theUser);
     setUser(theUser.user);
-  }
+  };
 
   const doLoggin = async (email) => {
     if (user) {
@@ -54,7 +53,7 @@ function useStore() {
     }
     const body = {
       email: email,
-    }
+    };
     try {
       const didToken = await new Magic(
         process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
@@ -62,12 +61,12 @@ function useStore() {
       const authRequest = await fetch("/api/login", {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + didToken,
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + didToken,
         },
         body: JSON.stringify(body),
       });
-      console.log('authRequest', authRequest);
+      console.log("authRequest", authRequest);
       if (authRequest.ok) {
         console.log("we have logged in!");
         console.log("authRequest", authRequest);
@@ -322,6 +321,28 @@ function useStore() {
       return error;
     }
   };
+  const removeDate = async (data) => {
+    try {
+      console.log("calling updateData", data);
+      const resp = await fetch("/api/updateData?name=removeDate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      //TODO why does this fail with current updateData?
+      //const message = await resp.json();
+
+      if (resp.ok) {
+        await getDates(true);
+      }
+      return resp;
+    } catch (error) {
+      console.log("removeDate error", error);
+      return error;
+    }
+  };
   const updateLocation = async (data) => {
     try {
       console.log("calling updateData", data);
@@ -411,6 +432,7 @@ function useStore() {
     getClubsLocations,
     clubsLocations,
     updateDate,
+    removeDate,
     updateLocation,
     updateClub,
     getHighScores,

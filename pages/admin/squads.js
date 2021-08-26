@@ -115,7 +115,7 @@ function Squads() {
     // update the remote store
     updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad });
   };
-  if (hasSquads && hasAllMembers) {
+  if (hasSquads && hasAllMembers && squads.length > 0) {
     dates = squads.map((d) => {
       return { date: d.date, match: `${d.host}-${d.guest}`, dateId: d.dateId };
     });
@@ -249,7 +249,23 @@ function Squads() {
         </Container>
       </>
     );
+  } else if (hasSquads && squads.length === 0) {
+    return (
+      <>
+        <Header />
+        <Container
+          style={{
+            marginTop: "-5px",
+          }}
+        >
+          <AdminHeader />
+          <div>No future Dates / Squads available</div>
+        </Container>
+      </>
+    );
   }
+
   return <div>Waiting add Progress indicator here!</div>;
 }
+
 export default Squads;

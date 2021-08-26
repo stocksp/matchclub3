@@ -17,12 +17,8 @@ import EditDate from "../../components/editDate";
 
 function Dates() {
   const [dateToEdit, setDateToEdit] = useState(null);
-  const {
-    dates,
-    setActive,
-    clubsLocations,
-    getClubsLocations,
-  } = useStoreContext();
+  const { dates, setActive, clubsLocations, getClubsLocations, removeDate } =
+    useStoreContext();
   useEffect(() => {
     setActive("admin.dates");
     getClubsLocations();
@@ -37,6 +33,7 @@ function Dates() {
   };
   const doDelete = (date) => {
     console.log("delete this guy", date.dateId);
+    removeDate(date);
   };
   const doNew = () => {
     setDateToEdit({
@@ -101,9 +98,7 @@ function Dates() {
                 {dates.map((d, i) => {
                   return (
                     <tr key={i}>
-                      <td align="left">
-                        {format(d.date, "MMM d yyyy")}
-                      </td>
+                      <td align="left">{format(d.date, "MMM d yyyy")}</td>
                       <td align="left">{d.host}</td>
                       <td align="left">{d.guest}</td>
                       <td align="left">{d.location}</td>

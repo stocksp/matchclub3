@@ -37,7 +37,13 @@ function EmptyCard(props) {
           variant="light"
         >
           {" "}
-          {bgc === "ivory" ? <span> TODAY </span> : ""}
+          {bgc === "ivory" ? (
+            <span style={{ color: "rgb(253, 132, 19)", fontWeight: "bold" }}>
+              TODAY{"  "}
+            </span>
+          ) : (
+            ""
+          )}
           {theDay}
         </div>
       </Card.Header>

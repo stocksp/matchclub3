@@ -65,7 +65,7 @@ const EditDate = (props) => {
       updateDate(theData);
       form.resetForm({ values: data });
       console.log("done with submit TODO", theData);
-      //props.onClose();
+      props.onClose();
     }
   };
 
