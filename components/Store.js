@@ -309,8 +309,10 @@ function useStore() {
         },
         body: JSON.stringify(data),
       });
-      //TODO why does this fail with current updateData?
-      //const message = await resp.json();
+      // if we have squads update them
+      if(squads) {
+        await getSquads(true);
+      }
 
       if (resp.ok) {
         await getDates(true);
@@ -336,6 +338,9 @@ function useStore() {
 
       if (resp.ok) {
         await getDates(true);
+        if(squads){
+          await getSquads(true);
+        }
       }
       return resp;
     } catch (error) {

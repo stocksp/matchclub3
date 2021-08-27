@@ -44,7 +44,7 @@ function Squads() {
   } = useStoreContext();
   useEffect(() => {
     getAllMembers();
-    getSquads(true);
+    getSquads();
     setActive("admin.squads");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
