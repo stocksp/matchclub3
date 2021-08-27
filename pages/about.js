@@ -1,11 +1,11 @@
 import Header from "../components/header";
 function About() {
-  let COMMIT_SHA = process.env.VERCEL_GITHUB_COMMIT_SHA;
+  let COMMIT_SHA = process.env.buildId;
   return (
     <>
       <Header />
       <h2>About whatever</h2>
-      {COMMIT_SHA ? <h6>COMMIT_SHA</h6> : null} 
+      <h6>Build: {COMMIT_SHA}</h6> 
     </>
   );
 }
