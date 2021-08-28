@@ -1,5 +1,6 @@
 import { Badge, Card } from "react-bootstrap";
 import { format, startOfDay, isEqual } from "date-fns";
+import Image from "next/image";
 
 function EmptyCard(props) {
   const theDay = props.data.day;
@@ -16,40 +17,66 @@ function EmptyCard(props) {
   ) {
     bgc = "ivory";
   }
-  return (
-    <Card>
-      <Card.Header
-        style={{
-          padding: "0.1rem",
-          backgroundColor: bgc,
-          border: "0",
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "flex-end",
-          height: "28px",
-        }}
-        as="div"
-      >
-        <div
+  if (bgc === "ivory")
+    return (
+      <Card>
+        <Card.Header
           style={{
-            flex: "top",
+            padding: "0.1rem",
+            backgroundColor: bgc,
+            border: "0",
+            cursor: "pointer",
+            display: "flex",
+            justifyContent: "flex-end",
+            height: "28px",
           }}
-          variant="light"
+          as="div"
         >
-          {theDay}
-        </div>
-      </Card.Header>
-      <Card.Body
-        style={{
-          backgroundColor: bgc,
-          height: "62px",
-          padding: "0px 0px 0px 0px",
-        }}
-        as="div"
-      >
-        <div>{bgc === "ivory" ? <img src="\today.svg" /> : ""}</div>
-      </Card.Body>
-    </Card>
-  );
+          <div
+            style={{
+              flex: "top",
+            }}
+            variant="light"
+          >
+            {theDay}
+          </div>
+        </Card.Header>
+        <Image height="50%" width="100%" src="/today.svg" />
+      </Card>
+    );
+  else
+    return (
+      <Card>
+        <Card.Header
+          style={{
+            padding: "0.1rem",
+            backgroundColor: bgc,
+            border: "0",
+            cursor: "pointer",
+            display: "flex",
+            justifyContent: "flex-end",
+            height: "28px",
+          }}
+          as="div"
+        >
+          <div
+            style={{
+              flex: "top",
+            }}
+            variant="light"
+          >
+            {theDay}
+          </div>
+        </Card.Header>
+        <Card.Body
+          style={{
+            backgroundColor: bgc,
+            height: "62px",
+            padding: "0px 0px 0px 0px",
+          }}
+          as="div"
+        ></Card.Body>
+      </Card>
+    );
 }
 export default EmptyCard;
