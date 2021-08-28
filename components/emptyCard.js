@@ -22,31 +22,33 @@ function EmptyCard(props) {
         style={{
           padding: "0.1rem",
           backgroundColor: bgc,
+          border: "0",
           cursor: "pointer",
           display: "flex",
           justifyContent: "flex-end",
-          height: "100%",
+          height: "28px",
         }}
         as="div"
       >
         <div
           style={{
-            height: "90px",
-            flex: "center",
+            flex: "top",
           }}
           variant="light"
         >
-          {" "}
-          {bgc === "ivory" ? (
-            <span style={{ color: "rgb(253, 132, 19)", fontWeight: "bold" }}>
-              TODAY{"  "}
-            </span>
-          ) : (
-            ""
-          )}
           {theDay}
         </div>
       </Card.Header>
+      <Card.Body
+        style={{
+          backgroundColor: bgc,
+          height: "62px",
+          padding: "0px 0px 0px 0px",
+        }}
+        as="div"
+      >
+        <div>{bgc === "ivory" ? <img src="\today.svg" /> : ""}</div>
+      </Card.Body>
     </Card>
   );
 }
