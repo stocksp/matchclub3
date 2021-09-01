@@ -14,6 +14,7 @@ function useStore() {
   const [dates, setDates] = useState([]);
   const [hasDates, setHasDates] = useState(false);
   const [teamStats, setTeamStats] = useState([]);
+  const [hasTeamStats, setHasTeamStats] = useState(false);
   const [matchStats, setMatchStats] = useState(null);
   const [scores, setScores] = useState(null);
   const [hasScores, setHasScores] = useState(false);
@@ -106,7 +107,7 @@ function useStore() {
       const response = await fetch("/api/getData?name=getTeamStats");
       const myJson = await response.json();
       setTeamStats(myJson);
-      //setHasTeamStats(true);
+      setHasTeamStats(true);
     } catch (e) {
       alert(`Sorry ${e}`);
     }
@@ -414,6 +415,7 @@ function useStore() {
     doLoggin,
     getTeamStats,
     teamStats,
+    hasTeamStats,
     getMatchStats,
     matchStats,
     getScores,

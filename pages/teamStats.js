@@ -1,12 +1,12 @@
 import Header from "../components/header";
 import React, { useState, useEffect } from "react";
 import { useStoreContext } from "../components/Store";
-import { Table } from "react-bootstrap";
+import { Table, Button, Spinner } from "react-bootstrap";
 
 function TeamStats() {
   const [sortBy, setSortBy] = useState("average");
   const [dir, setDir] = useState("desc");
-  const { teamStats, getTeamStats, setActive } = useStoreContext();
+  const { hasTeamStats, teamStats, getTeamStats, setActive } = useStoreContext();
   useEffect(() => {
     setActive("teamStats");
     getTeamStats();
@@ -28,7 +28,7 @@ function TeamStats() {
     else return a[sortBy] - b[sortBy];
   };
   if (teamStats.length) teamStats.sort(sorter);
-  if (teamStats.length)
+  if (hasTeamStats)
     return (
       <>
         <Header />
@@ -85,10 +85,22 @@ function TeamStats() {
             })}
           </tbody>
         </Table>
+        {teamStats.length === 0 && <h5 className="text-center">No Data yet this season!</h5>}
       </>
     );
 
-  return <div>Waiting add Progress indicator here!</div>;
+  return <>
+    <Button variant="primary" disabled>
+      <Spinner
+        as="span"
+        animation="grow"
+        size="sm"
+        role="status"
+        aria-hidden="true"
+      />
+      <span> Loading...</span>
+    </Button>
+  </>
 }
 
 export default TeamStats;
