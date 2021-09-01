@@ -6,7 +6,8 @@ import { Table, Button, Spinner } from "react-bootstrap";
 function TeamStats() {
   const [sortBy, setSortBy] = useState("average");
   const [dir, setDir] = useState("desc");
-  const { hasTeamStats, teamStats, getTeamStats, setActive } = useStoreContext();
+  const { hasTeamStats, teamStats, getTeamStats, setActive } =
+    useStoreContext();
   useEffect(() => {
     setActive("teamStats");
     getTeamStats();
@@ -85,22 +86,26 @@ function TeamStats() {
             })}
           </tbody>
         </Table>
-        {teamStats.length === 0 && <h5 className="text-center">No Data yet this season!</h5>}
+        {teamStats.length === 0 && (
+          <h5 className="text-center">No Data yet this season!</h5>
+        )}
       </>
     );
 
-  return <>
-    <Button variant="primary" disabled>
-      <Spinner
-        as="span"
-        animation="grow"
-        size="sm"
-        role="status"
-        aria-hidden="true"
-      />
-      <span> Loading...</span>
-    </Button>
-  </>
+  return (
+    <>
+      <Button variant="primary" disabled>
+        <Spinner
+          as="span"
+          animation="grow"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        <span> Loading...</span>
+      </Button>
+    </>
+  );
 }
 
 export default TeamStats;

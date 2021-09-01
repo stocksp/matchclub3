@@ -311,7 +311,7 @@ function useStore() {
         body: JSON.stringify(data),
       });
       // if we have squads update them
-      if(squads) {
+      if (squads) {
         await getSquads(true);
       }
 
@@ -339,7 +339,7 @@ function useStore() {
 
       if (resp.ok) {
         await getDates(true);
-        if(squads){
+        if (squads) {
           await getSquads(true);
         }
       }
