@@ -9,6 +9,7 @@ import { Formik, Field, FieldArray, getIn, ErrorMessage } from "formik";
 import * as yup from "yup";
 //import { useForm, Controller, ErrorMessage } from "react-hook-form";
 import { useStoreContext } from "../../components/Store";
+import Router from 'next/router'
 
 const schema = yup.object().shape({
   squad: yup.array().of(
@@ -42,7 +43,7 @@ function Games() {
   // const { register, handleSubmit, errors, contro, getValues } = useForm({
   //   mode: "onChange",
   // });
-  const { dates, setActive, scores, getScores, updateScores } =
+  const { hasDates, hasScores, dates, setActive, scores, getScores, updateScores } =
     useStoreContext();
   useEffect(() => {
     setActive("admin.games");
@@ -174,9 +175,8 @@ function Games() {
                         style={{ width: "40%" }}
                       >
                         {theDates.map((d, i) => {
-                          const title = `${format(d.date, "MMM. d, yyyy")} ${
-                            d.host
-                          } hosting ${d.guest}`;
+                          const title = `${format(d.date, "MMM. d, yyyy")} ${d.host
+                            } hosting ${d.guest}`;
                           return (
                             <option key={i} value={d.dateId}>
                               {title}
@@ -322,6 +322,10 @@ function Games() {
       </>
     );
   } else {
+    if (hasDates && scores?.length === 0) {
+      Router.push('/admin/dates');
+      return null;
+    }
     return (
       <Container
         style={{
