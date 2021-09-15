@@ -90,12 +90,13 @@ const handler = async (req, res) => {
           bulkWrites.push({
             updateOne: {
               filter: { memberId: id },
-              update: stats,
+              update: {$set: stats},
               upsert: true,
             },
           });
         }
       });
+      
       resp = await req.db.collection("memberstats").bulkWrite(bulkWrites);
 
       // now do the highScores for this date
@@ -113,6 +114,7 @@ const handler = async (req, res) => {
     } else res.json({ message: "not good" });
   } catch (e) {
     console.log("catch error", e);
+    res.json({ message: "not good" });
   }
 };
 
