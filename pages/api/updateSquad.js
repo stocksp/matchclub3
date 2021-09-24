@@ -5,6 +5,7 @@ const handler = async (req, res) => {
   try {
     const dateId = parseInt(req.body.dateId);
     const squad = req.body.squad ? req.body.squad : [];
+    const season = req.body.season;
 
     if (dateId && squad) {
       // update the dateResults
@@ -12,7 +13,7 @@ const handler = async (req, res) => {
 
       let resp = await req.db
         .collection("dates")
-        .updateOne({ dateId }, { $set: { squad } });
+        .updateOne({ dateId, season }, { $set: { squad } });
       console.log("resp modified", resp.result.nModified);
 
       res.json({ message: "aok", resp });
