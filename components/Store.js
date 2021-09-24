@@ -6,6 +6,7 @@ import { startOfDay } from "date-fns";
 
 import Router from "next/router";
 import { Magic } from "magic-sdk";
+import { getSeason } from "libs/utils";
 
 function useStore() {
   // removes time component makes comparison simpler
@@ -165,7 +166,8 @@ function useStore() {
   // get the squad for this dateId
   const getSquad = async (id) => {
     try {
-      const response = await fetch(`/api/getData?dateId=${id}&name=getSquad`);
+      const season = getSeason();
+      const response = await fetch(`/api/getData?dateId=${id}&season=${season}&name=getSquad`);
       const myJson = await response.json();
       setSquad(myJson.squad);
       setHasSquad(true);
@@ -188,6 +190,7 @@ function useStore() {
   };
   const doSquadAction = async (action, dateId, bowlerId, name) => {
     try {
+      const season = getSeason();
       if (action === "Remove Me") {
         const resp = await fetch("/api/removeBowlerFromSquad", {
           method: "POST",
@@ -197,6 +200,7 @@ function useStore() {
           body: JSON.stringify({
             dateId,
             bowlerId,
+            season,
           }),
         });
         return resp;
@@ -210,6 +214,7 @@ function useStore() {
             dateId,
             bowlerId,
             name,
+            season,
           }),
         });
         return resp;

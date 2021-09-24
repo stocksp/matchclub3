@@ -6,7 +6,7 @@ import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
 import { format, compareAsc, parseISO } from "date-fns";
 
 import { useReactToPrint } from "react-to-print";
-import { makeChunks } from "libs/utils";
+import { makeChunks, getSeason } from "libs/utils";
 
 function Squads() {
   const componentRef = useRef();
@@ -87,6 +87,7 @@ function Squads() {
 
     const theSquad = squads.find(
       (s) => s.dateId === (dateId ? dateId : dates[0].dateId)
+      && s.season === getSeason()
     ).squad;
     // get the position for the new bowler
     const pos =
@@ -97,7 +98,7 @@ function Squads() {
     // update the local data in our store
     setSquads([...squads]);
     // update the remote store
-    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad });
+    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad, season: getSeason() });
   };
 
   const remove = (member) => {
@@ -113,7 +114,7 @@ function Squads() {
     theSquad = theSquad.map((s, i) => ({ ...s, pos: i + 1 }));
 
     // update the remote store
-    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad });
+    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad, season: getSeason() });
   };
   if (hasSquads && hasAllMembers && squads.length > 0) {
     dates = squads.map((d) => {

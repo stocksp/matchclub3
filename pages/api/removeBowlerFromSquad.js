@@ -23,12 +23,13 @@ const handler = async (req, res) => {
   try {
     const dateId = parseInt(req.body.dateId);
     const bowlerId = parseInt(req.body.bowlerId);
+    const season = req.body.season;
     const bowler = await req.db
       .collection("members")
       .findOne({ memberId: bowlerId });
     const dateData = await req.db
       .collection("dates")
-      .findOne({ dateId: dateId });
+      .findOne({ dateId: dateId, season, season });
     const dateLocal = utcToZonedTime(new Date(), "America/Los_Angeles");
 
     if (dateId && bowlerId) {
@@ -36,7 +37,7 @@ const handler = async (req, res) => {
       // squad is an object with squad property with our array
       const squad = await req.db
         .collection("dates")
-        .findOne({ dateId }, { projection: { squad: 1, _id: 0 } });
+        .findOne({ dateId, season }, { projection: { squad: 1, _id: 0 } });
       let theSquad = squad.squad;
 
       // remove the one element
@@ -51,13 +52,13 @@ const handler = async (req, res) => {
       // now add it
       const result = await req.db
         .collection("dates")
-        .updateOne({ dateId }, { $set: { squad: theSquad } });
+        .updateOne({ dateId , season}, { $set: { squad: theSquad } });
 
       res.json({ message: "aok", result: result.result.nModified });
 
       resp = await nodemailerMailgun.sendMail({
         from: "admin@cornerpins.com",
-        to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
+        to: ["cap.stocks@gmail.com"], // An array if you have multiple recipients.
         subject: `MatchClub Dropout`,
         "h:Reply-To": "fireater1959@gmail.com",
         html: `<html>

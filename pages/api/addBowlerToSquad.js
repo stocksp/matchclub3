@@ -24,12 +24,13 @@ const handler = async (req, res) => {
   try {
     const dateId = parseInt(req.body.dateId);
     const bowlerId = parseInt(req.body.bowlerId);
+    const season = req.body.season;
     const bowler = await req.db
       .collection("members")
       .findOne({ memberId: bowlerId });
     const dateData = await req.db
       .collection("dates")
-      .findOne({ dateId: dateId });
+      .findOne({ dateId: dateId, season: season });
     const dateLocal = utcToZonedTime(new Date(), "America/Los_Angeles");
     const name = req.body.name;
 
@@ -38,7 +39,7 @@ const handler = async (req, res) => {
       // squad is an object with squad property with our array
       const squad = await req.db
         .collection("dates")
-        .findOne({ dateId }, { projection: { squad: 1, _id: 0 } });
+        .findOne({ dateId, season }, { projection: { squad: 1, _id: 0 } });
       const theSquad = squad.squad;
       //sort it just to be safe
       theSquad.sort((a, b) => a.pos - b.pos);
@@ -53,7 +54,7 @@ const handler = async (req, res) => {
       res.json({ message: "aok", result: result.result.nModified });
       resp = await nodemailerMailgun.sendMail({
         from: "admin@cornerpins.com",
-        to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
+        to: ["cap.stocks@gmail.com"], // An array if you have multiple recipients.
         subject: `MatchClub Signup`,
         "h:Reply-To": "fireater1959@gmail.com",
         html: `<html>
