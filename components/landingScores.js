@@ -29,6 +29,9 @@ const LandingScores = () => {
     const theData = highScores.results.find(
       (r) => r.dateId === (dateId ? dateId : theDateId)
     );
+    if (!theData) {
+      return <div>oops</div>;
+    }
     return (
       <div id="landingScores">
         <Form.Control as="select" custom onChange={handleChange}>

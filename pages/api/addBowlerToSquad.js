@@ -49,7 +49,7 @@ const handler = async (req, res) => {
       // now add it
       const result = await req.db
         .collection("dates")
-        .updateOne({ dateId }, { $set: { squad: theSquad } });
+        .updateOne({ dateId, season }, { $set: { squad: theSquad } });
 
       res.json({ message: "aok", result: result.result.nModified });
       resp = await nodemailerMailgun.sendMail({
