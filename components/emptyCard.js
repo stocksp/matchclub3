@@ -41,7 +41,15 @@ function EmptyCard(props) {
             {theDay}
           </div>
         </Card.Header>
-        <Image height="50%" width="100%" src="/today.svg" />
+        <Image
+          height="50%"
+          width="100%"
+          src={
+            now.getHours() < 18 && now.getHours() > 6
+              ? "/today.svg"
+              : "/tonight.svg"
+          }
+        />
       </Card>
     );
   else
