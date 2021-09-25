@@ -58,7 +58,7 @@ const handler = async (req, res) => {
 
       resp = await nodemailerMailgun.sendMail({
         from: "admin@cornerpins.com",
-        to: ["cap.stocks@gmail.com"], // An array if you have multiple recipients.
+        to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
         subject: `MatchClub Dropout`,
         "h:Reply-To": "fireater1959@gmail.com",
         html: `<html>
