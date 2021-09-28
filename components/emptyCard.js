@@ -45,7 +45,7 @@ function EmptyCard(props) {
           height="50%"
           width="100%"
           src={
-            now.getHours() < 18 && now.getHours() > 6
+            now.getHours() < 19 && now.getHours() > 6
               ? "/today.svg"
               : "/tonight.svg"
           }

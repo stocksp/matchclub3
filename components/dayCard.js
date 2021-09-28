@@ -8,6 +8,7 @@ function DayCard(props) {
   const { host, guest, location, date } = props.data.date;
   const theHour = format(date, "h a");
   const theDay = props.data.day;
+  const now = new Date();
   const styles = {
     fontSize: "0.675rem",
     marginBottom: "7px",
@@ -47,6 +48,11 @@ function DayCard(props) {
           }}
         >
           {theHour}
+          {now.getDay() == date.getDay() &&
+          now.getMonth() == date.getMonth() &&
+          now.getFullYear() == date.getFullYear()
+            ? " *TODAY*"
+            : ""}
         </Badge>
         <Badge
           style={{
@@ -65,7 +71,12 @@ function DayCard(props) {
       <Card.Body
         style={{
           padding: "10px 10px",
-          background: "aqua",
+          background:
+            now.getDay() == date.getDay() &&
+            now.getMonth() == date.getMonth() &&
+            now.getFullYear() == date.getFullYear()
+              ? "orange"
+              : "aqua",
           cursor: "pointer",
           verticalAlign: "center",
         }}
