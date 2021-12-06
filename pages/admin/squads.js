@@ -163,7 +163,6 @@ function Squads() {
               <Row>
                 <Form.Control
                   as="select"
-                  custom
                   onChange={handleChange}
                   style={{ width: "33%" }}
                 >

@@ -34,7 +34,7 @@ const LandingScores = () => {
     }
     return (
       <div id="landingScores">
-        <Form.Control as="select" custom onChange={handleChange}>
+        <Form.Control as="select" onChange={handleChange}>
           {theDates.map((d, i) => {
             const teamRes = highScores.dateResults.find(
               (t) => t.dateId === d.dateId

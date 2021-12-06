@@ -65,7 +65,7 @@ const EditDate = (props) => {
       updateDate(theData);
       form.resetForm({ values: data });
       console.log("done with submit TODO", theData);
-      props.onClose();
+      props.doClose();
     }
   };
 
@@ -109,7 +109,6 @@ const EditDate = (props) => {
               <Form.Control
                 as="select"
                 name="host"
-                custom
                 onChange={handleChange}
                 value={values.host}
               >
@@ -127,7 +126,6 @@ const EditDate = (props) => {
               <Form.Control
                 as="select"
                 name="guest"
-                custom
                 onChange={handleChange}
                 value={values.guest}
               >
@@ -145,7 +143,6 @@ const EditDate = (props) => {
               <Form.Control
                 as="select"
                 name="location"
-                custom
                 onChange={handleChange}
                 value={values.location}
               >
@@ -163,7 +160,6 @@ const EditDate = (props) => {
               <Form.Control
                 as="select"
                 name="teamsizemax"
-                custom
                 onChange={handleChange}
                 value={values.teamsizemax}
               >

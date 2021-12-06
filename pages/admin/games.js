@@ -177,7 +177,6 @@ function Games() {
                     <Row>
                       <Form.Control
                         as="select"
-                        custom
                         onChange={handleDateChange}
                         style={{ width: "40%" }}
                       >

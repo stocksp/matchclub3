@@ -63,7 +63,6 @@ function MemberStats() {
               <Row>
                 <Form.Control
                   as="select"
-                  custom
                   onChange={handleChange}
                   style={{ width: "20%" }}
                 >

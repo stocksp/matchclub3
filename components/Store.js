@@ -29,7 +29,7 @@ function useStore() {
   const [highScores, setHighScores] = useState(null);
   const [user, setUser] = useState(null);
 
-  console.log("user from store", user);
+  //console.log("user from store!!", user);
 
   useEffect(() => {
     getDates();
