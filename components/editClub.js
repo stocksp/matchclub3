@@ -131,7 +131,6 @@ const EditClub = (props) => {
               <Form.Control
                 as="select"
                 name="houseName"
-                custom
                 onChange={ev => doHouseChange(ev, values, setValues)}
                 value={values.houseName}
               >

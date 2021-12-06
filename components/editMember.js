@@ -306,7 +306,6 @@ function EditMember(props) {
                             <Form.Control
                               name={`reminders.${i}`}
                               as="select"
-                              custom
                               onChange={(v) => {
                                 setFieldValue(
                                   `reminders.${i}`,

@@ -60,7 +60,7 @@ function MatchStats() {
         <Form>
           <Form.Group controlId="exampleForm.SelectCustom">
             <Form.Label>Select the Match Date</Form.Label>
-            <Form.Control as="select" custom onChange={handleChange}>
+            <Form.Control as="select" onChange={handleChange}>
               {dates.map((d, i) => {
                 const teamRes = matchStats[1].find(
                   (t) => t.dateId === d.dateId
