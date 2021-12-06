@@ -59,7 +59,7 @@ const handler = async (req, res) => {
         );
       console.log(
         "resp modified",
-        resp.result.nModified,
+        resp.modifiedCount,
         "upserted",
         resp.result.upserted ? true : false
       );

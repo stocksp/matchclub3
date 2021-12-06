@@ -41,7 +41,7 @@ const handler = async (req, res) => {
           upsert: true,
         }
       );
-      console.log("resp", resp.result.nModified);
+      console.log("resp", resp.modifiedCount);
       return { message: "aok", resp };
     } else return error;
   } catch (e) {

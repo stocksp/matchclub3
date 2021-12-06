@@ -108,7 +108,7 @@ const handler = async (req, res) => {
           upsert: true,
         }
       );
-      console.log("resp", resp.result.nModified);
+      console.log("resp", resp.modifiedCount);
 
       res.json({ message: "aok" });
     } else res.json({ message: "not good" });
