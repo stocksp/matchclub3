@@ -51,7 +51,7 @@ const handler = async (req, res) => {
         .collection("dates")
         .updateOne({ dateId, season }, { $set: { squad: theSquad } });
 
-      res.json({ message: "aok", result: resp.modifiedCount });
+      res.json({ message: "aok", result: result.modifiedCount });
       resp = await nodemailerMailgun.sendMail({
         from: "admin@cornerpins.com",
         to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
