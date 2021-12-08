@@ -36,10 +36,10 @@ const handler = async (req, res) => {
           { $set: { dateId, won, lost, match, season } },
           { upsert: true }
         );
-      console.log("won lost ok", resp.result.ok);
+      console.log("won lost ok", resp.acknowledged);
       // delete all old scores for this date
       resp = await req.db.collection("matchScores").deleteMany({ dateId });
-      console.log("delete old scores ok", resp.result.ok);
+      console.log("delete old scores ok", resp.acknowledged);
       // insert the new ones
       // first convert the data from JSON strings to ints and date
       // then make it an array
@@ -54,7 +54,7 @@ const handler = async (req, res) => {
       });
       // now insert them
       resp = await req.db.collection("matchScores").insertMany(scoreArray);
-      console.log("inserting new scores ok", resp.result.ok);
+      console.log("inserting new scores ok", resp.acknowledged);
       // rebuild update and return the handicaps for all bowlers
       const handi = await makeHandi(req.db);
       console.log("handi", handi);

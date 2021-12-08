@@ -65,7 +65,7 @@ function Games() {
   const filterDates = () => {
     const now = new Date();
     let thedates = dates.filter((elem, index) => {
-      return compareAsc(new Date(), elem.date) === 1;
+      return compareAsc(now, elem.date) === 1;
     });
 
     return thedates;
