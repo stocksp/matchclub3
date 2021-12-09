@@ -65,9 +65,7 @@ const handler = async (req, res) => {
       } else res.json(data);
     } else if (name === "emailExists") {
       const data = await emailExists(req, res);
-      if (data.member !== undefined) {
-        res.json({ member: data.member });
-      } else res.status(401).end("Error on server.");
+      res.json({ member: data.member });
     } else {
       console.log("Bad name no go");
       res.json("Error: bad query name");

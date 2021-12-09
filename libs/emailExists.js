@@ -2,11 +2,12 @@ import { withMongo } from "./mongo";
 
 const handler = async (req, res) => {
   try {
-    console.log("starting emailExists:", req.query.email);
+    const email = decodeURIComponent(req.query.email)
+    console.log("starting emailExists:", email);
 
     const member = await req.db
       .collection("members")
-      .findOne({ email: req.query.email });
+      .findOne({ email: email });
 
     console.log("found member", member?.alias);
     if (member)

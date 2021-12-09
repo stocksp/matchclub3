@@ -13,7 +13,7 @@ const SignupSchema = Yup.object().shape({
 const Login = (props) => {
 
   const [failedLogin, setfailedLogin] = useState(false);
-  const { doLoggin, user } = useStoreContext();
+  const { doLoggin,  } = useStoreContext();
 
   const handleClose = () => {
     Router.push('/')
@@ -28,6 +28,12 @@ const Login = (props) => {
       onSubmit={async (values, { setSubmitting, setErrors, resetForm }) => {
         // same shape as initial values
         console.log(values);
+        const response = await fetch(`/api/getData?name=emailExists&email=${encodeURIComponent(values.email)}`);
+        const myJson = await response.json();
+        if(myJson.member === false) {
+          setErrors({ email: "User Not found!!" });
+          return
+        }
         const resp = await doLoggin(values.email);
         console.log(resp);
         if (resp) {
