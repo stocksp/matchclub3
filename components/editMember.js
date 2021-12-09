@@ -22,7 +22,7 @@ import { useStoreContext } from "components/Store";
 function renderTooltip(props) {
   return (
     <Tooltip id="button-tooltip" {...props}>
-      Contact Cap to change email!
+      Contact Don or Cap:<br /> To change email!
     </Tooltip>
   );
 }
@@ -168,10 +168,18 @@ function EditMember(props) {
                   <InputGroup>
                     <InputGroup.Text>
                       {" "}
-                      <BsFillInfoCircleFill
-                        size={"1.5em"}
-                        style={{ cursor: "pointer" }}
-                      />
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltip}
+                      >
+                        <div>
+                          <BsFillInfoCircleFill
+                            size={"1.5em"}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>
+                      </OverlayTrigger>
                     </InputGroup.Text>
                     <Form.Control
                       name="email"
@@ -180,7 +188,7 @@ function EditMember(props) {
                       value={values.email}
                       onChange={handleChange}
                       disabled={props.fromAdmin ? false : true}
-                      
+
                     />
                   </InputGroup>
                 </Col>
