@@ -165,32 +165,40 @@ function EditMember(props) {
                   Email
                 </Form.Label>
                 <Col sm={3}>
-                  <InputGroup>
-                    <InputGroup.Text>
-                      {" "}
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
-                      >
-                        <div>
-                          <BsFillInfoCircleFill
-                            size={"1.5em"}
-                            style={{ cursor: "pointer" }}
-                          />
-                        </div>
-                      </OverlayTrigger>
-                    </InputGroup.Text>
+                  {props.fromAdmin ?
                     <Form.Control
                       name="email"
                       type="text"
                       placeholder="Enter email"
                       value={values.email}
                       onChange={handleChange}
-                      disabled={props.fromAdmin ? false : true}
-
-                    />
-                  </InputGroup>
+                    /> :
+                    <InputGroup>
+                      <InputGroup.Text>
+                        {" "}
+                        <OverlayTrigger
+                          placement="right"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderTooltip}
+                        >
+                          <div>
+                            <BsFillInfoCircleFill
+                              size={"1.5em"}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </div>
+                        </OverlayTrigger>
+                      </InputGroup.Text>
+                      <Form.Control
+                        name="email"
+                        type="text"
+                        placeholder="Enter email"
+                        value={values.email}
+                        onChange={handleChange}
+                        disabled
+                      />
+                    </InputGroup>
+                  }
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
