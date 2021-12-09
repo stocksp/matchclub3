@@ -53,11 +53,7 @@ export default function Member() {
 
     console.log("good submit ", theData);
   };
-  const doChangePW = () => {
-    console.log("doChangePW");
-    setShowChangePW(true);
-  };
-
+  
   return (
     <>
       <Header />

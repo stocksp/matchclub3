@@ -178,7 +178,9 @@ function EditMember(props) {
                       type="text"
                       placeholder="Enter email"
                       value={values.email}
-                      disabled
+                      onChange={handleChange}
+                      disabled={props.fromAdmin ? false : true}
+                      
                     />
                   </InputGroup>
                 </Col>

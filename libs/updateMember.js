@@ -61,7 +61,7 @@ const handler = async (req, res) => {
         "resp modified",
         resp.modifiedCount,
         "upserted",
-        resp.result.upserted ? true : false
+        resp.upsertedCount === 1 ? true : false
       );
       
       return({ message: "aok",  resp});
