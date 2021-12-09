@@ -14,6 +14,7 @@ import {
   InputGroup,
   OverlayTrigger,
   Tooltip,
+  Image
 } from "react-bootstrap";
 
 import { useStoreContext } from "components/Store";
@@ -39,6 +40,7 @@ const schema = yup.object().shape({
 
 function EditMember(props) {
   const { updateMember } = useStoreContext();
+  let ref = React.createRef();
 
   const [active, setActive] = useState(
     props.member ? props.member.active : true
@@ -164,21 +166,13 @@ function EditMember(props) {
                 </Form.Label>
                 <Col sm={3}>
                   <InputGroup>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>
-                        {" "}
-                        <OverlayTrigger
-                          placement="right"
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={renderTooltip}
-                        >
-                          <BsFillInfoCircleFill
-                            size={"1.5em"}
-                            style={{ cursor: "pointer" }}
-                          />
-                        </OverlayTrigger>
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
+                    <InputGroup.Text>
+                      {" "}
+                      <BsFillInfoCircleFill
+                        size={"1.5em"}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </InputGroup.Text>
                     <Form.Control
                       name="email"
                       type="text"
