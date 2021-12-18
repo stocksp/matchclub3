@@ -14,7 +14,7 @@ import {
   InputGroup,
   OverlayTrigger,
   Tooltip,
-  Image
+  Image,
 } from "react-bootstrap";
 
 import { useStoreContext } from "components/Store";
@@ -22,7 +22,8 @@ import { useStoreContext } from "components/Store";
 function renderTooltip(props) {
   return (
     <Tooltip id="button-tooltip" {...props}>
-      Contact Don or Cap:<br /> To change email!
+      Contact Don or Cap:
+      <br /> To change email!
     </Tooltip>
   );
 }
@@ -165,14 +166,15 @@ function EditMember(props) {
                   Email
                 </Form.Label>
                 <Col sm={3}>
-                  {props.fromAdmin ?
+                  {props.fromAdmin ? (
                     <Form.Control
                       name="email"
                       type="text"
                       placeholder="Enter email"
                       value={values.email}
                       onChange={handleChange}
-                    /> :
+                    />
+                  ) : (
                     <InputGroup>
                       <InputGroup.Text>
                         {" "}
@@ -198,7 +200,7 @@ function EditMember(props) {
                         disabled
                       />
                     </InputGroup>
-                  }
+                  )}
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -337,38 +339,46 @@ function EditMember(props) {
                             </Form.Control>
                           </Col>
                           {values.reminders.length != 0 && (
-                            <BsDashCircleFill
-                              size={"2em"}
-                              color={"red"}
-                              onClick={() => {
-                                remove(i);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
+                            <div style={{ width: "20%" }}>
+                              <BsDashCircleFill
+                                size={"2em"}
+                                color={"red"}
+                                onClick={() => {
+                                  remove(i);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </div>
                           )}
                           {values.reminders.length < 2 && (
-                            <BsPlusCircleFill
-                              size={"2em"}
-                              color={"blue"}
-                              onClick={() => {
-                                push(1);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
+                            <div>
+                              Add a second email reminder&nbsp;&nbsp;
+                              <BsPlusCircleFill
+                                size={"2em"}
+                                color={"blue"}
+                                onClick={() => {
+                                  push(1);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </div>
                           )}
                         </Form.Group>
                       );
                     });
                   else
                     return (
-                      <BsPlusCircleFill
-                        size={"2em"}
-                        color={"blue"}
-                        onClick={() => {
-                          push(1);
-                        }}
-                        style={{ cursor: "pointer" }}
-                      />
+                      <div>
+                        Add an email reminder&nbsp;&nbsp;
+                        <BsPlusCircleFill
+                          size={"2em"}
+                          color={"blue"}
+                          onClick={() => {
+                            push(1);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </div>
                     );
                 }}
               </FieldArray>
