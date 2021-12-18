@@ -27,6 +27,13 @@ function renderTooltip(props) {
     </Tooltip>
   );
 }
+function reminderTooltip(props) {
+  return (
+    <Tooltip id="button-tooltip" {...props}>
+      Click to add reminder
+    </Tooltip>
+  );
+}
 
 const theOptions = [1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 21].map((n, i) => {
   return { label: `${n} day${n === 0 ? "" : "s"} before`, value: n };
@@ -340,6 +347,7 @@ function EditMember(props) {
                           </Col>
                           {values.reminders.length != 0 && (
                             <div style={{ width: "20%" }}>
+
                               <BsDashCircleFill
                                 size={"2em"}
                                 color={"red"}
@@ -348,19 +356,28 @@ function EditMember(props) {
                                 }}
                                 style={{ cursor: "pointer" }}
                               />
+
                             </div>
                           )}
                           {values.reminders.length < 2 && (
                             <div>
                               Add a second email reminder&nbsp;&nbsp;
-                              <BsPlusCircleFill
-                                size={"2em"}
-                                color={"blue"}
-                                onClick={() => {
-                                  push(1);
-                                }}
-                                style={{ cursor: "pointer" }}
-                              />
+                              <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={reminderTooltip}
+                              >
+                                <div style={{ display: "inline" }}>
+                                  <BsPlusCircleFill
+                                    size={"2em"}
+                                    color={"blue"}
+                                    onClick={() => {
+                                      push(1);
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </div>
+                              </OverlayTrigger>
                             </div>
                           )}
                         </Form.Group>
@@ -370,14 +387,22 @@ function EditMember(props) {
                     return (
                       <div>
                         Add an email reminder&nbsp;&nbsp;
-                        <BsPlusCircleFill
-                          size={"2em"}
-                          color={"blue"}
-                          onClick={() => {
-                            push(1);
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />
+                        <OverlayTrigger
+                          placement="right"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={reminderTooltip}
+                        >
+                          <div style={{ display: "inline" }}>
+                            <BsPlusCircleFill
+                              size={"2em"}
+                              color={"blue"}
+                              onClick={() => {
+                                push(1);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </div>
+                        </OverlayTrigger>
                       </div>
                     );
                 }}
