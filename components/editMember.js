@@ -30,7 +30,7 @@ function renderTooltip(props) {
 function reminderTooltip(props) {
   return (
     <Tooltip id="button-tooltip" {...props}>
-      Click to add reminder
+      Click to remove reminder
     </Tooltip>
   );
 }
@@ -347,37 +347,35 @@ function EditMember(props) {
                           </Col>
                           {values.reminders.length != 0 && (
                             <div style={{ width: "20%" }}>
-
-                              <BsDashCircleFill
-                                size={"2em"}
-                                color={"red"}
-                                onClick={() => {
-                                  remove(i);
-                                }}
-                                style={{ cursor: "pointer" }}
-                              />
-
-                            </div>
-                          )}
-                          {values.reminders.length < 2 && (
-                            <div>
-                              Add a second email reminder&nbsp;&nbsp;
                               <OverlayTrigger
                                 placement="right"
                                 delay={{ show: 250, hide: 400 }}
                                 overlay={reminderTooltip}
                               >
                                 <div style={{ display: "inline" }}>
-                                  <BsPlusCircleFill
+                                  <BsDashCircleFill
                                     size={"2em"}
-                                    color={"blue"}
+                                    color={"red"}
                                     onClick={() => {
-                                      push(1);
+                                      remove(i);
                                     }}
                                     style={{ cursor: "pointer" }}
                                   />
                                 </div>
                               </OverlayTrigger>
+                            </div>
+                          )}
+                          {values.reminders.length < 2 && (
+                            <div>
+                              Click to add a second email reminder&nbsp;&nbsp;
+                              <BsPlusCircleFill
+                                size={"2em"}
+                                color={"blue"}
+                                onClick={() => {
+                                  push(1);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              />
                             </div>
                           )}
                         </Form.Group>
@@ -386,23 +384,17 @@ function EditMember(props) {
                   else
                     return (
                       <div>
-                        Add an email reminder&nbsp;&nbsp;
-                        <OverlayTrigger
-                          placement="right"
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={reminderTooltip}
-                        >
-                          <div style={{ display: "inline" }}>
-                            <BsPlusCircleFill
-                              size={"2em"}
-                              color={"blue"}
-                              onClick={() => {
-                                push(1);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
-                          </div>
-                        </OverlayTrigger>
+                        Click to add an email reminder&nbsp;&nbsp;
+                        <div style={{ display: "inline" }}>
+                          <BsPlusCircleFill
+                            size={"2em"}
+                            color={"blue"}
+                            onClick={() => {
+                              push(1);
+                            }}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>
                       </div>
                     );
                 }}
