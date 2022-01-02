@@ -48,7 +48,7 @@ function DayCard(props) {
           }}
         >
           {theHour}
-          {now.getDay() == date.getDay() &&
+          {now.getDate() == date.getDate() &&
           now.getMonth() == date.getMonth() &&
           now.getFullYear() == date.getFullYear()
             ? " *TODAY*"
@@ -72,7 +72,7 @@ function DayCard(props) {
         style={{
           padding: "10px 10px",
           background:
-            now.getDay() == date.getDay() &&
+            now.getDate() == date.getDate() &&
             now.getMonth() == date.getMonth() &&
             now.getFullYear() == date.getFullYear()
               ? "orange"
