@@ -6,7 +6,8 @@ const handler = async (req, res) => {
     console.log("starting getDates");
     const docs = await req.db
       .collection("dates")
-      .find({ season: getSeason() })
+/*       .find({ season: getSeason() }) */
+      .find({season: {$gte:(getSeason())}})
       .project({ squad: 0, _id: 0 })
       .sort({ date: -1 })
       .toArray();

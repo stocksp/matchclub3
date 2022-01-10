@@ -87,7 +87,6 @@ function Squads() {
 
     const theSquad = squads.find(
       (s) => s.dateId === (dateId ? dateId : dates[0].dateId)
-      && s.season === getSeason()
     ).squad;
     // get the position for the new bowler
     const pos =
@@ -98,7 +97,7 @@ function Squads() {
     // update the local data in our store
     setSquads([...squads]);
     // update the remote store
-    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad, season: getSeason() });
+    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad });
   };
 
   const remove = (member) => {
@@ -114,7 +113,7 @@ function Squads() {
     theSquad = theSquad.map((s, i) => ({ ...s, pos: i + 1 }));
 
     // update the remote store
-    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad, season: getSeason() });
+    updateSquad({ dateId: dateId ? dateId : dates[0].dateId, squad: theSquad });
   };
   if (hasSquads && hasAllMembers && squads.length > 0) {
     dates = squads.map((d) => {

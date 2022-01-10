@@ -6,7 +6,8 @@ const handler = async (req, res) => {
     const docs = await req.db
 
       .collection("dates")
-      .find({ dateId: parseInt(req.query.dateId), season: req.query.season })
+      /*    .find({ dateId: parseInt(req.query.dateId), season: req.query.season }) */
+      .find({ dateId: parseInt(req.query.dateId) })
       .project({ squad: 1, _id: 0 })
       .toArray();
 

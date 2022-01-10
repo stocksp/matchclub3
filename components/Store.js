@@ -167,7 +167,7 @@ function useStore() {
   const getSquad = async (id) => {
     try {
       const season = getSeason();
-      const response = await fetch(`/api/getData?dateId=${id}&season=${season}&name=getSquad`);
+      const response = await fetch(`/api/getData?dateId=${id}&name=getSquad`);
       const myJson = await response.json();
       setSquad(myJson.squad);
       setHasSquad(true);

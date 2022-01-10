@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 
 import { Tab, Row, Col, ListGroup, Form } from "react-bootstrap";
-import { format,  } from "date-fns";
+import { format } from "date-fns";
 import { useStoreContext } from "./Store";
 
 const LandingScores = () => {

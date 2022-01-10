@@ -13,7 +13,7 @@ const handler = async (req, res) => {
 
       let resp = await req.db
         .collection("dates")
-        .updateOne({ dateId, season }, { $set: { squad } });
+        .updateOne({ dateId }, { $set: { squad } });
       console.log("resp modified", resp.modifiedCount);
 
       res.json({ message: "aok", resp });
