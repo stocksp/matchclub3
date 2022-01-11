@@ -97,7 +97,6 @@ function TeamStats() {
           bordered
           hover
           size="sm"
-          leftMargin="100px"
           ref={componentRef}
           className="hide-on-screen"
         >
