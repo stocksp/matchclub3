@@ -5,6 +5,7 @@ import { useStoreContext } from "components/Store";
 import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
 import { format, compareAsc, parseISO } from "date-fns";
 
+import { Spinner } from "react-bootstrap";
 import { useReactToPrint } from "react-to-print";
 import { makeChunks, getSeason } from "libs/utils";
 
@@ -264,7 +265,20 @@ function Squads() {
     );
   }
 
-  return <div>Waiting add Progress indicator here!</div>;
+  return (
+    <>
+      <Button variant="primary" disabled>
+        <Spinner
+          as="span"
+          animation="grow"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        <span> Loading...</span>
+      </Button>
+    </>
+  );
 }
 
 export default Squads;

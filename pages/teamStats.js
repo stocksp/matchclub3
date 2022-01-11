@@ -1,13 +1,18 @@
 import Header from "../components/header";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useStoreContext } from "../components/Store";
 import { Table, Button, Spinner } from "react-bootstrap";
+import { useReactToPrint } from "react-to-print";
 
 function TeamStats() {
   const [sortBy, setSortBy] = useState("average");
   const [dir, setDir] = useState("desc");
   const { hasTeamStats, teamStats, getTeamStats, setActive } =
     useStoreContext();
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   useEffect(() => {
     setActive("teamStats");
     getTeamStats();
@@ -34,6 +39,7 @@ function TeamStats() {
       <>
         <Header />
         <h2 className="text-center">Team Stats</h2>
+        <button onClick={handlePrint}>Print the Stats</button>
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
@@ -45,6 +51,66 @@ function TeamStats() {
                 Hi&nbsp;Game
                 <br />
                 handi&nbsp;↕️
+              </th>
+              <th>
+                Hi&nbsp;Series
+                <br />
+                handi
+              </th>
+              <th>
+                Hi Series
+                <br />
+                games
+              </th>
+              <th>
+                Hi Series
+                <br />
+                HandiGames
+              </th>
+              <th>Total Pins</th>
+              <th>Total Games</th>
+              <th>Handi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teamStats.map((r, i) => {
+              return (
+                <tr key={i}>
+                  <td key={1}>{r.member}</td>
+                  <td key={2}>{r.average}</td>
+                  <td key={3}>{r.hiGame}</td>
+                  <td key={4}>{r.hiSeries}</td>
+                  <td key={5}>{r.hiGameHandi}</td>
+                  <td key={6}>{r.hiSeriesHandi}</td>
+                  <td key={7}>{r.hiSeriesGames.join(",")}</td>
+                  <td key={8}>{r.hiSeriesHandiGames.join(",")}</td>
+                  <td key={9}>{r.totalPins}</td>
+                  <td key={10}>{r.totalGames}</td>
+                  <td key={11}>{r.handicap}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        <Table
+          striped
+          bordered
+          hover
+          size="sm"
+          leftMargin="100px"
+          ref={componentRef}
+          className="hide-on-screen"
+        >
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Average</th>
+              <th>Hi Game</th>
+              <th>Hi Series</th>
+              <th>
+                Hi&nbsp;Game
+                <br />
+                handi
               </th>
               <th>
                 Hi&nbsp;Series

@@ -1,14 +1,19 @@
 import Header from "../components/header";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useStoreContext } from "../components/Store";
 import { Table, Form } from "react-bootstrap";
 import { format, parseISO } from "date-fns";
+import { useReactToPrint } from "react-to-print";
 
 function MatchStats() {
   const [sortBy, setSortBy] = useState("average");
   const [dir, setDir] = useState("desc");
   const [dateId, setDateId] = useState(null);
   const { getMatchStats, matchStats, setActive } = useStoreContext();
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   useEffect(() => {
     setActive("matchStats");
     getMatchStats();
@@ -57,6 +62,7 @@ function MatchStats() {
       <>
         <Header />
         <h2 className="text-center">Match Stats</h2>
+        <button onClick={handlePrint}>Print the Stats</button>
         <Form>
           <Form.Group controlId="exampleForm.SelectCustom">
             <Form.Label>Select the Match Date</Form.Label>
@@ -99,6 +105,48 @@ function MatchStats() {
                 Series&nbsp;hcp&nbsp;↕️
               </th>
 
+              <th>Handi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {theData.map((r, i) => {
+              return (
+                <tr key={i}>
+                  <td key={1}>{r.alias.replace(/ /g, "\u00a0")}</td>
+                  <td key={2}>{r.average}</td>
+                  <td key={3}>{r.series}</td>
+                  <td key={4}>{r.hiGame}</td>
+                  <td key={5}>{r.game1}</td>
+                  <td key={6}>{r.game2}</td>
+                  <td key={7}>{r.game3}</td>
+                  <td key={8}>{r.hiGameHandi}</td>
+                  <td key={9}>{r.seriesHandi}</td>
+
+                  <td key={10}>{r.handi}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        <Table
+          striped
+          bordered
+          hover
+          size="sm"
+          ref={componentRef}
+          className="hide-on-screen"
+        >
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Average</th>
+              <th>Hi Series</th>
+              <th>Hi Game</th>
+              <th>Game&nbsp;1</th>
+              <th>Game&nbsp;2</th>
+              <th>Game&nbsp;3</th>
+              <th>Hi&nbsp;Game&nbsp;hcp</th>
+              <th>Series&nbsp;hcp</th>
               <th>Handi</th>
             </tr>
           </thead>
