@@ -2,18 +2,6 @@ import { date } from "yup";
 import { withMongo } from "../../libs/mongo";
 import { utcToZonedTime } from "date-fns-tz";
 const { format } = require("date-fns");
-const nodemailer = require("nodemailer");
-const mg = require("nodemailer-mailgun-transport");
-let resp = null;
-const api_key = process.env.EMAIL_API_KEY;
-const domain = process.env.EMAIL_DOMAIN;
-const auth = {
-  auth: {
-    api_key: api_key,
-    domain: domain,
-  },
-};
-const nodemailerMailgun = nodemailer.createTransport(mg(auth));
 const handler = async (req, res) => {
   console.log(
     "running removeBowlerFromSquad",
@@ -49,25 +37,36 @@ const handler = async (req, res) => {
       });
 
       // now add it
-      const result = await req.db
+      let result = await req.db
         .collection("dates")
         .updateOne({ dateId }, { $set: { squad: theSquad } });
 
       res.json({ message: "aok", result: result.modifiedCount });
 
-      resp = await nodemailerMailgun.sendMail({
-        from: "admin@cornerpins.com",
-        to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
-        subject: `MatchClub Dropout`,
-        "h:Reply-To": "fireater1959@gmail.com",
-        html: `<html>
-         <p>${bowler.alias} dropped out of the ${format(
-          dateData.date,
-          "MM/dd/yyyy"
-        )} match at ${dateData.location}.</p>
-        <p>This was done at ${format(dateLocal, "h:mma MM/dd/yyyy")}.</p>
-         </html>`,
-      });
+      result = await req.db
+        .collection("signups")
+        .insertOne({
+          name: bowler.alias,
+          date: dateData.date,
+          location: dateData.location,
+          what: "remove",
+          when: dateLocal,
+          emailSent: false,
+        });
+
+      // resp = await nodemailerMailgun.sendMail({
+      //   from: "admin@cornerpins.com",
+      //   to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
+      //   subject: `MatchClub Dropout`,
+      //   "h:Reply-To": "fireater1959@gmail.com",
+      //   html: `<html>
+      //    <p>${bowler.alias} dropped out of the ${format(
+      //     dateData.date,
+      //     "MM/dd/yyyy"
+      //   )} match at ${dateData.location}.</p>
+      //   <p>This was done at ${format(dateLocal, "h:mma MM/dd/yyyy")}.</p>
+      //    </html>`,
+      // });
     } else {
       res.json({ message: "no update!" });
     }
