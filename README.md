@@ -44,3 +44,7 @@ Don't check this change in or loggins won't work correctly
 
 ## TODO
 - [] Figure out active and guest: Can Guests log in?
+
+Old mailer task 
+program: "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+arg: https://cornerpins.com/api/getData?name=runMailer
