@@ -99,6 +99,7 @@ function TeamStats() {
           size="sm"
           ref={componentRef}
           className="hide-on-screen"
+          style={{ marginLeft: "50px", marginTop: "50px" }}
         >
           <thead>
             <tr>
