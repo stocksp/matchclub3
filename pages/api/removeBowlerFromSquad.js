@@ -50,7 +50,7 @@ const handler = async (req, res) => {
           date: dateData.date,
           location: dateData.location,
           what: "remove",
-          when: new date(),
+          when: new Date(),
           emailSent: false,
         });
 
