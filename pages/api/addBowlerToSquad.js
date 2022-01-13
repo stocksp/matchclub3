@@ -1,5 +1,5 @@
 import { withMongo } from "../../libs/mongo";
-import { utcToZonedTime } from "date-fns-tz";
+
 import { array } from "yup";
 const { format } = require("date-fns");
 
@@ -20,7 +20,7 @@ const handler = async (req, res) => {
     const dateData = await req.db
       .collection("dates")
       .findOne({ dateId: dateId });
-    const dateLocal = utcToZonedTime(new Date(), "America/Los_Angeles");
+    
     const name = req.body.name;
 
     if (dateId && bowlerId && name) {
@@ -49,7 +49,7 @@ const handler = async (req, res) => {
           date: dateData.date,
           location: dateData.location,
           what: "add",
-          when: dateLocal,
+          when: new Date(),
           emailSent: false,
         });
 

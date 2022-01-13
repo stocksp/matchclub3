@@ -1,6 +1,6 @@
 import { date } from "yup";
 import { withMongo } from "../../libs/mongo";
-import { utcToZonedTime } from "date-fns-tz";
+
 const { format } = require("date-fns");
 const handler = async (req, res) => {
   console.log(
@@ -17,7 +17,7 @@ const handler = async (req, res) => {
     const dateData = await req.db
       .collection("dates")
       .findOne({ dateId: dateId });
-    const dateLocal = utcToZonedTime(new Date(), "America/Los_Angeles");
+    
 
     if (dateId && bowlerId) {
       // get the squad with requested dateId
@@ -50,7 +50,7 @@ const handler = async (req, res) => {
           date: dateData.date,
           location: dateData.location,
           what: "remove",
-          when: dateLocal,
+          when: new date(),
           emailSent: false,
         });
 
