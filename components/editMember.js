@@ -42,7 +42,7 @@ const schema = yup.object().shape({
   alias: yup
     .string()
     .min(2, "Too Short!")
-    .max(15, "Too Long!")
+    .max(25, "Too Long!")
     .required("Required"),
 });
 
