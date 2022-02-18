@@ -6,19 +6,14 @@ import { Formik, Field } from "formik";
 import { getSeason } from "libs/utils";
 import Alert from "components/alert";
 import DatePicker from "react-datepicker";
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  InputGroup,
-  Tooltip,
-} from "react-bootstrap";
+import { Form, Button, Row, Col, InputGroup, Tooltip } from "react-bootstrap";
 
 const EditDate = (props) => {
   const [openAlert, setOpenAlert] = useState(false);
 
-  const { updateDate } = useStoreContext();
+  const { updateDate, dates } = useStoreContext();
+  // get existing dates to exclude in datepicker
+  const theDates = dates.map((d) => d.date);
   const teamSizeMaxArr = [16, 20];
 
   const { clubs, locations } = props.clubsLocations;
@@ -40,7 +35,6 @@ const EditDate = (props) => {
   };
 
   const onSubmit = (data, form) => {
-
     const conflict = dateIsUsed(data.date);
     console.log("conflict with existing date", conflict);
     if (conflict) setOpenAlert(true);
@@ -58,8 +52,7 @@ const EditDate = (props) => {
         season: getSeason(data.date),
       };
       // if a new add empth squad
-      if(props.date.squad)
-        theData.squad = [];
+      if (props.date.squad) theData.squad = [];
 
       updateDate(theData);
       form.resetForm({ values: data });
@@ -101,6 +94,7 @@ const EditDate = (props) => {
                 showTimeSelect
                 selected={values.date}
                 dateFormat="MMM d, yyyy h:mm aa"
+                excludeDates={theDates}
               />
             </Form.Group>
             <Form.Group>
