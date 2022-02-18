@@ -6,7 +6,7 @@ const handler = async (req, res) => {
     const dateId = parseInt(req.body.dateId);
 
     if (dateId) {
-      let resp = await req.db.collection("dates").removeOne({ dateId });
+      let resp = await req.db.collection("dates").remove({ dateId });
       console.log("resp", resp.modifiedCount);
       return { message: "aok", resp };
     } else return error;

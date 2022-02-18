@@ -33,7 +33,7 @@ const handler = async (req, res) => {
       };
       if (req.body.squad) data.squad = [];
       let resp = await req.db.collection("dates").updateOne(
-        { dateId, season },
+        { dateId },
         {
           $set: data,
         },
