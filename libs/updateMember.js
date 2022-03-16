@@ -35,7 +35,7 @@ const handler = async (req, res) => {
     const upsert = req.body.upsert;
 
     const data = { alias, active, guest };
-    if (email && upsert) data.email = email;
+    if (email) data.email = email;
     if (first) data.first = first;
     if (last) data.last = last;
     if (address) data.address = address;
@@ -44,28 +44,25 @@ const handler = async (req, res) => {
     if (zip) data.zip = zip;
     if (phone) data.phone = phone;
     if (cell) data.cell = cell;
-    if (reminders) data.reminders = reminders.map(r => parseInt(r));
+    if (reminders) data.reminders = reminders.map((r) => parseInt(r));
 
     if (memberId) {
-      
-      let resp = await req.db
-        .collection("members")
-        .updateOne(
-          { memberId },
-          { $set: data },
-          {
-            upsert: upsert
-          }
-        );
+      let resp = await req.db.collection("members").updateOne(
+        { memberId },
+        { $set: data },
+        {
+          upsert: upsert,
+        }
+      );
       console.log(
         "resp modified",
         resp.modifiedCount,
         "upserted",
         resp.upsertedCount === 1 ? true : false
       );
-      
-      return({ message: "aok",  resp});
-    } else return({ message: "not good data" });
+
+      return { message: "aok", resp };
+    } else return { message: "not good data" };
   } catch (e) {
     console.log("catch error", e);
   }
