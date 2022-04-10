@@ -34,6 +34,19 @@ function MatchStats() {
     });
   };
 
+  const getActiveDate = (dates) => {
+    //const date = dateId ? dateId : dates[dates.length -1];
+    const id = dateId ? dateId : matchStats[0][0].dateId;
+    
+    const date = dates.find(d => d.dateId === id).date;
+    const title = `${format(
+      parseISO(date),
+      "MMM. d, yyyy"
+    )}`;
+    
+    return title;
+  }
+
   const sortMe = (who) => {
     if (sortBy === who) {
       setDir(dir === "desc" ? "asc" : "desc");
@@ -74,9 +87,8 @@ function MatchStats() {
                 const title = `${format(
                   parseISO(d.date),
                   "MMM. d, yyyy"
-                )} ${d.match.replace("-", " hosting ")} [Won ${
-                  teamRes.won
-                } Lost ${teamRes.lost}]  `;
+                )} ${d.match.replace("-", " hosting ")} [Won ${teamRes.won
+                  } Lost ${teamRes.lost}]  `;
                 return (
                   <option key={i} value={d.dateId}>
                     {title}
@@ -127,49 +139,55 @@ function MatchStats() {
               );
             })}
           </tbody>
+
         </Table>
-        <Table
-          striped
-          bordered
-          hover
-          size="sm"
+        <div
           ref={componentRef}
           className="hide-on-screen"
         >
-          <thead>
-            <tr>
-              <th>Member</th>
-              <th>Average</th>
-              <th>Hi Series</th>
-              <th>Hi Game</th>
-              <th>Game&nbsp;1</th>
-              <th>Game&nbsp;2</th>
-              <th>Game&nbsp;3</th>
-              <th>Hi&nbsp;Game&nbsp;hcp</th>
-              <th>Series&nbsp;hcp</th>
-              <th>Handi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {theData.map((r, i) => {
-              return (
-                <tr key={i}>
-                  <td key={1}>{r.alias.replace(/ /g, "\u00a0")}</td>
-                  <td key={2}>{r.average}</td>
-                  <td key={3}>{r.series}</td>
-                  <td key={4}>{r.hiGame}</td>
-                  <td key={5}>{r.game1}</td>
-                  <td key={6}>{r.game2}</td>
-                  <td key={7}>{r.game3}</td>
-                  <td key={8}>{r.hiGameHandi}</td>
-                  <td key={9}>{r.seriesHandi}</td>
+          <h3  className="text-center">{getActiveDate(dates)}</h3>
+          <Table
+            striped
+            bordered
+            hover
+            size="sm"
 
-                  <td key={10}>{r.handi}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+          >
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Average</th>
+                <th>Hi Series</th>
+                <th>Hi Game</th>
+                <th>Game&nbsp;1</th>
+                <th>Game&nbsp;2</th>
+                <th>Game&nbsp;3</th>
+                <th>Hi&nbsp;Game&nbsp;hcp</th>
+                <th>Series&nbsp;hcp</th>
+                <th>Handi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {theData.map((r, i) => {
+                return (
+                  <tr key={i}>
+                    <td key={1}>{r.alias.replace(/ /g, "\u00a0")}</td>
+                    <td key={2}>{r.average}</td>
+                    <td key={3}>{r.series}</td>
+                    <td key={4}>{r.hiGame}</td>
+                    <td key={5}>{r.game1}</td>
+                    <td key={6}>{r.game2}</td>
+                    <td key={7}>{r.game3}</td>
+                    <td key={8}>{r.hiGameHandi}</td>
+                    <td key={9}>{r.seriesHandi}</td>
+
+                    <td key={10}>{r.handi}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
       </>
     );
   }
