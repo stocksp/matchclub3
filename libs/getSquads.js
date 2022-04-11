@@ -4,6 +4,9 @@ const handler = async (req, res) => {
   try {
     console.log("starting getSquads");
     const now = new Date();
+    //set now time to 0 hours to allow squad changes for entire match day
+    now.setHours(0);
+    now.setMinutes(0);
     const docs = await req.db
       .collection("dates")
       .find({ date: { $gte: now } })

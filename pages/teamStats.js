@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useStoreContext } from "../components/Store";
 import { Table, Button, Spinner } from "react-bootstrap";
 import { useReactToPrint } from "react-to-print";
+const { format } = require("date-fns");
 
 function TeamStats() {
   const [sortBy, setSortBy] = useState("average");
@@ -92,66 +93,75 @@ function TeamStats() {
             })}
           </tbody>
         </Table>
-        <Table
-          striped
-          bordered
-          hover
-          size="sm"
+        <div
           ref={componentRef}
           className="hide-on-screen"
-          style={{ marginLeft: "50px", marginTop: "50px" }}
+          style={{ marginTop: "25px" }}
         >
-          <thead>
-            <tr>
-              <th>Member</th>
-              <th>Average</th>
-              <th>Hi Game</th>
-              <th>Hi Series</th>
-              <th>
-                Hi&nbsp;Game
-                <br />
-                handi
-              </th>
-              <th>
-                Hi&nbsp;Series
-                <br />
-                handi
-              </th>
-              <th>
-                Hi Series
-                <br />
-                games
-              </th>
-              <th>
-                Hi Series
-                <br />
-                HandiGames
-              </th>
-              <th>Total Pins</th>
-              <th>Total Games</th>
-              <th>Handi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {teamStats.map((r, i) => {
-              return (
-                <tr key={i}>
-                  <td key={1}>{r.member}</td>
-                  <td key={2}>{r.average}</td>
-                  <td key={3}>{r.hiGame}</td>
-                  <td key={4}>{r.hiSeries}</td>
-                  <td key={5}>{r.hiGameHandi}</td>
-                  <td key={6}>{r.hiSeriesHandi}</td>
-                  <td key={7}>{r.hiSeriesGames.join(",")}</td>
-                  <td key={8}>{r.hiSeriesHandiGames.join(",")}</td>
-                  <td key={9}>{r.totalPins}</td>
-                  <td key={10}>{r.totalGames}</td>
-                  <td key={11}>{r.handicap}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+          <h3 className="text-center">
+            Team Stats as of {format(new Date(), "MMM. d, yyyy")}
+          </h3>
+          <Table
+            striped
+            bordered
+            hover
+            size="sm"
+            ref={componentRef}
+            className="hide-on-screen"
+            style={{ marginLeft: "50px", marginTop: "25px" }}
+          >
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Average</th>
+                <th>Hi Game</th>
+                <th>Hi Series</th>
+                <th>
+                  Hi&nbsp;Game
+                  <br />
+                  handi
+                </th>
+                <th>
+                  Hi&nbsp;Series
+                  <br />
+                  handi
+                </th>
+                <th>
+                  Hi Series
+                  <br />
+                  games
+                </th>
+                <th>
+                  Hi Series
+                  <br />
+                  HandiGames
+                </th>
+                <th>Total Pins</th>
+                <th>Total Games</th>
+                <th>Handi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teamStats.map((r, i) => {
+                return (
+                  <tr key={i}>
+                    <td key={1}>{r.member}</td>
+                    <td key={2}>{r.average}</td>
+                    <td key={3}>{r.hiGame}</td>
+                    <td key={4}>{r.hiSeries}</td>
+                    <td key={5}>{r.hiGameHandi}</td>
+                    <td key={6}>{r.hiSeriesHandi}</td>
+                    <td key={7}>{r.hiSeriesGames.join(",")}</td>
+                    <td key={8}>{r.hiSeriesHandiGames.join(",")}</td>
+                    <td key={9}>{r.totalPins}</td>
+                    <td key={10}>{r.totalGames}</td>
+                    <td key={11}>{r.handicap}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
         {teamStats.length === 0 && (
           <h5 className="text-center">No Data yet this season!</h5>
         )}

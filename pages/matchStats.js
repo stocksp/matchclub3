@@ -37,15 +37,12 @@ function MatchStats() {
   const getActiveDate = (dates) => {
     //const date = dateId ? dateId : dates[dates.length -1];
     const id = dateId ? dateId : matchStats[0][0].dateId;
-    
-    const date = dates.find(d => d.dateId === id).date;
-    const title = `${format(
-      parseISO(date),
-      "MMM. d, yyyy"
-    )}`;
-    
+
+    const date = dates.find((d) => d.dateId === id).date;
+    const title = `${format(parseISO(date), "MMM. d, yyyy")}`;
+
     return title;
-  }
+  };
 
   const sortMe = (who) => {
     if (sortBy === who) {
@@ -87,8 +84,9 @@ function MatchStats() {
                 const title = `${format(
                   parseISO(d.date),
                   "MMM. d, yyyy"
-                )} ${d.match.replace("-", " hosting ")} [Won ${teamRes.won
-                  } Lost ${teamRes.lost}]  `;
+                )} ${d.match.replace("-", " hosting ")} [Won ${
+                  teamRes.won
+                } Lost ${teamRes.lost}]  `;
                 return (
                   <option key={i} value={d.dateId}>
                     {title}
@@ -139,20 +137,16 @@ function MatchStats() {
               );
             })}
           </tbody>
-
         </Table>
         <div
           ref={componentRef}
           className="hide-on-screen"
+          style={{ marginTop: "25px" }}
         >
-          <h3  className="text-center">{getActiveDate(dates)}</h3>
-          <Table
-            striped
-            bordered
-            hover
-            size="sm"
-
-          >
+          <h3 className="text-center">
+            Match Stats for {getActiveDate(dates)}
+          </h3>
+          <Table striped bordered hover size="sm" style={{ marginTop: "25px" }}>
             <thead>
               <tr>
                 <th>Member</th>
