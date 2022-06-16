@@ -5,7 +5,7 @@ function DayCard(props) {
   // const classes = useStyles();
 
   // //console.log("data", props.data);
-  const { host, guest, location, date } = props.data.date;
+  const { host, guest, location, date, hasmeeting } = props.data.date;
   const theHour = format(date, "h a");
   const theDay = props.data.day;
   const now = new Date();
@@ -47,12 +47,22 @@ function DayCard(props) {
             color: "gold",
           }}
         >
-          {theHour}
+          {hasmeeting == true ? (
+            <div style={{ fontSize: "11px" }}>{theHour} *Meeting*</div>
+          ) : (
+            theHour
+          )}
           {now.getDate() == date.getDate() &&
           now.getMonth() == date.getMonth() &&
-          now.getFullYear() == date.getFullYear()
-            ? " *TODAY*"
-            : ""}
+          now.getFullYear() == date.getFullYear() ? (
+            hasmeeting == true ? (
+              <div style={{ fontSize: "11px" }}>TODAY</div>
+            ) : (
+              " *TODAY*"
+            )
+          ) : (
+            ""
+          )}
         </Badge>
         <Badge
           style={{
