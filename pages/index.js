@@ -37,6 +37,7 @@ const Index = () => {
     getSquad,
     doSquadAction,
     user,
+    windowSize,
   } = useStoreContext();
   useEffect(() => {
     setActive("0");
@@ -138,34 +139,37 @@ const Index = () => {
       weeks.push(theWeek);
     }
     console.log("the weeks", weeks);
+    
+    let doShort = windowSize.width < 950 ? true : false;
+    console.log("window size:", windowSize.width, windowSize.height, doShort);
     return (
       <Container>
         <Header />
         <Container
           fluid
           className="grid text-center"
-          style={{ padding: "0px" }}
+          style={{ padding: "0px", display: "grid",  gridGap: "1px", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 2fr"}}
         >
           <div>
-            <strong>Sunday</strong>
+            <strong>{doShort ? 'Sun' : 'Sunday'}</strong>
           </div>
           <div>
-            <strong>Monday</strong>
+            <strong>{doShort ? 'Mon' : 'Monday'}</strong>
           </div>
           <div>
-            <strong>Tuesday</strong>
+            <strong>{doShort ? 'Tue' : 'Tuesday'}</strong>
           </div>
           <div>
-            <strong>Wednesday</strong>
+            <strong>{doShort ? 'Wed' : 'Wednesday'}</strong>
           </div>
           <div>
-            <strong>Thursday</strong>
+            <strong>{doShort ? 'Thu' : 'Thursday'}</strong>
           </div>
           <div>
-            <strong>Friday</strong>
+            <strong>{doShort ? 'Fri' : 'Friday'}</strong>
           </div>
           <div>
-            <strong>Saturday</strong>
+            <strong>{doShort ? 'Sat' : 'Sunday'}</strong>
           </div>
           {weeks.map((w, i) =>
             w.map((d, i2) => {

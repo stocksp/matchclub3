@@ -28,6 +28,10 @@ function useStore() {
   const [clubsLocations, setClubsLocations] = useState(null);
   const [highScores, setHighScores] = useState(null);
   const [user, setUser] = useState(null);
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
 
   //console.log("user from store!!", user);
 
@@ -35,6 +39,20 @@ function useStore() {
     getDates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     checkUser();
+    // Handler to call on window resize
+    function handleResize() {
+      // Set window width/height to state
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const checkUser = async () => {
@@ -450,6 +468,7 @@ function useStore() {
     getHighScores,
     highScores,
     user,
+    windowSize,
   };
 }
 
