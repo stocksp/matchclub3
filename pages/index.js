@@ -139,7 +139,7 @@ const Index = () => {
       weeks.push(theWeek);
     }
     console.log("the weeks", weeks);
-    
+
     let doShort = windowSize.width < 950 ? true : false;
     console.log("window size:", windowSize.width, windowSize.height, doShort);
     return (
@@ -148,7 +148,7 @@ const Index = () => {
         <Container
           fluid
           className="grid text-center"
-          style={{ padding: "0px", display: "grid",  gridGap: "1px", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 2fr"}}
+          style={{ padding: "0px", display: "grid", gridGap: "1px", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 2fr", overflowX: "hidden" }}
         >
           <div>
             <strong>{doShort ? 'Sun' : 'Sunday'}</strong>
@@ -169,7 +169,7 @@ const Index = () => {
             <strong>{doShort ? 'Fri' : 'Friday'}</strong>
           </div>
           <div>
-            <strong>{doShort ? 'Sat' : 'Sunday'}</strong>
+            <strong>{doShort ? 'Sat' : 'Saturday'}</strong>
           </div>
           {weeks.map((w, i) =>
             w.map((d, i2) => {
