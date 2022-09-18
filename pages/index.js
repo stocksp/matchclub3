@@ -139,8 +139,8 @@ const Index = () => {
       weeks.push(theWeek);
     }
     console.log("the weeks", weeks);
-
-    console.log("window size:", windowSize.width, windowSize.height, doShort);
+    let doShort = windowSize.width < 950 ? true : false;
+    
     return (
       <Container>
         <Header />
