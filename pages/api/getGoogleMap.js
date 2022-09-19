@@ -14,7 +14,7 @@ const handler = async (req, res) => {
 
       let link = `http://maps.google.com/maps?f=d&source=s_d&saddr=${from_address}&daddr=${to_address}`;
       console.log('link', link)
-      res.json([link]);
+      res.json([link, to_address]);
     }
 
   } catch (error) {

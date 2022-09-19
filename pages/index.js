@@ -87,6 +87,7 @@ const Index = () => {
         "/api/getGoogleMap?location=" + data.date.location
       );
       const url = await theLink.json();
+      console.log("shit",url[1]);
       setMapLink(url[0]);
       return;
     }
