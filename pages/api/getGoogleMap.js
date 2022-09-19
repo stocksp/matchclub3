@@ -10,11 +10,12 @@ const handler = async (req, res) => {
     if (location) {
       let from_address = "300%20Golf%20Course%20Drive,Rohnert%20Park,CA";
       let to_address = `${location.address},${location.city},${location.state}`;
+      let plain_address = `${location.address}, ${location.city}, ${location.state}`;
       to_address = to_address.replace(/ /g, "%20");
 
       let link = `http://maps.google.com/maps?f=d&source=s_d&saddr=${from_address}&daddr=${to_address}`;
       console.log('link', link)
-      res.json([link, to_address]);
+      res.json([link, plain_address]);
     }
 
   } catch (error) {

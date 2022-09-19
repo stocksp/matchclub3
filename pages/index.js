@@ -44,6 +44,7 @@ const Index = () => {
     setActive("0");
   }, []);
 
+  const [hostAddress, setHostAddress] = useState("");
   const [mapLink, setMapLink] = useState("");
   const [dateSelected, setDateSelected] = useState(null);
   //const [showLogin, setShowLogin] = useState(false);
@@ -78,7 +79,7 @@ const Index = () => {
     }
     getSquad(dateSelected);
   };
-
+  
   const onDayClick = async (ev, data) => {
     console.log("event click ev:", ev.target, "event:", data);
     //check if map click
@@ -87,8 +88,8 @@ const Index = () => {
         "/api/getGoogleMap?location=" + data.date.location
       );
       const url = await theLink.json();
-      console.log("shit",url[1]);
       setMapLink(url[0]);
+      setHostAddress(url[1]);
       return;
     }
 
@@ -222,9 +223,9 @@ const Index = () => {
         </Modal>
         <Modal show={mapLink !== ""} onHide={mapLinkClose} size="lg">
           <Modal.Header closeButton>
-            <Modal.Title>Show Map Navigation route?</Modal.Title>
+            <Modal.Title>{hostAddress}</Modal.Title>
           </Modal.Header>
-          {mapLink}
+          
           <Modal.Body>
             <ButtonToolbar className="justify-content-between">
               <Button variant="secondary" onClick={mapLinkClose}>
