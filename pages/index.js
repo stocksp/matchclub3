@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Router from "next/router";
 import Header from "components/header";
+
 import {
   Modal,
   Button,
@@ -43,6 +44,8 @@ const Index = () => {
     setActive("0");
   }, []);
 
+  const [hostAddress, setHostAddress] = useState("");
+  const [mapLink, setMapLink] = useState("");
   const [dateSelected, setDateSelected] = useState(null);
   //const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
@@ -53,6 +56,13 @@ const Index = () => {
     setDateSelected(null);
     setFooterText("");
   };
+  const mapLinkClose = () => {
+    setMapLink("");
+  }
+  const handleMapLink = () => {
+    window.open(mapLink, "_blank");
+    setMapLink("")
+  }
   const handleSquadAction = async (action) => {
     setFooterText("updating ....");
     const resp = await doSquadAction(
@@ -69,7 +79,7 @@ const Index = () => {
     }
     getSquad(dateSelected);
   };
-
+  
   const onDayClick = async (ev, data) => {
     console.log("event click ev:", ev.target, "event:", data);
     //check if map click
@@ -78,7 +88,8 @@ const Index = () => {
         "/api/getGoogleMap?location=" + data.date.location
       );
       const url = await theLink.json();
-      window.open(url, "_blank");
+      setMapLink(url[0]);
+      setHostAddress(url[1]);
       return;
     }
 
@@ -212,6 +223,27 @@ const Index = () => {
                   {actionStr}
                 </Button>
               )}
+            </ButtonToolbar>
+          </Modal.Body>
+        </Modal>
+        <Modal show={mapLink !== ""} onHide={mapLinkClose} size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>{hostAddress}</Modal.Title>
+          </Modal.Header>
+          
+          <Modal.Body>
+            <ButtonToolbar className="justify-content-between">
+              <Button variant="secondary" onClick={mapLinkClose}>
+                Cancel
+              </Button>
+
+              <Button
+                variant="primary"
+                onClick={handleMapLink}
+              >
+                GoTo Map
+              </Button>
+
             </ButtonToolbar>
           </Modal.Body>
         </Modal>
