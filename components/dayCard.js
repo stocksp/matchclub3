@@ -1,12 +1,13 @@
 import { Badge, Card } from "react-bootstrap";
-import { format } from "date-fns";
+import { format, getMinutes } from "date-fns";
 
 function DayCard(props) {
   // const classes = useStyles();
 
   // //console.log("data", props.data);
   const { host, guest, location, date, hasmeeting } = props.data.date;
-  const theHour = format(date, "h a");
+  const theMinutes = date.getMinutes();
+  const theHour = theMinutes != 0 ? format(date, "h:m a") : format(date, "h a");
   const theDay = props.data.day;
   const now = new Date();
   const styles = {
