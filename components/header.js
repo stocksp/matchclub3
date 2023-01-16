@@ -42,7 +42,7 @@ const Header = () => {
     }
   };
 
-  console.log("now", currentDate.toLocaleDateString, "user", user);
+  console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId);
   return (
     <div
       style={{
@@ -92,33 +92,32 @@ const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav activeKey={active}>
             <Link href="/" passHref>
-              <Nav.Link eventKey="0">HOME</Nav.Link>
+              <Nav.Link as="a" href="/" eventKey="0">HOME</Nav.Link>
             </Link>
             <Link href="/teamStats" passHref>
-              <Nav.Link eventKey="teamStats">TEAM STATS</Nav.Link>
+              <Nav.Link as="a" href="/teamStats" eventKey="teamStats">TEAM STATS</Nav.Link>
             </Link>
             <Link href="/matchStats" passHref>
-              <Nav.Link eventKey="matchStats">MATCH STATS</Nav.Link>
+              <Nav.Link as="a" href="/matchStats" eventKey="matchStats">MATCH STATS</Nav.Link>
             </Link>
             <Link href="/memberStats" passHref>
-              <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
+              <Nav.Link as="a" href="/memberStats" eventKey="memberStats">MEMBER STATS</Nav.Link>
             </Link>
             {user && (
               <Link
-                href="/member/[id]"
-                as={`/member/${user.memberId}`}
+                href={`/member/${user.memberId}`}
                 passHref
               >
-                <Nav.Link eventKey="member">Your Stuff</Nav.Link>
+                <Nav.Link as="a" href={`/member/${user.memberId}`} eventKey="member">Your Stuff</Nav.Link>
               </Link>
             )}
             {user && user.role === "admin" && (
               <Link href="/admin/games" passHref>
-                <Nav.Link>ADMIN</Nav.Link>
+                <Nav.Link as="a" href="/admin/games">ADMIN</Nav.Link>
               </Link>
             )}
             <Link href="/about" passHref>
-              <Nav.Link>ABOUT</Nav.Link>
+              <Nav.Link as="a" href="/about" >ABOUT</Nav.Link>
             </Link>
           </Nav>
         </Navbar.Collapse>

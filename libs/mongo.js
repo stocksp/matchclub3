@@ -11,11 +11,7 @@ const setupMongo = async () => {
 
     // If no connection is cached, create a new one
     const client = await MongoClient.connect(
-      process.env.MONGO_URI_LOCAL,
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
+      process.env.MONGO_URI_LOCAL
     );
     const db = await client.db();
     global.cachedDb = db;
@@ -30,20 +26,17 @@ const setupMongo = async () => {
   }
   // If no connection is cached, create a new one
   const client = await MongoClient.connect(
-    process.env.MONGO_URI_PROD,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+    process.env.MONGO_URI_PROD
   );
   const db = await client.db();
   global.cachedDb = db;
   console.log("New Mongo connection established");
   return global.cachedDb;
-  
+
 };
 
 const connectToMongo = async () => {
+  console.log("calling setupMongo")
   return await setupMongo();
 };
 
