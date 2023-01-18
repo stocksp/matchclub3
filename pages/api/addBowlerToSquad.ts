@@ -1,10 +1,11 @@
-import { withMongo } from "../../libs/mongo";
+import clientPromise from "libs/mongo"
 
-import { array } from "yup";
 const { format } = require("date-fns");
 
 
-const handler = async (req, res) => {
+import type { NextApiRequest, NextApiResponse } from "next"
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log(
     "running addBowlerToSquad",
     req.body.dateId,
@@ -12,12 +13,14 @@ const handler = async (req, res) => {
     req.body.name
   );
   try {
+    const client = await clientPromise
+    const db = client.db()
     const dateId = parseInt(req.body.dateId);
     const bowlerId = parseInt(req.body.bowlerId);
-    const bowler = await req.db
+    const bowler = await db
       .collection("members")
       .findOne({ memberId: bowlerId });
-    const dateData = await req.db
+    const dateData = await db
       .collection("dates")
       .findOne({ dateId: dateId });
     
@@ -26,7 +29,7 @@ const handler = async (req, res) => {
     if (dateId && bowlerId && name) {
       // get the squad with requested dateId
       // squad is an object with squad property with our array
-      const squad = await req.db
+      const squad = await db
         .collection("dates")
         .findOne({ dateId }, { projection: { squad: 1, _id: 0 } });
       const theSquad = squad.squad;
@@ -36,13 +39,13 @@ const handler = async (req, res) => {
       theSquad.push({ name, pos: squad.squad.length + 1, id: bowlerId });
       //console.log("squad", squad.squad);
       // now add it
-      let result = await req.db
+      let result = await db
         .collection("dates")
         .updateOne({ dateId }, { $set: { squad: theSquad } });
 
       res.json({ message: "aok", result: result.modifiedCount });
       // send to db
-      result = await req.db
+      let result2 = await db
         .collection("signups")
         .insertOne({
           name: bowler.alias,
@@ -74,4 +77,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default withMongo(handler);
+export default handler
