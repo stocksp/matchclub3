@@ -1,10 +1,13 @@
-import { withMongo } from "./mongo";
+import clientPromise from "libs/mongo"
 import { getSeason, startOfSeason } from "./utils";
+import type { NextApiRequest, NextApiResponse } from "next"
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     console.log("starting getDates");
-    const docs = await req.db
+    const client = await clientPromise
+    const db = client.db()
+    const docs = await db
       .collection("dates")
 /*       .find({ season: getSeason() }) */
       .find({season: {$gte:(getSeason())}})
@@ -15,11 +18,7 @@ const handler = async (req, res) => {
     return {message: "ok", docs};
   } catch (error) {
     return error;
-    //res.json("Error: " + error.toString());
   }
-
-  // TODO - Update state in mongo to persist
-  //res.json(state);
 };
 
-export default withMongo(handler);
+export default handler

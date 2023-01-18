@@ -1,17 +1,20 @@
-import { withMongo } from "../../libs/mongo";
+import clientPromise from "libs/mongo"
 
-import { getSeason, startOfSeason } from "../../libs/utils";
+import { getSeason, startOfSeason } from "libs/utils";
+import type { NextApiRequest, NextApiResponse } from "next"
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     console.log("starting getScores");
+    const client = await clientPromise
+    const db = client.db()
 
-    const wonLost = await req.db
+    const wonLost = await db
       .collection("dateResults")
       .find({ season: getSeason() })
       .toArray();
 
-    const squads = await req.db
+    const squads = await db
 
       .collection("dates")
       .find({ season: getSeason(), date: { $lte: new Date() } })
@@ -19,7 +22,7 @@ const handler = async (req, res) => {
       .sort({ date: -1 })
       .toArray();
 
-    const scores = await req.db
+    const scores = await db
 
       .collection("matchScores")
       .find({ season: getSeason() })
@@ -58,4 +61,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default withMongo(handler);
+export default handler

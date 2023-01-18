@@ -20,23 +20,23 @@ const AdminHeader = () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav activeKey={active}>
-          <Link href="/admin/clubs" passHref>
-            <Nav.Link as="a" href="/admin/clubs" eventKey="admin.clubs">CLUBS</Nav.Link>
+          <Link href="/admin/clubs" passHref legacyBehavior>
+            <Nav.Link eventKey="admin.clubs">CLUBS</Nav.Link>
           </Link>
-          <Link href="/admin/locations" passHref>
-            <Nav.Link as="a" href="/admin/locations" eventKey="admin.locations">LOCATIONS</Nav.Link>
+          <Link href="/admin/locations" passHref legacyBehavior>
+            <Nav.Link  eventKey="admin.locations">LOCATIONS</Nav.Link>
           </Link>
-          <Link href="/admin/dates" passHref>
-            <Nav.Link as="a" href="/admin/dates" eventKey="admin.dates">DATES</Nav.Link>
+          <Link href="/admin/dates" passHref legacyBehavior>
+            <Nav.Link eventKey="admin.dates">DATES</Nav.Link>
           </Link>
-          <Link href="/admin/members" passHref>
-            <Nav.Link as="a" href="/admin/members" eventKey="admin.members">MEMBERS</Nav.Link>
+          <Link href="/admin/members" passHref legacyBehavior>
+            <Nav.Link eventKey="admin.members">MEMBERS</Nav.Link>
           </Link>
-          <Link href="/admin/squads" passHref>
-            <Nav.Link as="a" href="/admin/squads" eventKey="admin.squads">SQUADS</Nav.Link>
+          <Link href="/admin/squads" passHref legacyBehavior>
+            <Nav.Link eventKey="admin.squads">SQUADS</Nav.Link>
           </Link>
-          <Link href="/admin/games" passHref>
-            <Nav.Link as="a" href="/admin/games" eventKey="admin.games">GAMES</Nav.Link>
+          <Link href="/admin/games" passHref legacyBehavior>
+            <Nav.Link eventKey="admin.games">GAMES</Nav.Link>
           </Link>
         </Nav>
       </Navbar.Collapse>

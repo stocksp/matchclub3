@@ -1,7 +1,8 @@
-import { withMongo } from "./mongo";
-import AbortController from "node-abort-controller";
+import clientPromise from "libs/mongo"
+import type { NextApiRequest, NextApiResponse } from "next"
+
 import { utcToZonedTime } from "date-fns-tz";
-global.AbortController = AbortController;
+
 const nodemailer = require("nodemailer");
 const mg = require("nodemailer-mailgun-transport");
 
@@ -27,12 +28,14 @@ function googleMapLink(mem, date, clubs, locations) {
   return `<p><a href=http://maps.google.com/maps?f=d&source=s_d&saddr=${from_address}&daddr=${to_address}>Google Directions</a><p>`;
 }
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     console.log("starting mailer");
+    const client = await clientPromise
+    const db = client.db()
 
     // have we run today?
-    const emailSent = await req.db
+    const emailSent = await db
       .collection("emailSent")
       .find({})
       .project({})
@@ -65,23 +68,23 @@ const handler = async (req, res) => {
     // get dates from now till 4 weeks forward
     let dateIn4weeks = add(new Date(), { days: 30 });
     console.log(`In 4 weeks ${dateIn4weeks}`);
-    const dates = await req.db
+    const dates = await db
       .collection("dates")
       .find({ date: { $gte: new Date(), $lt: dateIn4weeks } })
       .sort({ date: 1 })
       .toArray();
 
-    const members = await req.db
+    const members = await db
       .collection("members")
       .find({ active: true })
       .project({ _id: 0 })
       .toArray();
 
-    const locations = await req.db.collection("locations").find().toArray();
+    const locations = await db.collection("locations").find().toArray();
 
-    const clubs = await req.db.collection("clubs").find().toArray();
+    const clubs = await db.collection("clubs").find().toArray();
 
-    const emailMap = await req.db.collection("emailMap").find().toArray();
+    const emailMap = await db.collection("emailMap").find().toArray();
 
     console.log(`Dates found ${dates.length} Members found ${members.length}`);
     let resp = null;
@@ -156,7 +159,7 @@ const handler = async (req, res) => {
         }
       }
     }
-    await req.db
+    await db
       .collection("emailSent")
       .insertOne({ when: new Date(), who: all });
 
@@ -167,4 +170,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default withMongo(handler);
+export default handler

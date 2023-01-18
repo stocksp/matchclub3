@@ -1,15 +1,19 @@
 import { magic } from "libs/magic";
 import Iron from "@hapi/iron";
-import { withMongo } from "libs/mongo";
+import clientPromise from "libs/mongo"
 import { setTokenCookie } from "libs/auth-cookies";
 
-const handler = async (req, res) => {
+import type { NextApiRequest, NextApiResponse } from "next"
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("starting api/login");
   if (req.method !== "POST") return res.status(405).end();
   const email = req.body.email;
 
   try {
-    const doc = await req.db
+    const client = await clientPromise
+    const db = client.db()
+    const doc = await db
       .collection("members")
       .findOne({ email: email, active: true, guest: false });
     if (!doc) {
@@ -23,14 +27,15 @@ const handler = async (req, res) => {
     //console.log('magic', process.env.MAGIC_SECRET_KEY);
 
     console.log("found user");
-    user.alias = doc.alias;
-    user.memberId = doc.memberId;
-    user.role = doc.role ? doc.role : "";
+    const bowler = {...user, alias: doc.alias, memberId: doc.memberId, role: doc.role ? doc.role : ""}
+    // user.alias = doc.alias;
+    // user.memberId = doc.memberId;
+    // user.role = doc.role ? doc.role : "";
 
     // Author a couple of cookies to persist a users session
     // Author a couple of cookies to persist a user's session
     const token = await Iron.seal(
-      user,
+      bowler,
       process.env.ENCRYPTION_SECRET,
       Iron.defaults
     );
@@ -43,4 +48,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default withMongo(handler);
+export default handler

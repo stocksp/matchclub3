@@ -1,5 +1,5 @@
 import { parseISO } from "date-fns";
-import { withMongo } from "../../libs/mongo";
+import clientPromise from "libs/mongo"
 import {
   makeHandi,
   getSeason,
@@ -7,7 +7,9 @@ import {
   makeHighScores,
 } from "../../libs/utils";
 
-const handler = async (req, res) => {
+import type { NextApiRequest, NextApiResponse } from "next"
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log(
     "running updateScores",
     req.body.dateId,
@@ -18,6 +20,8 @@ const handler = async (req, res) => {
     req.body.season
   );
   try {
+    const client = await clientPromise
+    const db = client.db()
     const dateId = parseInt(req.body.dateId);
     const match = req.body.match;
     let scores = req.body.scores;
@@ -29,7 +33,7 @@ const handler = async (req, res) => {
     if (dateId && match && scores && !isNaN(won) && !isNaN(lost)) {
       // update the dateResults
 
-      let resp = await req.db
+      let resp = await db
         .collection("dateResults")
         .updateOne(
           { dateId },
@@ -38,7 +42,7 @@ const handler = async (req, res) => {
         );
       console.log("won lost ok", resp.acknowledged);
       // delete all old scores for this date
-      resp = await req.db.collection("matchScores").deleteMany({ dateId });
+      let resp2 = await db.collection("matchScores").deleteMany({ dateId });
       console.log("delete old scores ok", resp.acknowledged);
       // insert the new ones
       // first convert the data from JSON strings to ints and date
@@ -53,15 +57,15 @@ const handler = async (req, res) => {
         scoreArray.push(scores[k]);
       });
       // now insert them
-      resp = await req.db.collection("matchScores").insertMany(scoreArray);
+      let resp3 = await db.collection("matchScores").insertMany(scoreArray);
       console.log("inserting new scores ok", resp.acknowledged);
       // rebuild update and return the handicaps for all bowlers
-      const handi = await makeHandi(req.db);
+      const handi = await makeHandi(db);
       console.log("handi", handi);
       // make memberStats
 
       // get ALL the scores for this seaon
-      const docs = await req.db
+      const docs = await db
         .collection("matchScores")
         .find({ season: getSeason() })
         .sort({ date: 1 })
@@ -70,7 +74,7 @@ const handler = async (req, res) => {
       // ids for all the members who have bowled
       // TODO shouldn't we just filter the above docs
       // and make theIds instead of another trip to the db??
-      const theIds = await req.db
+      const theIds = await db
 
         .collection("matchScores")
         .distinct("memberId", { season: getSeason() });
@@ -80,7 +84,7 @@ const handler = async (req, res) => {
       let bulkWrites = [];
       theIds.forEach((id) => {
         const theScores = docs.filter((d) => d.memberId === id);
-        if (theScores.lenght === 0)
+        if (theScores.length === 0)
           console.log(`NO SCORES FOUND for memberId: ${id}`);
         else {
           const stats = calcStats(theScores, handi);
@@ -97,11 +101,11 @@ const handler = async (req, res) => {
         }
       });
       
-      resp = await req.db.collection("memberstats").bulkWrite(bulkWrites);
+      let resp4 = await db.collection("memberstats").bulkWrite(bulkWrites);
 
       // now do the highScores for this date
       const theScores = makeHighScores(scoreArray, handi);
-      resp = await req.db.collection("highScores").updateOne(
+      let resp5 = await db.collection("highScores").updateOne(
         { dateId },
         { $set: { data: theScores, season } },
         {
@@ -118,4 +122,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default withMongo(handler);
+export default handler

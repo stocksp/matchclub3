@@ -1,11 +1,14 @@
-import { withMongo } from "./mongo";
+import clientPromise from "libs/mongo"
+import type { NextApiRequest, NextApiResponse } from "next"
 
-const handler = async (req, res) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const email = decodeURIComponent(req.query.email)
+    const client = await clientPromise
+    const db = client.db()
+    const email = decodeURIComponent(req.query.email as string)
     console.log("starting emailExists:", email);
 
-    const member = await req.db
+    const member = await db
       .collection("members")
       .findOne({ email: email });
 
@@ -22,4 +25,4 @@ const handler = async (req, res) => {
     return error;
   }
 };
-export default withMongo(handler);
+export default handler

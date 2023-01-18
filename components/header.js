@@ -91,33 +91,35 @@ const Header = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav activeKey={active}>
-            <Link href="/" passHref>
-              <Nav.Link as="a" href="/" eventKey="0">HOME</Nav.Link>
+            <Link href="/" passHref legacyBehavior>
+              <Nav.Link eventKey="0">HOME</Nav.Link>
             </Link>
-            <Link href="/teamStats" passHref>
-              <Nav.Link as="a" href="/teamStats" eventKey="teamStats">TEAM STATS</Nav.Link>
+            <Link href="/teamStats" passHref legacyBehavior>
+              <Nav.Link eventKey="teamStats">TEAM STATS</Nav.Link>
             </Link>
-            <Link href="/matchStats" passHref>
-              <Nav.Link as="a" href="/matchStats" eventKey="matchStats">MATCH STATS</Nav.Link>
+            <Link href="/matchStats" passHref legacyBehavior>
+              <Nav.Link eventKey="matchStats">MATCH STATS</Nav.Link>
             </Link>
-            <Link href="/memberStats" passHref>
-              <Nav.Link as="a" href="/memberStats" eventKey="memberStats">MEMBER STATS</Nav.Link>
+            <Link href="/memberStats" passHref legacyBehavior>
+              <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
             </Link>
             {user && (
               <Link
-                href={`/member/${user.memberId}`}
+                href="/member/[id]"
+                as={`/member/${user.memberId}`}
                 passHref
+                legacyBehavior
               >
-                <Nav.Link as="a" href={`/member/${user.memberId}`} eventKey="member">Your Stuff</Nav.Link>
+                <Nav.Link eventKey="member">Your Stuff</Nav.Link>
               </Link>
             )}
             {user && user.role === "admin" && (
-              <Link href="/admin/games" passHref>
-                <Nav.Link as="a" href="/admin/games">ADMIN</Nav.Link>
+              <Link href="/admin/games" passHref legacyBehavior>
+                <Nav.Link>ADMIN</Nav.Link>
               </Link>
             )}
-            <Link href="/about" passHref>
-              <Nav.Link as="a" href="/about" >ABOUT</Nav.Link>
+            <Link href="/about" passHref legacyBehavior>
+              <Nav.Link>ABOUT</Nav.Link>
             </Link>
           </Nav>
         </Navbar.Collapse>

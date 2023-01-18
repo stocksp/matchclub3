@@ -11,7 +11,9 @@ import testMail from "libs/testMail";
 import runMailer from "libs/runMailer";
 import emailExists from "libs/emailExists";
 
-const handler = async (req, res) => {
+import type { NextApiRequest, NextApiResponse } from "next"
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const name = req.query.name;
   console.log("starting getData:", name);
   try {
