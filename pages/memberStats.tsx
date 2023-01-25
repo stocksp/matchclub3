@@ -1,8 +1,8 @@
-import Header from "../components/header"
-import React, { useContext, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Container } from "react-bootstrap"
-import { useStoreContext } from "../components/Store"
-import { format, parseISO } from "date-fns"
+import Header from "../components/header";
+import React, { useContext, useState, useEffect } from "react";
+import { Table, Form, Row, Col, Container } from "react-bootstrap";
+import { useStoreContext } from "../components/Store";
+import { format, parseISO } from "date-fns";
 
 function MemberStats() {
   const {
@@ -13,67 +13,67 @@ function MemberStats() {
     hasTeamStats,
     teamStats,
     getTeamStats,
-  } = useStoreContext()
-  const [where, setWhere] = useState("all")
-  const [memberId, setMemberId] = useState(null)
+  } = useStoreContext();
+  const [where, setWhere] = useState("all");
+  const [memberId, setMemberId] = useState(null);
   useEffect(() => {
-    setActive("memberStats")
-    if (!hasMatchStats) getMatchStats()
-    if (!hasTeamStats) getTeamStats()
-  }, [])
+    setActive("memberStats");
+    if (!hasMatchStats) getMatchStats();
+    if (!hasTeamStats) getTeamStats();
+  }, []);
   const getBowlers = () => {
     // taken from https://stackoverflow.com/questions/36032179/remove-duplicates-in-an-object-array-javascript
     let thedates = matchStats[0].filter(
       (elem, index, self) =>
         self.findIndex((m) => {
-          return m.alias === elem.alias
+          return m.alias === elem.alias;
         }) === index
-    )
+    );
 
     return thedates.map((d) => {
-      return { alias: d.alias, dateId: d.dateId, memberId: d.memberId }
-    })
-  }
+      return { alias: d.alias, dateId: d.dateId, memberId: d.memberId };
+    });
+  };
 
   const getBowlerStats = () => {
-    const stat = teamStats.find((s) => s.memberId === memberId)
+    const stat = teamStats.find((s) => s.memberId === memberId);
     return (
-      <div>
-        Average: {stat.average}
+      <div style={{ width: 115 }}>
+        Average: <div style={{ float: "right" }}> {stat.average}</div>
         <br />
-        HiGame: {stat.hiGame}
+        High Game: <div style={{ float: "right" }}> {stat.hiGame}</div>
         <br />
-        HiSeries: {stat.hiSeries}
+        High Series: <div style={{ float: "right" }}> {stat.hiSeries}</div>
       </div>
-    )
-  }
+    );
+  };
 
   const handleChange = (event) => {
-    setMemberId(parseInt(event.target.value))
-  }
+    setMemberId(parseInt(event.target.value));
+  };
   const onRadio = (event) => {
-    console.log("where", event.target.value)
-    setWhere(event.target.value)
-  }
+    console.log("where", event.target.value);
+    setWhere(event.target.value);
+  };
 
   if (matchStats) {
     const theData = matchStats[0].filter((s) => {
       if (s.memberId === memberId) {
-        if (where === "all") return true
-        if (where === "local" && s.match.match(/^Continental/i)) return true
-        if (where === "away" && s.match.match(/-Continental/)) return true
+        if (where === "all") return true;
+        if (where === "local" && s.match.match(/^Continental/i)) return true;
+        if (where === "away" && s.match.match(/-Continental/)) return true;
       }
-      return false
-    })
+      return false;
+    });
 
     // make the dates for the input selector
-    const bowlers = getBowlers()
+    const bowlers = getBowlers();
     // add the initial value
     bowlers.unshift({
       alias: "Please Select a Member",
       dateId: 0,
       memberId: 0,
-    })
+    });
     return (
       <>
         <Header />
@@ -91,7 +91,7 @@ function MemberStats() {
                         <option key={i} value={d.memberId}>
                           {d.alias}
                         </option>
-                      )
+                      );
                     })}
                   </Form.Control>
                   <div key={"inline-1"} className="mb-3">
@@ -126,7 +126,9 @@ function MemberStats() {
                 </Form.Group>
               </Form>
             </Col>
-            <Col>{memberId && teamStats.length > 0 ? getBowlerStats() : null}</Col>
+            <Col>
+              {memberId && teamStats.length > 0 ? getBowlerStats() : null}
+            </Col>
           </Row>
           <Table striped bordered hover size="sm">
             <thead>
@@ -158,14 +160,14 @@ function MemberStats() {
 
                     <td key={9}>{r.handi}</td>
                   </tr>
-                )
+                );
               })}
             </tbody>
           </Table>
         </Container>
       </>
-    )
-  } else return <div>Waiting add Progress indicator here!</div>
+    );
+  } else return <div>Waiting add Progress indicator here!</div>;
 }
 
-export default MemberStats
+export default MemberStats;
