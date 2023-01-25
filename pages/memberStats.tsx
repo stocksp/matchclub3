@@ -79,12 +79,13 @@ function MemberStats() {
         <Header />
         <Container>
           <h2 className="text-center">Member Stats</h2>
-          <Form>
-            <Form.Group controlId="exampleForm.SelectCustom">
-              <Form.Label>Select the Bowler: </Form.Label>
-              <Row>
-                <Col>
-                  <Form.Control as="select" onChange={handleChange} style={{ width: "20%" }}>
+          <Row>
+            <Col>
+              <Form>
+                <Form.Group controlId="exampleForm.SelectCustom">
+                  <Form.Label>Select the Bowler: </Form.Label>
+
+                  <Form.Control as="select" onChange={handleChange}>
                     {bowlers.map((d, i) => {
                       return (
                         <option key={i} value={d.memberId}>
@@ -122,11 +123,11 @@ function MemberStats() {
                       checked={where === "away"}
                     />
                   </div>
-                </Col>
-                <Col>{memberId && teamStats.length > 0 ? getBowlerStats() : null}</Col>
-              </Row>
-            </Form.Group>
-          </Form>
+                </Form.Group>
+              </Form>
+            </Col>
+            <Col>{memberId && teamStats.length > 0 ? getBowlerStats() : null}</Col>
+          </Row>
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
