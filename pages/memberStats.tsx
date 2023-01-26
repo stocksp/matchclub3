@@ -85,7 +85,7 @@ function MemberStats() {
                 <Form.Group controlId="exampleForm.SelectCustom">
                   <Form.Label>Select the Bowler: </Form.Label>
 
-                  <Form.Control as="select" onChange={handleChange} style={{ width: "10em" }}>
+                  <Form.Control as="select" onChange={handleChange} style={{ width: "15em" }}>
                     {bowlers.map((d, i) => {
                       return (
                         <option key={i} value={d.memberId}>
