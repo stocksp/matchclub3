@@ -1,6 +1,6 @@
 import Header from "../components/header"
 import React, { useContext, useState, useEffect } from "react"
-import { Table, Form, Row, Col, Container } from "react-bootstrap"
+import { Table, Form, Row, Col, Container, Stack } from "react-bootstrap"
 import { useStoreContext } from "../components/Store"
 import { format, parseISO } from "date-fns"
 
@@ -80,7 +80,7 @@ function MemberStats() {
         <Container>
           <h2 className="text-center">Member Stats</h2>
           <Row>
-            <Col>
+            <Col sm={6} md={4}>
               <Form>
                 <Form.Group controlId="exampleForm.SelectCustom">
                   <Form.Label>Select the Bowler: </Form.Label>
@@ -126,7 +126,11 @@ function MemberStats() {
                 </Form.Group>
               </Form>
             </Col>
-            <Col>{memberId && teamStats.length > 0 ? getBowlerStats() : null}</Col>
+            <Col sm={6}>
+              {memberId && teamStats.length > 0 ? (
+                <BowlerStats {...teamStats.find((s) => s.memberId === memberId)} />
+              ) : null}
+            </Col>
           </Row>
           <Table striped bordered hover size="sm">
             <thead>
@@ -166,6 +170,24 @@ function MemberStats() {
       </>
     )
   } else return <div>Waiting add Progress indicator here!</div>
+}
+const BowlerStats = (props) => {
+  return (
+    <>
+      <Row>
+        <Col className="d-flex justify-content-end fs-4">Average:</Col>
+        <Col className="d-flex justify-content-start fs-4" >{props.average}</Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-end fs-4">Hi Game:</Col>
+        <Col className="d-flex justify-content-start fs-4">{props.hiGame}</Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-end fs-4">Hi Series:</Col>
+        <Col className="d-flex justify-content-start fs-4">{props.hiSeries}</Col>
+      </Row>
+    </>
+  )
 }
 
 export default MemberStats
