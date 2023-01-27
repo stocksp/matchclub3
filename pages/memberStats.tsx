@@ -197,15 +197,15 @@ const BowlerStats = (props) => {
   return (
     <>
       <Row>
-        <Col className="d-flex justify-content-end fs-5 text-primary">Average:</Col>
+        <Col className="d-flex justify-content-end fs-5 p-0 text-primary">Average:</Col>
         <Col className="d-flex justify-content-start fs-5">{props.average}</Col>
       </Row>
       <Row>
-        <Col className="d-flex justify-content-end fs-5 text-primary">Hi Game:</Col>
+        <Col className="d-flex justify-content-end fs-5 p-0 text-primary">Hi Game:</Col>
         <Col className="d-flex justify-content-start fs-5">{props.hiGame}</Col>
       </Row>
       <Row>
-        <Col className="d-flex justify-content-end fs-5 text-primary">Hi Series:</Col>
+        <Col className="d-flex justify-content-end fs-5 p-0 text-primary">Hi Series:</Col>
         <Col className="d-flex justify-content-start fs-5">{props.hiSeries}</Col>
       </Row>
     </>
