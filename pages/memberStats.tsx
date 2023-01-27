@@ -1,15 +1,6 @@
 import Header from "../components/header"
 import React, { useContext, useState, useEffect } from "react"
-import {
-  Table,
-  Form,
-  Row,
-  Col,
-  Container,
-  Button,
-  Spinner,
-  Stack,
-} from "react-bootstrap"
+import { Table, Form, Row, Col, Container, Button, Spinner, Stack } from "react-bootstrap"
 import { useStoreContext } from "../components/Store"
 import { format, parseISO } from "date-fns"
 
@@ -39,9 +30,23 @@ function MemberStats() {
         }) === index
     )
 
-    return thedates.map((d) => {
-      return { alias: d.alias, dateId: d.dateId, memberId: d.memberId }
-    })
+    return thedates
+      .map((d) => {
+        return { alias: d.alias, dateId: d.dateId, memberId: d.memberId }
+      })
+      .sort((a, b) => {
+        const nameA = a.alias.toUpperCase().split(' ')[1] // ignore upper and lowercase use last name
+        const nameB = b.alias.toUpperCase().split(' ')[1] // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1
+        }
+        if (nameA > nameB) {
+          return 1
+        }
+
+        // names must be equal
+        return 0
+      })
   }
 
   const getBowlerStats = () => {
@@ -94,11 +99,7 @@ function MemberStats() {
                 <Form.Group controlId="exampleForm.SelectCustom">
                   <Form.Label>Select the Bowler: </Form.Label>
 
-                  <Form.Control
-                    as="select"
-                    onChange={handleChange}
-                    style={{ width: "15em" }}
-                  >
+                  <Form.Control as="select" onChange={handleChange} style={{ width: "15em" }}>
                     {bowlers.map((d, i) => {
                       return (
                         <option key={i} value={d.memberId}>
@@ -141,9 +142,7 @@ function MemberStats() {
             </Col>
             <Col sm={6}>
               {memberId && teamStats.length > 0 ? (
-                <BowlerStats
-                  {...teamStats.find((s) => s.memberId === memberId)}
-                />
+                <BowlerStats {...teamStats.find((s) => s.memberId === memberId)} />
               ) : null}
             </Col>
           </Row>
@@ -188,13 +187,7 @@ function MemberStats() {
     return (
       <>
         <Button variant="primary" disabled>
-          <Spinner
-            as="span"
-            animation="grow"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
+          <Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />
           <span> Loading...</span>
         </Button>
       </>
@@ -204,24 +197,16 @@ const BowlerStats = (props) => {
   return (
     <>
       <Row>
-        <Col className="d-flex justify-content-end fs-5 text-primary">
-          Average:
-        </Col>
+        <Col className="d-flex justify-content-end fs-5 text-primary">Average:</Col>
         <Col className="d-flex justify-content-start fs-5">{props.average}</Col>
       </Row>
       <Row>
-        <Col className="d-flex justify-content-end fs-5 text-primary">
-          Hi Game:
-        </Col>
+        <Col className="d-flex justify-content-end fs-5 text-primary">Hi Game:</Col>
         <Col className="d-flex justify-content-start fs-5">{props.hiGame}</Col>
       </Row>
       <Row>
-        <Col className="d-flex justify-content-end fs-5 text-primary">
-          Hi Series:
-        </Col>
-        <Col className="d-flex justify-content-start fs-5">
-          {props.hiSeries}
-        </Col>
+        <Col className="d-flex justify-content-end fs-5 text-primary">Hi Series:</Col>
+        <Col className="d-flex justify-content-start fs-5">{props.hiSeries}</Col>
       </Row>
     </>
   )
