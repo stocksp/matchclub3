@@ -24,17 +24,15 @@
   font-weight: bold;
   margin: 3px;
 }
-.landingScores {
-  margin-left: 16px;
-}
+
 .list-group-item {
   background-color: gainsboro;
   color: white;
   font-weight: bold;
   padding-bottom: 1px;
   padding-top: 5px;
-  padding-left: 1px;
-  padding-right: 1px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 .list-group-item.active {
   background-color: rgb(255, 217, 0);
@@ -54,11 +52,7 @@
 
 .hide-on-screen {display:none;}
 
-@media screen and (min-width: 1025px) {
-  #landingScores select {
-    width: 60%;
-  }
-}
+
 @media print {
   .hide-on-screen {display:block;}
 }
