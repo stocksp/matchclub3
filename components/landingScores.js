@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 
-import { Tab, Row, Col, ListGroup, Form } from "react-bootstrap";
+import { Tab, Row, Col, ListGroup, Form, Container } from "react-bootstrap";
 import { format } from "date-fns";
 import { useStoreContext } from "./Store";
 
@@ -33,7 +33,7 @@ const LandingScores = () => {
       return <div>oops</div>;
     }
     return (
-      <container id="landingScores">
+      <Container id="landingScores">
         <Row className="justify-content-cstart ">
           <Col sm={12} md={8} lg={6}>
             <Form.Control as="select" onChange={handleChange}>
@@ -72,26 +72,26 @@ const LandingScores = () => {
                 </ListGroup.Item>
               </ListGroup>
             </Col>
-            <Col  sm={8} xl={4}>
+            <Col sm={8} xl={4}>
               <Tab.Content>
                 <Tab.Pane eventKey="#link1">
                   {theData.data.scratchGame.map((b, i) => (
-                    <>
-                      <Row>
+                    <div key={i}>
+                      <Row >
                         <Col className="d-flex justify-content-end px-0 text-primary">{b.alias}:</Col>
                         <Col className="d-flex justify-content-start ps-1">{b.score}</Col>
                       </Row>
-                    </>
+                    </div>
                   ))}
                 </Tab.Pane>
                 <Tab.Pane eventKey="#link2">
                   {theData.data.scratchSeries.map((b, i) => (
-                    <>
-                      <Row>
+                    <div key={i}>
+                      <Row >
                         <Col className="d-flex justify-content-end px-0 text-primary">{b.alias}:</Col>
                         <Col className="d-flex justify-content-start ps-1">{b.score}</Col>
                       </Row>
-                    </>
+                    </div>
                   ))}
                 </Tab.Pane>
               </Tab.Content>
@@ -120,22 +120,22 @@ const LandingScores = () => {
               <Tab.Content>
                 <Tab.Pane eventKey="#link3">
                   {theData.data.handiGame.map((b, i) => (
-                    <>
-                      <Row>
+                    <div key={i}>
+                      <Row >
                         <Col className="d-flex justify-content-end px-0 text-primary">{b.alias}:</Col>
                         <Col className="d-flex justify-content-start ps-1">{b.score}</Col>
                       </Row>
-                    </>
+                    </div>
                   ))}
                 </Tab.Pane>
                 <Tab.Pane eventKey="#link4">
                   {theData.data.handiSeries.map((b, i) => (
-                    <>
-                      <Row>
+                    <div key={i}>
+                      <Row >
                         <Col className="d-flex justify-content-end px-0 text-primary">{b.alias}:</Col>
                         <Col className="d-flex justify-content-start ps-1">{b.score}</Col>
                       </Row>
-                    </>
+                    </div>
                   ))}
                 </Tab.Pane>
               </Tab.Content>
@@ -143,7 +143,7 @@ const LandingScores = () => {
 
           </Tab.Container>
         </Row>
-      </container>
+      </Container>
     );
   } else return null;
 };
