@@ -1,8 +1,13 @@
 import { Badge, Card } from "react-bootstrap";
 import { format, startOfDay, isEqual } from "date-fns";
 import Image from "next/image";
+import { useDimensions } from 'libs/useDimensions';
+import { useRef } from "react";
 
 function EmptyCard(props) {
+  const ref = useRef(null)
+  const { width, height } = useDimensions(ref)
+
   const theDay = props.data.day;
   const when = props.data.month;
   const day1 = props.day1;
@@ -17,9 +22,10 @@ function EmptyCard(props) {
   ) {
     bgc = "ivory";
   }
+  console.log('width', width, 'height', height)
   if (bgc === "ivory")
     return (
-      <Card>
+      <Card ref={ref}>
         <Card.Header
           style={{
             padding: "0.1rem",
