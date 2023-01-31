@@ -96,8 +96,9 @@ async function makeHandi(db) {
 
     let totalPins = 0;
     let gamesTotal = 0;
-    theScores.forEach((s, i) => {
-      const prop = s.dateId.toString();
+    const propArray = [];
+    const handiArr = []
+     theScores.forEach((s, i) => {
       const series = s.games.reduce((acc, cur) => acc + cur, 0);
       totalPins += series;
       gamesTotal += s.games.length;
@@ -108,9 +109,13 @@ async function makeHandi(db) {
       if (handi < 0) {
         handi = 0;
       }
-
-      handiObj[`${s.dateId.toString()}-${s.memberId}`] = handi;
+      handiArr.push(handi)
+      propArray.push(`${s.dateId.toString()}-${s.memberId}`)
+      
     });
+    propArray.forEach((item, index) => {
+      handiObj[item] = handiArr[index === 0 ? index : index -1];
+    })
   });
   handiObj.season = getSeason(new Date());
   console.log(handiObj);
