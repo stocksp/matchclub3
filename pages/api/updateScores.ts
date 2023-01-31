@@ -1,11 +1,6 @@
-import { parseISO } from "date-fns";
+import { parseISO } from "date-fns"
 import clientPromise from "libs/mongo"
-import {
-  makeHandi,
-  getSeason,
-  calcStats,
-  makeHighScores,
-} from "../../libs/utils";
+import { makeHandi, getSeason, calcStats, makeHighScores } from "../../libs/utils"
 
 import type { NextApiRequest, NextApiResponse } from "next"
 
@@ -18,50 +13,46 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     req.body.won,
     req.body.lost,
     req.body.season
-  );
+  )
   try {
     const client = await clientPromise
     const db = client.db()
-    const dateId = parseInt(req.body.dateId);
-    const match = req.body.match;
-    let scores = req.body.scores;
-    const won = parseInt(req.body.won);
-    const lost = parseInt(req.body.lost);
-    const season = req.body.season;
-    console.log("scores", scores);
+    const dateId = parseInt(req.body.dateId)
+    const match = req.body.match
+    let scores = req.body.scores
+    const won = parseInt(req.body.won)
+    const lost = parseInt(req.body.lost)
+    const season = req.body.season
+    console.log("scores", scores)
 
     if (dateId && match && scores && !isNaN(won) && !isNaN(lost)) {
       // update the dateResults
 
       let resp = await db
         .collection("dateResults")
-        .updateOne(
-          { dateId },
-          { $set: { dateId, won, lost, match, season } },
-          { upsert: true }
-        );
-      console.log("won lost ok", resp.acknowledged);
+        .updateOne({ dateId }, { $set: { dateId, won, lost, match, season } }, { upsert: true })
+      console.log("won lost ok", resp.acknowledged)
       // delete all old scores for this date
-      let resp2 = await db.collection("matchScores").deleteMany({ dateId });
-      console.log("delete old scores ok", resp.acknowledged);
+      let resp2 = await db.collection("matchScores").deleteMany({ dateId })
+      console.log("delete old scores ok", resp.acknowledged)
       // insert the new ones
       // first convert the data from JSON strings to ints and date
       // then make it an array
-      const keys = Object.keys(scores);
-      const scoreArray = [];
+      const keys = Object.keys(scores)
+      const scoreArray = []
       keys.forEach((k) => {
-        scores[k].date = parseISO(scores[k].date);
-        scores[k].memberId = parseInt(scores[k].memberId);
-        scores[k].dateId = parseInt(scores[k].dateId);
-        scores[k].games = scores[k].games.map((g) => parseInt(g));
-        scoreArray.push(scores[k]);
-      });
+        scores[k].date = parseISO(scores[k].date)
+        scores[k].memberId = parseInt(scores[k].memberId)
+        scores[k].dateId = parseInt(scores[k].dateId)
+        scores[k].games = scores[k].games.map((g) => parseInt(g))
+        scoreArray.push(scores[k])
+      })
       // now insert them
-      let resp3 = await db.collection("matchScores").insertMany(scoreArray);
-      console.log("inserting new scores ok", resp.acknowledged);
+      let resp3 = await db.collection("matchScores").insertMany(scoreArray)
+      console.log("inserting new scores ok", resp.acknowledged)
       // rebuild update and return the handicaps for all bowlers
-      const handi = await makeHandi(db);
-      console.log("handi", handi);
+      const handi = await makeHandi(db)
+      console.log("handi", handi)
       // make memberStats
 
       // get ALL the scores for this seaon
@@ -70,56 +61,55 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .find({ season: getSeason() })
         .sort({ date: 1 })
         .project({ _id: 0 })
-        .toArray();
+        .toArray()
       // ids for all the members who have bowled
       // TODO shouldn't we just filter the above docs
       // and make theIds instead of another trip to the db??
       const theIds = await db
 
         .collection("matchScores")
-        .distinct("memberId", { season: getSeason() });
+        .distinct("memberId", { season: getSeason() })
 
-      console.log("ids", theIds);
+      console.log("ids", theIds)
 
-      let bulkWrites = [];
+      let bulkWrites = []
       theIds.forEach((id) => {
-        const theScores = docs.filter((d) => d.memberId === id);
-        if (theScores.length === 0)
-          console.log(`NO SCORES FOUND for memberId: ${id}`);
+        const theScores = docs.filter((d) => d.memberId === id)
+        if (theScores.length === 0) console.log(`NO SCORES FOUND for memberId: ${id}`)
         else {
-          const stats = calcStats(theScores, handi);
-          stats.member = theScores[0].alias;
-          stats.memberId = id;
-          console.log("stats", stats);
+          const stats = calcStats(theScores)
+          stats.member = theScores[0].alias
+          stats.memberId = id
+          console.log("stats", stats)
           bulkWrites.push({
             updateOne: {
               filter: { memberId: id },
-              update: {$set: stats},
+              update: { $set: stats },
               upsert: true,
             },
-          });
+          })
         }
-      });
-      
-      let resp4 = await db.collection("memberstats").bulkWrite(bulkWrites);
+      })
+
+      let resp4 = await db.collection("memberstats").bulkWrite(bulkWrites)
 
       // now do the highScores for this date
-      const theScores = makeHighScores(scoreArray, handi);
+      const theScores = makeHighScores(scoreArray, handi)
       let resp5 = await db.collection("highScores").updateOne(
         { dateId },
         { $set: { data: theScores, season } },
         {
           upsert: true,
         }
-      );
-      console.log("resp", resp.modifiedCount);
+      )
+      console.log("resp", resp.modifiedCount)
 
-      res.json({ message: "aok" });
-    } else res.json({ message: "not good" });
+      res.json({ message: "aok" })
+    } else res.json({ message: "not good" })
   } catch (e) {
-    console.log("catch error", e);
-    res.json({ message: "not good" });
+    console.log("catch error", e)
+    res.json({ message: "not good" })
   }
-};
+}
 
 export default handler

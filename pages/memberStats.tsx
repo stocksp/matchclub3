@@ -35,8 +35,8 @@ function MemberStats() {
         return { alias: d.alias, dateId: d.dateId, memberId: d.memberId }
       })
       .sort((a, b) => {
-        const nameA = a.alias.toUpperCase().split(' ')[1] // ignore upper and lowercase use last name
-        const nameB = b.alias.toUpperCase().split(' ')[1] // ignore upper and lowercase
+        const nameA = a.alias.toUpperCase().split(" ")[1] // ignore upper and lowercase use last name
+        const nameB = b.alias.toUpperCase().split(" ")[1] // ignore upper and lowercase
         if (nameA < nameB) {
           return -1
         }
@@ -47,19 +47,6 @@ function MemberStats() {
         // names must be equal
         return 0
       })
-  }
-
-  const getBowlerStats = () => {
-    const stat = teamStats.find((s) => s.memberId === memberId)
-    return (
-      <div>
-        Average: {stat.average}
-        <br />
-        High Game: {stat.hiGame}
-        <br />
-        High Series: {stat.hiSeries}
-      </div>
-    )
   }
 
   const handleChange = (event) => {
@@ -194,6 +181,11 @@ function MemberStats() {
     )
 }
 const BowlerStats = (props) => {
+  let hdi = Math.floor(0.9 * Math.floor(220 - Math.floor(props.totalPins / props.totalGames)))
+  // no negative handicap for bowlers over 220
+  if (hdi < 0) {
+    hdi = 0
+  }
   return (
     <>
       <Row>
@@ -207,6 +199,10 @@ const BowlerStats = (props) => {
       <Row>
         <Col className="d-flex justify-content-end fs-5 p-0 text-primary">Hi Series:</Col>
         <Col className="d-flex justify-content-start fs-5">{props.hiSeries}</Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-end fs-5 p-0 text-primary">Handicap:</Col>
+        <Col className="d-flex justify-content-start fs-5">{hdi}</Col>
       </Row>
     </>
   )

@@ -1,40 +1,50 @@
-import Header from "../components/header";
-import React, { useState, useEffect, useRef } from "react";
-import { useStoreContext } from "../components/Store";
-import { Table, Button, Spinner } from "react-bootstrap";
-import { useReactToPrint } from "react-to-print";
-const { format } = require("date-fns");
+import Header from "../components/header"
+import React, { useState, useEffect, useRef } from "react"
+import { useStoreContext } from "../components/Store"
+import { Table, Button, Spinner } from "react-bootstrap"
+import { useReactToPrint } from "react-to-print"
+const { format } = require("date-fns")
 
 function TeamStats() {
-  const [sortBy, setSortBy] = useState("average");
-  const [dir, setDir] = useState("desc");
-  const { hasTeamStats, teamStats, getTeamStats, setActive } =
-    useStoreContext();
-  const componentRef = useRef();
+  const [sortBy, setSortBy] = useState("average")
+  const [dir, setDir] = useState("desc")
+  const { hasTeamStats, teamStats, getTeamStats, setActive } = useStoreContext()
+  const componentRef = useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-  });
+  })
   useEffect(() => {
-    setActive("teamStats");
-    getTeamStats();
+    setActive("teamStats")
+    getTeamStats()
     //return setActive(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const sortMe = (who) => {
-    console.log("sortme", who, sortBy);
+    console.log("sortme", who, sortBy)
     if (sortBy === who) {
-      setDir(dir === "desc" ? "asc" : "desc");
+      setDir(dir === "desc" ? "asc" : "desc")
     } else {
-      setSortBy(who);
+      setSortBy(who)
     }
-    console.log(who);
-  };
+    console.log(who)
+  }
   const sorter = (a, b) => {
-    if (dir === "desc") return b[sortBy] - a[sortBy];
-    else return a[sortBy] - b[sortBy];
-  };
-  if (teamStats.length) teamStats.sort(sorter);
+    if (dir === "desc") return b[sortBy] - a[sortBy]
+    else return a[sortBy] - b[sortBy]
+  }
+
+  // the handi returned from the db is the handicap used for the match
+  // we want the current handicap after bowling
+  const makeHandi = (totalPins: number, totalGames: number) => {
+    let hdi = Math.floor(0.9 * Math.floor(220 - Math.floor(totalPins / totalGames)))
+    // no negative handicap for bowlers over 220
+    if (hdi < 0) {
+      hdi = 0
+    }
+    return hdi
+  }
+  if (teamStats.length) teamStats.sort(sorter)
   if (hasTeamStats)
     return (
       <>
@@ -75,6 +85,7 @@ function TeamStats() {
           </thead>
           <tbody>
             {teamStats.map((r, i) => {
+              const handi = makeHandi(r.totalPins, r.totalGames)
               return (
                 <tr key={i}>
                   <td key={1}>{r.member}</td>
@@ -87,20 +98,14 @@ function TeamStats() {
                   <td key={8}>{r.hiSeriesHandiGames.join(",")}</td>
                   <td key={9}>{r.totalPins}</td>
                   <td key={10}>{r.totalGames}</td>
-                  <td key={11}>{r.handicap}</td>
+                  <td key={11}>{handi}</td>
                 </tr>
-              );
+              )
             })}
           </tbody>
         </Table>
-        <div
-          ref={componentRef}
-          className="hide-on-screen"
-          style={{ marginTop: "25px" }}
-        >
-          <h3 className="text-center">
-            Team Stats as of {format(new Date(), "MMM. d, yyyy")}
-          </h3>
+        <div ref={componentRef} className="hide-on-screen" style={{ marginTop: "25px" }}>
+          <h3 className="text-center">Team Stats as of {format(new Date(), "MMM. d, yyyy")}</h3>
           <Table
             striped
             bordered
@@ -157,31 +162,23 @@ function TeamStats() {
                     <td key={10}>{r.totalGames}</td>
                     <td key={11}>{r.handicap}</td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </Table>
         </div>
-        {teamStats.length === 0 && (
-          <h5 className="text-center">No Data yet this season!</h5>
-        )}
+        {teamStats.length === 0 && <h5 className="text-center">No Data yet this season!</h5>}
       </>
-    );
+    )
 
   return (
     <>
       <Button variant="primary" disabled>
-        <Spinner
-          as="span"
-          animation="grow"
-          size="sm"
-          role="status"
-          aria-hidden="true"
-        />
+        <Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />
         <span> Loading...</span>
       </Button>
     </>
-  );
+  )
 }
 
-export default TeamStats;
+export default TeamStats

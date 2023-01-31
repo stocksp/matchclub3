@@ -19,7 +19,7 @@ function getSeason(date = new Date()) {
   return `${year - 2000}-${year - 1999}`;
 }
 // from an array matchScores calc the average
-function calcStats(scores, handiObj) {
+function calcStats(scores) {
   // saving this maybe handicaps can be added with
   // reduce ...
   /* let totalGames = scores.reduce((a, b) => a + b.games.length, 0);
@@ -47,7 +47,15 @@ function calcStats(scores, handiObj) {
     const hg = Math.max(...s.games);
     const ser = s.games.reduce((a, b) => a + b, 0);
     const param = `${s.dateId.toString()}-${s.memberId.toString()}`;
-    const hdi = handiObj[param];
+    totalPins += ser;
+    totalGames += games.length;
+    let handi = Math.floor(
+      0.9 * Math.floor(220 - Math.floor(totalPins / totalGames))
+    );
+    // no negative handicap for bowlers over 220
+    if (handi < 0) {
+      handi = 0;
+    }
     if (hg > hiGame) hiGame = hg;
     if (ser > hiSeries) {
       hiSeries = ser;
@@ -58,9 +66,8 @@ function calcStats(scores, handiObj) {
       hiSeriesHandi = ser + 3 * hdi;
       hiSeriesHandiGames = games;
     }
-    totalPins += ser;
-    totalGames += games.length;
-    handicap = hdi;
+
+    handicap = handi;
   });
   average = Math.floor(totalPins / totalGames);
   return {
@@ -98,7 +105,7 @@ async function makeHandi(db) {
     let gamesTotal = 0;
     const propArray = [];
     const handiArr = []
-     theScores.forEach((s, i) => {
+    theScores.forEach((s, i) => {
       const series = s.games.reduce((acc, cur) => acc + cur, 0);
       totalPins += series;
       gamesTotal += s.games.length;
@@ -111,10 +118,10 @@ async function makeHandi(db) {
       }
       handiArr.push(handi)
       propArray.push(`${s.dateId.toString()}-${s.memberId}`)
-      
+
     });
     propArray.forEach((item, index) => {
-      handiObj[item] = handiArr[index === 0 ? index : index -1];
+      handiObj[item] = handiArr[index === 0 ? index : index - 1];
     })
   });
   handiObj.season = getSeason(new Date());
