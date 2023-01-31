@@ -44,6 +44,12 @@ function TeamStats() {
     }
     return hdi
   }
+  const makeHandiSeries = (games, hiSeries) => {
+    let sum = games.reduce(function (a, b) {
+      return a + b;
+    }, 0);
+    return `${games.join(",")} +${hiSeries - sum}`
+  }
   if (teamStats.length) teamStats.sort(sorter)
   if (hasTeamStats)
     return (
@@ -86,6 +92,7 @@ function TeamStats() {
           <tbody>
             {teamStats.map((r, i) => {
               const handi = makeHandi(r.totalPins, r.totalGames)
+              const handiSeries = makeHandiSeries(r.hiSeriesHandiGames, r.hiSeriesHandi)
               return (
                 <tr key={i}>
                   <td key={1}>{r.member}</td>
@@ -95,7 +102,7 @@ function TeamStats() {
                   <td key={5}>{r.hiGameHandi}</td>
                   <td key={6}>{r.hiSeriesHandi}</td>
                   <td key={7}>{r.hiSeriesGames.join(",")}</td>
-                  <td key={8}>{r.hiSeriesHandiGames.join(",")}</td>
+                  <td key={8}>{makeHandiSeries(r.hiSeriesHandiGames, r.hiSeriesHandi)}</td>
                   <td key={9}>{r.totalPins}</td>
                   <td key={10}>{r.totalGames}</td>
                   <td key={11}>{handi}</td>
