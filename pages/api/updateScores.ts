@@ -74,12 +74,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       let bulkWrites = []
       theIds.forEach((id) => {
-        const theScores = docs.filter((d) => d.memberId === id)
+        const theScores = docs.filter((d) => d.memberId === id) as Array<Score>
         if (theScores.length === 0) console.log(`NO SCORES FOUND for memberId: ${id}`)
         else {
           const stats = calcStats(theScores)
-          stats.member = theScores[0].alias
-          stats.memberId = id
           console.log("stats", stats)
           bulkWrites.push({
             updateOne: {

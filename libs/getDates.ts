@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .project({ squad: 0, _id: 0 })
       .sort({ date: -1 })
       .toArray();
-    console.log("found dates", docs.length);
+    //console.log("found dates", docs.length);
     return {message: "ok", docs};
   } catch (error) {
     return error;

@@ -24,7 +24,7 @@ function EmptyCard(props) {
   console.log("width", width, "height", height)
   if (bgc === "ivory")
     return (
-      <Card ref={ref}>
+      <Card>
         <Card.Header
           style={{
             padding: "0.1rem",

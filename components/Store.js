@@ -59,7 +59,7 @@ function useStore() {
   const checkUser = async () => {
     const response = await fetch("/api/user")
     const theUser = await response.json()
-    console.log("checkUser", theUser)
+    //console.log("checkUser", theUser)
     setUser(theUser.user)
   }
 
@@ -106,10 +106,10 @@ function useStore() {
   const getDates = async (force = false) => {
     if (!hasDates || force) {
       try {
-        console.log("store getDates called")
+        //console.log("store getDates called")
         const response = await fetch("/api/getData?name=getDates")
         const myJson = await response.json()
-        console.log("getDates called", myJson)
+        //console.log("getDates called", myJson)
         // convert the Json date
         myJson.forEach((d) => {
           d.date = new Date(d.date)
@@ -156,8 +156,8 @@ function useStore() {
     }
   }
   const updateScores = async (dateId, match, season, scores, won, lost) => {
-    console.log("going to call fetch with /api/updateScores")
-    console.log("scores", scores)
+    //console.log("going to call fetch with /api/updateScores")
+    //console.log("scores", scores)
     const theData = JSON.stringify({
       dateId,
       match,

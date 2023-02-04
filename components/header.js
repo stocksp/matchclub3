@@ -42,7 +42,7 @@ const Header = () => {
     }
   };
 
-  console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId);
+  //console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId);
   return (
     <div
       style={{
