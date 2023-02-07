@@ -19,7 +19,7 @@ function getSeason(date = new Date()) {
   return `${year - 2000}-${year - 1999}`
 }
 // from an array matchScores calc the average
-function calcStats(scores: Array<Score>) {
+function calcStats(scores: Array<Score>): MemberStat {
   // saving this maybe handicaps can be added with
   // reduce ...
   /* let totalGames = scores.reduce((a, b) => a + b.games.length, 0);
@@ -43,12 +43,11 @@ function calcStats(scores: Array<Score>) {
   let hiSeriesHandiGames = []
   let handicap = 0
   scores.forEach((s) => {
-    const games = s.games
     const hg = Math.max(...s.games)
     const ser = s.games.reduce((a, b) => a + b, 0)
     //const param = `${s.dateId.toString()}-${s.memberId.toString()}`;
     totalPins += ser
-    totalGames += games.length
+    totalGames += s.games.length
     let handi = Math.floor(0.9 * Math.floor(220 - Math.floor(totalPins / totalGames)))
     // no negative handicap for bowlers over 220
     if (handi < 0) {
@@ -57,12 +56,12 @@ function calcStats(scores: Array<Score>) {
     if (hg > hiGame) hiGame = hg
     if (ser > hiSeries) {
       hiSeries = ser
-      hiSeriesGames = games
+      hiSeriesGames = s.games
     }
     if (hg + handi > hiGameHandi) hiGameHandi = hg + handi
     if (ser + 3 * handi > hiSeriesHandi) {
       hiSeriesHandi = ser + 3 * handi
-      hiSeriesHandiGames = games
+      hiSeriesHandiGames = s.games
     }
 
     handicap = handi
@@ -81,8 +80,83 @@ function calcStats(scores: Array<Score>) {
     handicap,
     season: getSeason(),
     memberId: scores[0].memberId,
-    member: scores[0].alias
+    member: scores[0].alias,
   }
+}
+function computePersonalBest(
+  previousScores: Array<Score>,
+  stats: MemberStat,
+  dateId: number
+) {
+  let average = 0
+  let hiGame = 0
+  let hiSeries = 0
+  let totalGames = 0
+  let totalPins = 0
+  const data = []
+  previousScores.forEach((s) => {
+    const hg = Math.max(...s.games)
+    const ser = s.games.reduce((a, b) => a + b, 0)
+    totalPins += ser
+    totalGames += s.games.length
+
+    if (hg > hiGame) hiGame = hg
+    if (ser > hiSeries) {
+      hiSeries = ser
+    }
+  })
+  average = Math.floor(totalPins / totalGames)
+
+  if (stats.average - average > 0) {
+    data.push({
+      updateOne: {
+        filter: { season: stats.season, memberId: stats.memberId, dateId: dateId },
+        update: {
+          $set: {
+            alias: previousScores[0].alias,
+            what: "average",
+            plus: stats.average - average,
+            value: stats.average,
+          },
+        },
+        upsert: true,
+      },
+    })
+  }
+  if (stats.hiGame - hiGame > 0) {
+    data.push({
+      updateOne: {
+        filter: { season: stats.season, memberId: stats.memberId, dateId: dateId },
+        update: {
+          $set: {
+            alias: previousScores[0].alias,
+            what: "hiGame",
+            plus: stats.hiGame - hiGame,
+            value: stats.hiGame,
+          },
+        },
+        upsert: true,
+      },
+    })
+  }
+  if (stats.hiSeries - hiSeries > 0) {
+    data.push({
+      updateOne: {
+        filter: { season: stats.season, memberId: stats.memberId, dateId: dateId },
+        update: {
+          $set: {
+            alias: previousScores[0].alias,
+            what: "hiSeries",
+            plus: stats.hiSeries - hiSeries,
+            value: stats.hiSeries,
+          },
+        },
+        upsert: true,
+      },
+    })
+  }
+
+  return data
 }
 // compute the members handicap for the whole season
 // this is not efficient but its quick ....
@@ -97,7 +171,7 @@ async function makeHandi(db) {
   const memIds: Array<number> = [...new Set(memberIds)]
   memIds.sort((a, b) => a - b)
   console.log(memIds)
-  const handiObj ={} as HandiObject
+  const handiObj = {} as HandiObject
   memIds.forEach((m) => {
     const theScores = scores.filter((s) => s.memberId === m)
 
@@ -306,4 +380,5 @@ export {
   makeChunks,
   getFirstWeek,
   getNextWeek,
+  computePersonalBest,
 }

@@ -14,12 +14,27 @@ type HandiObject = {
   season: string
 }
 type HighScore = {
-    alias: string,
-    score: string
+  alias: string
+  score: string
 }
 type HighScores = {
   scratchGame: Array<HighScore>
   scratchSeries: Array<HighScore>
   handiGame: Array<HighScore>
   handiSeries: Array<HighScore>
+}
+type MemberStat = {
+  average: number
+  hiGame: number
+  hiSeries: number
+  totalGames: number
+  totalPins: number
+  hiSeriesGames: number[]
+  hiSeriesHandiGames: number[]
+  hiSeriesHandi: number
+  hiGameHandi: number
+  handicap: number
+  season: string
+  memberId: number
+  member: string
 }

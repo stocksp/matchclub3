@@ -10,6 +10,7 @@ import getHighScores from "libs/getHighScores";
 import testMail from "libs/testMail";
 import runMailer from "libs/runMailer";
 import emailExists from "libs/emailExists";
+import getBests from "libs/getBests"
 
 import type { NextApiRequest, NextApiResponse } from "next"
 
@@ -17,6 +18,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const name = req.query.name;
   console.log("starting getData:", name);
   try {
+    if (name === "getBests") {
+      const data = await getBests(req, res);
+      if (data.message == "ok") res.json(data.docs);
+      else res.json("Error: " + data.toString());
+    } else
     if (name === "getDates") {
       const data = await getDates(req, res);
       if (data.message == "ok") res.json(data.docs);

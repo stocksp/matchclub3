@@ -15,6 +15,7 @@ import { useStoreContext } from "../components/Store";
 import { getFirstWeek, getNextWeek } from "../libs/utils";
 
 import LandingScores from "components/landingScores";
+import PersonalBest from "components/personalBest";
 import DayCard from "components/dayCard";
 import EmptyCard from "components/emptyCard";
 import {
@@ -39,17 +40,23 @@ const Index = () => {
     doSquadAction,
     user,
     windowSize,
+    getHighScores,
+    highScores
   } = useStoreContext();
   useEffect(() => {
+    getHighScores()
     setActive("0");
   }, []);
 
+
+  const [dateId, setDateId] = useState(null);
   const [hostAddress, setHostAddress] = useState("");
   const [mapLink, setMapLink] = useState("");
   const [dateSelected, setDateSelected] = useState(null);
   //const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
   const [footerText, setFooterText] = useState("");
+
 
   const handleClose = () => {
     setHasSquad(false);
@@ -79,7 +86,7 @@ const Index = () => {
     }
     getSquad(dateSelected);
   };
-  
+
   const onDayClick = async (ev, data) => {
     console.log("event click ev:", ev.target, "event:", data);
     //check if map click
@@ -107,6 +114,13 @@ const Index = () => {
       Router.push("/login");
     }
   };
+  const getDateId = () => {
+    const theDates =  dates.filter((d) => {
+      const found = highScores.dateResults.find((r) => r.dateId === d.dateId)
+      return found !== undefined
+    })
+    return (dateId ? dateId : theDates[0].dateId);
+  }
 
   //console.log("dates", dates);
   if (hasDates) {
@@ -149,9 +163,9 @@ const Index = () => {
       //console.log(theWeek);
       weeks.push(theWeek);
     }
-   // console.log("the weeks", weeks);
+    // console.log("the weeks", weeks);
     let doShort = windowSize.width < 950 ? true : false;
-    
+
     return (
       <Container>
         <Header />
@@ -201,9 +215,10 @@ const Index = () => {
               else return <EmptyCard key={(i + 1) * i2} data={d} day1={day1} />;
             })
           )}
-        </Container>
 
-        <LandingScores />
+        </Container>
+        {highScores ? <PersonalBest dateId={getDateId()} highScores={highScores} /> : null}
+        <LandingScores dateId={dateId} setDateId={setDateId} highScores={highScores} />
 
         <Modal show={hasSquad} onHide={handleClose} size="lg">
           <Modal.Header closeButton>
@@ -230,7 +245,7 @@ const Index = () => {
           <Modal.Header closeButton>
             <Modal.Title>{hostAddress}</Modal.Title>
           </Modal.Header>
-          
+
           <Modal.Body>
             <ButtonToolbar className="justify-content-between">
               <Button variant="secondary" onClick={mapLinkClose}>
