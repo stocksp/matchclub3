@@ -14,6 +14,7 @@ import {
 import { useStoreContext } from "./Store"
 import Router from "next/router"
 import { format, addMonths, getDay, getDaysInMonth, startOfDay } from "date-fns"
+import PersonalBest from "components/personalBest"
 const active = "0"
 
 const navbar = {
@@ -22,6 +23,9 @@ const navbar = {
 const datebar = {
   backgroundColor: "lightblue",
   padding: "2px",
+}
+const menudisplay = {
+  justify: "left",
 }
 
 const Header = () => {
@@ -49,6 +53,34 @@ const Header = () => {
       Router.push("/login")
     }
   }
+
+  const [dateId, setDateId] = useState(null)
+
+  const getDateId = () => {
+    const theDates = dates.filter((d) => {
+      const found = highScores.dateResults.find((r) => r.dateId === d.dateId)
+      return found !== undefined
+    })
+    return dateId ? dateId : theDates[0].dateId
+  }
+
+  const {
+    dates,
+    hasDates,
+    setActive,
+    hasSquad,
+    setHasSquad,
+    squad,
+    getSquad,
+    doSquadAction,
+    windowSize,
+    getHighScores,
+    highScores,
+  } = useStoreContext()
+  useEffect(() => {
+    getHighScores()
+    setActive("0")
+  }, [])
 
   //console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId);
   return (
@@ -94,46 +126,52 @@ const Header = () => {
           </Button>
         </span>
       </div>
-
-      <Container style={{ maxWidth: "60%", justifySelf: "left" }}>
-        <Navbar expand="sm" collapseOnSelect variant="dark" style={navbar}>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav activeKey={active}>
-              <Link href="/" passHref legacyBehavior>
-                <Nav.Link eventKey="0">HOME</Nav.Link>
-              </Link>
-              <Link href="/teamStats" passHref legacyBehavior>
-                <Nav.Link eventKey="teamStats">TEAM STATS</Nav.Link>
-              </Link>
-              <Link href="/matchStats" passHref legacyBehavior>
-                <Nav.Link eventKey="matchStats">MATCH STATS</Nav.Link>
-              </Link>
-              <Link href="/memberStats" passHref legacyBehavior>
-                <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
-              </Link>
-              {user && (
-                <Link
-                  href="/member/[id]"
-                  as={`/member/${user.memberId}`}
-                  passHref
-                  legacyBehavior
-                >
-                  <Nav.Link eventKey="member">Your Stuff</Nav.Link>
+      <div>
+        <Container style={menudisplay}>
+          <Navbar expand="sm" collapseOnSelect variant="dark" style={navbar}>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav activeKey={active}>
+                <Link href="/" passHref legacyBehavior>
+                  <Nav.Link eventKey="0">HOME</Nav.Link>
                 </Link>
-              )}
-              {user && user.role === "admin" && (
-                <Link href="/admin/games" passHref legacyBehavior>
-                  <Nav.Link>ADMIN</Nav.Link>
+                <Link href="/teamStats" passHref legacyBehavior>
+                  <Nav.Link eventKey="teamStats">TEAM STATS</Nav.Link>
                 </Link>
-              )}
-              <Link href="/about" passHref legacyBehavior>
-                <Nav.Link>ABOUT</Nav.Link>
-              </Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-      </Container>
+                <Link href="/matchStats" passHref legacyBehavior>
+                  <Nav.Link eventKey="matchStats">MATCH STATS</Nav.Link>
+                </Link>
+                <Link href="/memberStats" passHref legacyBehavior>
+                  <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
+                </Link>
+                {user && (
+                  <Link
+                    href="/member/[id]"
+                    as={`/member/${user.memberId}`}
+                    passHref
+                    legacyBehavior
+                  >
+                    <Nav.Link eventKey="member">Your Stuff</Nav.Link>
+                  </Link>
+                )}
+                {user && user.role === "admin" && (
+                  <Link href="/admin/games" passHref legacyBehavior>
+                    <Nav.Link>ADMIN</Nav.Link>
+                  </Link>
+                )}
+                <Link href="/about" passHref legacyBehavior>
+                  <Nav.Link>ABOUT</Nav.Link>
+                </Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+        </Container>
+      </div>
+      <div>
+        {highScores ? (
+          <PersonalBest dateId={getDateId()} highScores={highScores} />
+        ) : null}
+      </div>
     </div>
   )
 }
