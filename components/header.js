@@ -28,10 +28,9 @@ const menudisplay = {
   justify: "left",
 }
 
-const Header = () => {
-  const [showLogin, setShowLogin] = useState(false)
-
-  const { currentDate, setCurrentDate, active, user, doLoggin } =
+const Header = (props) => {
+  
+  const { currentDate, setCurrentDate, active, user, doLoggin, highScores } =
     useStoreContext()
 
   const today = () => {
@@ -54,35 +53,8 @@ const Header = () => {
     }
   }
 
-  const [dateId, setDateId] = useState(null)
 
-  const getDateId = () => {
-    const theDates = dates.filter((d) => {
-      const found = highScores.dateResults.find((r) => r.dateId === d.dateId)
-      return found !== undefined
-    })
-    return dateId ? dateId : theDates[0].dateId
-  }
-
-  const {
-    dates,
-    hasDates,
-    setActive,
-    hasSquad,
-    setHasSquad,
-    squad,
-    getSquad,
-    doSquadAction,
-    windowSize,
-    getHighScores,
-    highScores,
-  } = useStoreContext()
-  useEffect(() => {
-    getHighScores()
-    setActive("0")
-  }, [])
-
-  //console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId);
+  console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId, "highScores", props.highScores);
   return (
     <div
       style={{
@@ -169,7 +141,7 @@ const Header = () => {
       </div>
       <div>
         {highScores ? (
-          <PersonalBest dateId={getDateId()} highScores={highScores} />
+          <PersonalBest dateId={props.dateId} highScores={props.highScores} />
         ) : null}
       </div>
     </div>

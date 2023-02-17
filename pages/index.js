@@ -168,7 +168,7 @@ const Index = () => {
 
     return (
       <Container>
-        <Header />
+        <Header dateId={dateId} highScores={highScores}/>
         <Container
           fluid
           className="grid text-center"
