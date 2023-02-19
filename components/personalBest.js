@@ -35,6 +35,8 @@ const PersonalBest = (props) => {
     })
   }
 
+  
+
   const getBests = async () => {
     try {
       const response = await fetch(

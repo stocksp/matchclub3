@@ -1,15 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
 import Link from "next/link"
 import Head from "next/head"
-import {
-  Navbar,
-  Nav,
-  NavDropdown,
-  Button,
-  Modal,
-  Form,
-  Container,
-} from "react-bootstrap"
+import { Navbar, Nav, NavDropdown, Button, Modal, Form, Container } from "react-bootstrap"
 
 import { useStoreContext } from "./Store"
 import Router from "next/router"
@@ -26,8 +18,7 @@ const datebar = {
 }
 
 const Header = (props) => {
-  const { currentDate, setCurrentDate, active, user, doLoggin, highScores } =
-    useStoreContext()
+  const { currentDate, setCurrentDate, active, user, doLoggin, highScores } = useStoreContext()
 
   const today = () => {
     console.log("today")
@@ -47,6 +38,20 @@ const Header = (props) => {
     } else {
       Router.push("/login")
     }
+  }
+  const getDateId = () => {
+    const theDates =  props.dates.filter((d) => {
+      const found = props.highScores.dateResults.find((r) => r.dateId === d.dateId)
+      return found !== undefined
+    })
+    return (props.dateId ? props.dateId : theDates[0].dateId);
+  }
+  const getTheDate = () => {
+    const id = getDateId()
+    const data = props.dates.find((d) => {
+      return d.dateId === id
+    })
+    return data.date
   }
 
   console.log(
@@ -90,10 +95,7 @@ const Header = (props) => {
             </Button>
           </span>
         )}
-        <span className="calendarDate">
-          {" "}
-          {format(currentDate, "MMMM yyyy")}{" "}
-        </span>
+        <span className="calendarDate"> {format(currentDate, "MMMM yyyy")} </span>
         <span>
           <Button variant="primary" onClick={handleLogin}>
             {user ? user.alias + " (log out)" : "log in"}
@@ -119,12 +121,7 @@ const Header = (props) => {
                   <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
                 </Link>
                 {user && (
-                  <Link
-                    href="/member/[id]"
-                    as={`/member/${user.memberId}`}
-                    passHref
-                    legacyBehavior
-                  >
+                  <Link href="/member/[id]" as={`/member/${user.memberId}`} passHref legacyBehavior>
                     <Nav.Link eventKey="member">Your Stuff</Nav.Link>
                   </Link>
                 )}
@@ -141,9 +138,9 @@ const Header = (props) => {
           </Navbar>
         </div>
         <div style={{ padding: "0px 0px 0px 10px" }}>
-          {highScores ? <p>Best stuff on </p> : null}
+          {highScores ? <p>Best stuff on {getTheDate().toLocaleDateString()}</p> : null}
           {highScores ? (
-            <PersonalBest dateId={props.dateId} highScores={props.highScores} />
+            <PersonalBest dateId={props.dateId} highScores={props.highScores} dates={props.dates} />
           ) : null}
         </div>
       </div>

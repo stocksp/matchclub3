@@ -114,13 +114,7 @@ const Index = () => {
       Router.push("/login");
     }
   };
-  const getDateId = () => {
-    const theDates =  dates.filter((d) => {
-      const found = highScores.dateResults.find((r) => r.dateId === d.dateId)
-      return found !== undefined
-    })
-    return (dateId ? dateId : theDates[0].dateId);
-  }
+  
 
   //console.log("dates", dates);
   if (hasDates) {
@@ -168,7 +162,7 @@ const Index = () => {
 
     return (
       <Container>
-        <Header dateId={dateId} highScores={highScores}/>
+        <Header dateId={dateId} highScores={highScores} dates={dates}/>
         <Container
           fluid
           className="grid text-center"
