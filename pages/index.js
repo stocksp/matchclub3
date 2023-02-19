@@ -217,7 +217,6 @@ const Index = () => {
           )}
 
         </Container>
-        {highScores ? <PersonalBest dateId={getDateId()} highScores={highScores} /> : null}
         <LandingScores dateId={dateId} setDateId={setDateId} highScores={highScores} />
 
         <Modal show={hasSquad} onHide={handleClose} size="lg">

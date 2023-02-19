@@ -24,12 +24,8 @@ const datebar = {
   backgroundColor: "lightblue",
   padding: "2px",
 }
-const menudisplay = {
-  justify: "left",
-}
 
 const Header = (props) => {
-  
   const { currentDate, setCurrentDate, active, user, doLoggin, highScores } =
     useStoreContext()
 
@@ -53,8 +49,14 @@ const Header = (props) => {
     }
   }
 
-
-  console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId, "highScores", props.highScores);
+  console.log(
+    "now",
+    currentDate.toLocaleDateString(),
+    "user",
+    user?.memberId,
+    "highScores",
+    props.highScores
+  )
   return (
     <div
       style={{
@@ -98,8 +100,8 @@ const Header = (props) => {
           </Button>
         </span>
       </div>
-      <div>
-        <Container style={menudisplay}>
+      <div className="navbar-container">
+        <div style={{ width: "50%" }}>
           <Navbar expand="sm" collapseOnSelect variant="dark" style={navbar}>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
@@ -137,12 +139,13 @@ const Header = (props) => {
               </Nav>
             </Navbar.Collapse>
           </Navbar>
-        </Container>
-      </div>
-      <div>
-        {highScores ? (
-          <PersonalBest dateId={props.dateId} highScores={props.highScores} />
-        ) : null}
+        </div>
+        <div style={{ padding: "0px 0px 0px 10px" }}>
+          {highScores ? <p>Best stuff on </p> : null}
+          {highScores ? (
+            <PersonalBest dateId={props.dateId} highScores={props.highScores} />
+          ) : null}
+        </div>
       </div>
     </div>
   )
