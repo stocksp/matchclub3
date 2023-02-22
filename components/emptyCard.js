@@ -48,11 +48,7 @@ function EmptyCard(props) {
         </Card.Header>
         <Image
           alt="what?"
-          class={
-            now.getDay() === 0 || now.getDay() === 6
-              ? "img-fluid rounded-circle"
-              : ""
-          }
+          className={now.getDay() === 0 || now.getDay() === 6 ? "img-fluid rounded-circle" : ""}
           fill={true}
           src={now.getHours() < 19 && now.getHours() > 6 ? "/today.svg" : "/tonight.svg"}
         />

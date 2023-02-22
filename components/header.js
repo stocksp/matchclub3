@@ -17,8 +17,9 @@ const datebar = {
   padding: "2px",
 }
 
-const Header = (props) => {
-  const { currentDate, setCurrentDate, active, user, doLoggin, highScores } = useStoreContext()
+const Header = () => {
+  const { currentDate, setCurrentDate, active, user, doLoggin, highScores, dateId, dates } =
+    useStoreContext()
 
   const today = () => {
     console.log("today")
@@ -39,18 +40,12 @@ const Header = (props) => {
       Router.push("/login")
     }
   }
-  const getDateId = () => {
-    const theDates =  props.dates.filter((d) => {
-      const found = props.highScores.dateResults.find((r) => r.dateId === d.dateId)
-      return found !== undefined
-    })
-    return (props.dateId ? props.dateId : theDates[0].dateId);
-  }
+
   const getTheDate = () => {
-    const id = getDateId()
-    const data = props.dates.find((d) => {
-      return d.dateId === id
+    const data = dates.find((d) => {
+      return d.dateId === dateId
     })
+    console.log("header date", data.date)
     return data.date
   }
 
@@ -60,7 +55,9 @@ const Header = (props) => {
     "user",
     user?.memberId,
     "highScores",
-    props.highScores
+    highScores,
+    "dateId",
+    dateId
   )
   return (
     <div
@@ -139,9 +136,7 @@ const Header = (props) => {
         </div>
         <div style={{ padding: "0px 0px 0px 10px" }}>
           {highScores ? <p>Best stuff on {getTheDate().toLocaleDateString()}</p> : null}
-          {highScores ? (
-            <PersonalBest dateId={props.dateId} highScores={props.highScores} dates={props.dates} />
-          ) : null}
+          {highScores ? <PersonalBest /> : null}
         </div>
       </div>
     </div>

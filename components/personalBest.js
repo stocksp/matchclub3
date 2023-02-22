@@ -10,7 +10,7 @@ const PersonalBest = (props) => {
     setDelay(null)
   }
 
-  const { getHighScores, highScores, dates } = useStoreContext()
+  const { highScores, dateId } = useStoreContext()
 
   const [bests, setBests] = useState([])
   const [hasBests, setHasBests] = useState(false)
@@ -20,7 +20,7 @@ const PersonalBest = (props) => {
   useEffect(() => {
     console.log("best useEffects")
     getBests()
-  }, [props.dateId])
+  }, [dateId])
 
   useInterval(() => {
     if (hasBests && bests.length > 0) {
@@ -28,20 +28,10 @@ const PersonalBest = (props) => {
       else setBestCount(bestCount + 1)
     }
   }, 4000)
-  const getDates = () => {
-    return dates.filter((d) => {
-      const found = highScores.dateResults.find((r) => r.dateId === d.dateId)
-      return found !== undefined
-    })
-  }
-
-  
 
   const getBests = async () => {
     try {
-      const response = await fetch(
-        `/api/getData?name=getBests&dateId=${props.dateId}`
-      )
+      const response = await fetch(`/api/getData?name=getBests&dateId=${dateId}`)
       let myJson = await response.json()
       console.log("bests", myJson)
       setHasBests(true)
@@ -53,11 +43,7 @@ const PersonalBest = (props) => {
   }
 
   //console.log('bestCount', bestCount)
-  if (
-    props.highScores &&
-    props.highScores.dateResults.length > 0 &&
-    bests.length > 0
-  ) {
+  if (highScores && highScores.dateResults.length > 0 && bests.length > 0) {
     const theBest = bests[bestCount]
     /* return (
             <ToastContainer className="p-3" position='middle-center'>

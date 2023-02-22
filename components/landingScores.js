@@ -4,30 +4,27 @@ import { Tab, Row, Col, ListGroup, Form, Container } from "react-bootstrap"
 import { format } from "date-fns"
 import { useStoreContext } from "./Store"
 
-const LandingScores = (props) => {
-  const { dates } = useStoreContext()
+const LandingScores = () => {
+  const { dates, dateId, setDateId, highScores } = useStoreContext()
 
   useEffect(() => {
-   
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getDates = () => {
     return dates.filter((d) => {
-      const found = props.highScores.dateResults.find((r) => r.dateId === d.dateId)
+      const found = highScores.dateResults.find((r) => r.dateId === d.dateId)
       return found !== undefined
     })
   }
   const handleChange = (event) => {
-    props.setDateId(parseInt(event.target.value))
+    setDateId(parseInt(event.target.value))
   }
-  if (props.highScores && props.highScores.dateResults.length > 0) {
+  if (highScores && highScores.dateResults.length > 0) {
     const theDates = getDates()
-    const theDateId = props.dateId ? props.dateId : theDates[0].dateId
-    
-    const theData = props.highScores.results.find(
-      (r) => r.dateId === (props.dateId ? props.dateId : theDateId)
-    )
+    //const theDateId = dateId ? dateId : theDates[0].dateId
+
+    const theData = highScores.results.find((r) => r.dateId === dateId)
     if (!theData) {
       return <div>oops</div>
     }
@@ -37,7 +34,7 @@ const LandingScores = (props) => {
           <Col sm={12} md={8} lg={6}>
             <Form.Control as="select" onChange={handleChange}>
               {theDates.map((d, i) => {
-                const teamRes = props.highScores.dateResults.find((t) => t.dateId === d.dateId)
+                const teamRes = highScores.dateResults.find((t) => t.dateId === d.dateId)
                 const title = `${format(d.date, "MMM. d, yyyy")} ${d.host} hosting ${
                   d.guest
                 } [Won ${teamRes.won} Lost ${teamRes.lost}]  `
