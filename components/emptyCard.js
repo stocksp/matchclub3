@@ -48,7 +48,7 @@ function EmptyCard(props) {
         </Card.Header>
         <Image
           alt="what?"
-          class={
+          className={
             now.getDay() === 0 || now.getDay() === 6
               ? "img-fluid rounded-circle"
               : ""
