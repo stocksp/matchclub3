@@ -1,7 +1,15 @@
 import React, { useContext, useState, useEffect } from "react"
 import Link from "next/link"
 import Head from "next/head"
-import { Navbar, Nav, NavDropdown, Button, Modal, Form, Container } from "react-bootstrap"
+import {
+  Navbar,
+  Nav,
+  NavDropdown,
+  Button,
+  Modal,
+  Form,
+  Container,
+} from "react-bootstrap"
 
 import { useStoreContext } from "./Store"
 import Router from "next/router"
@@ -18,8 +26,17 @@ const datebar = {
 }
 
 const Header = () => {
-  const { currentDate, setCurrentDate, active, user, doLoggin, highScores, dateId, dates } =
-    useStoreContext()
+  const {
+    currentDate,
+    setCurrentDate,
+    active,
+    user,
+    doLoggin,
+    highScores,
+    dateId,
+    dates,
+    windowSize,
+  } = useStoreContext()
 
   const today = () => {
     console.log("today")
@@ -48,6 +65,9 @@ const Header = () => {
     console.log("header date", data.date)
     return data.date
   }
+
+  // Shrink navbar div prior to size when hamburger appears
+  const windowSizeStyle = windowSize.width < 585 ? "25%" : "60%"
 
   console.log(
     "now",
@@ -92,7 +112,10 @@ const Header = () => {
             </Button>
           </span>
         )}
-        <span className="calendarDate"> {format(currentDate, "MMMM yyyy")} </span>
+        <span className="calendarDate">
+          {" "}
+          {format(currentDate, "MMMM yyyy")}{" "}
+        </span>
         <span>
           <Button variant="primary" onClick={handleLogin}>
             {user ? user.alias + " (log out)" : "log in"}
@@ -100,7 +123,7 @@ const Header = () => {
         </span>
       </div>
       <div className="navbar-container">
-        <div style={{ width: "50%" }}>
+        <div style={{ width: windowSizeStyle }}>
           <Navbar expand="sm" collapseOnSelect variant="dark" style={navbar}>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
@@ -118,7 +141,12 @@ const Header = () => {
                   <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
                 </Link>
                 {user && (
-                  <Link href="/member/[id]" as={`/member/${user.memberId}`} passHref legacyBehavior>
+                  <Link
+                    href="/member/[id]"
+                    as={`/member/${user.memberId}`}
+                    passHref
+                    legacyBehavior
+                  >
                     <Nav.Link eventKey="member">Your Stuff</Nav.Link>
                   </Link>
                 )}
@@ -135,7 +163,9 @@ const Header = () => {
           </Navbar>
         </div>
         <div style={{ padding: "0px 0px 0px 10px" }}>
-          {highScores ? <p>Best stuff on {getTheDate().toLocaleDateString()}</p> : null}
+          {highScores ? (
+            <p>Best stuff on {getTheDate().toLocaleDateString()}</p>
+          ) : null}
           {highScores ? <PersonalBest /> : null}
         </div>
       </div>
