@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "components/header";
 import AdminHeader from "components/adminHeader";
 import { Container, Button, Table, Spinner } from "react-bootstrap";
-import EditClub from "components/editClub";
+import EditClub from "components/editClub.tsx";
 import { useStoreContext } from "components/Store";
 import { MdEdit } from "react-icons/md";
 function Clubs() {

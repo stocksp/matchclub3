@@ -410,8 +410,8 @@ function useStore() {
       //TODO why does this fail with current updateData?
       //const message = await resp.json();
 
-      if (resp.ok) {
-        await await getClubsLocations(true)
+      if (resp.statusText == 'OK') {
+        await getClubsLocations(true)
       }
       return resp
     } catch (error) {

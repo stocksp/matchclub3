@@ -25,7 +25,7 @@ const handler = async (req, res) => {
     } else res.json("Error: " + data.toString());
   } else if (name === "updateClub") {
     const data = await updateClub(req, res);
-    if (data.message == "aok") {
+    if (data.message == "ok") {
       res.json({ message: "aok" });
     } else res.json("Error: " + data.toString());
   } else if (name === "removeDate") {

@@ -1,4 +1,5 @@
 import clientPromise from "libs/mongo"
+import { UpdateResult } from "mongodb"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,15 +18,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const houseName = req.body.houseName
 
     if (locationId && clubId && name && address && city && state && zip && phone && houseName) {
-      let resp = await db.collection("clubs").updateOne(
+      let resp: UpdateResult = await db.collection("clubs").updateOne(
         { clubId },
         { $set: { name, address, city, state, zip, phone, houseName, locationId } },
         {
           upsert: true,
         }
       )
-      console.log("resp", resp.modifiedCount)
-      return { message: "aok", resp }
+      
+      console.log("resp count", resp.modifiedCount)
+      return { message: "ok", count: resp.modifiedCount }
     } else return { message: "not good data" }
   } catch (e) {
     console.log("catch error", e)
