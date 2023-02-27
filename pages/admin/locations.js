@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Header from "components/header";
 import AdminHeader from "components/adminHeader";
 import { Container, Button, Table, Spinner } from "react-bootstrap";
-import EditLocation from "components/editLocation";
+import EditLocation from "components/editLocation.tsx";
 import { useStoreContext } from "components/Store";
 import { MdEdit } from "react-icons/md";
 function Locations() {
