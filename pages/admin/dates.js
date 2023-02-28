@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import { format, compareAsc } from "date-fns";
 import { useStoreContext } from "components/Store";
-import EditDate from "../../components/editDate";
+import EditDate from "../../components/editDate.tsx";
 
 function Dates() {
   const [dateToEdit, setDateToEdit] = useState(null);
