@@ -1,21 +1,35 @@
-import { Badge, Card } from "react-bootstrap";
-import { format, getMinutes } from "date-fns";
+import { Badge, Card } from "react-bootstrap"
+import { format, getMinutes } from "date-fns"
+import { useState } from "react"
+import { useStoreContext } from "components/Store"
 
 function DayCard(props) {
-  // const classes = useStyles();
+  const [userIsInSquad, setUserIsInSquad] = useState(false)
+  const { user } = useStoreContext()
+  
+  const checkForUser = async () => {
+    const response = await fetch(`/api/getData?memberId=${user.memberId}&dateId=${props.data.date.dateId}&name=userInSquad`)
+    const data = await response.json()
+    console.log("userInSquad", data)
+    if(data.member)
+      setUserIsInSquad(true)
+  }
+  if( user && !userIsInSquad) {
+    checkForUser()
+  }
 
   // //console.log("data", props.data);
-  const { host, guest, location, date, hasmeeting } = props.data.date;
-  const theMinutes = date.getMinutes();
-  const theHour = theMinutes != 0 ? format(date, "h:m a") : format(date, "h a");
-  const theDay = props.data.day;
-  const now = new Date();
+  const { host, guest, location, date, hasmeeting } = props.data.date
+  const theMinutes = date.getMinutes()
+  const theHour = theMinutes != 0 ? format(date, "h:m a") : format(date, "h a")
+  const theDay = props.data.day
+  const now = new Date()
   const styles = {
     fontSize: "0.675rem",
     marginBottom: "7px",
     textAlign: "left",
     color: "rgb(100, 100, 100)",
-  };
+  }
   const mapStyle = {
     fontSize: "11px",
     position: "absolute",
@@ -27,7 +41,7 @@ function DayCard(props) {
     backgroundColor: "gold",
     color: "Black",
     cursor: "crosshair",
-  };
+  }
   return (
     <Card onClick={props.onClick}>
       <Card.Header
@@ -101,11 +115,9 @@ function DayCard(props) {
         <Card.Subtitle style={styles}>
           <strong>{location}</strong>
         </Card.Subtitle>
-        {location !== "Double Decker Lanes" ? (
-          <div style={mapStyle}> Map</div>
-        ) : null}
+        {location !== "Double Decker Lanes" ? <div style={mapStyle}> Map</div> : null}
       </Card.Body>
     </Card>
-  );
+  )
 }
-export default DayCard;
+export default DayCard
