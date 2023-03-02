@@ -1,17 +1,19 @@
 import { Badge, Card } from "react-bootstrap"
 import { format, getMinutes } from "date-fns"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useStoreContext } from "components/Store"
 
 function DayCard(props) {
   const { user } = useStoreContext()
 
-  var signedUp = false
-  function checkSignedUp() {
+  const [signedUp, setsignedUp] = useState(false)
+
+  useEffect(() => {
+    if (user) {
       const foundIt = props.data.date.squad.find((s) => s.id === user.memberId)
-      foundIt ? (signedUp = true) : (signedUp = false)
-  }
-  if (user) checkSignedUp()
+      if (foundIt) setsignedUp(true)
+    }
+  }, [user])
 
   // //console.log("data", props.data);
   const { host, guest, location, date, hasmeeting } = props.data.date
