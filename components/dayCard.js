@@ -7,16 +7,22 @@ function DayCard(props) {
   const { user } = useStoreContext()
 
   const [signedUp, setsignedUp] = useState(false)
-
+  const { host, guest, location, date, hasmeeting } = props.data.date
   useEffect(() => {
     if (user) {
-      const foundIt = props.data.date.squad.find((s) => s.id === user.memberId)
-      if (foundIt) setsignedUp(true)
+      const foundIt = props.data.date.squad.find((s) => {
+        return s.id === user.memberId
+      })
+      if (foundIt) {
+        setsignedUp(true)
+      } else {
+        setsignedUp(false)
+      }
     }
-  }, [user])
+  }, [user, props.data.date.squad])
 
-  // //console.log("data", props.data);
-  const { host, guest, location, date, hasmeeting } = props.data.date
+  console.log("squad", date.squad)
+
   const theMinutes = date.getMinutes()
   const theHour = theMinutes != 0 ? format(date, "h:m a") : format(date, "h a")
   const theDay = props.data.day
@@ -39,6 +45,7 @@ function DayCard(props) {
     color: "Black",
     cursor: "crosshair",
   }
+
   return (
     <Card onClick={props.onClick}>
       <Card.Header
@@ -113,9 +120,7 @@ function DayCard(props) {
         <Card.Subtitle style={styles}>
           <strong>{location}</strong>
         </Card.Subtitle>
-        {location !== "Double Decker Lanes" ? (
-          <div style={mapStyle}> Map</div>
-        ) : null}
+        {location !== "Double Decker Lanes" ? <div style={mapStyle}> Map</div> : null}
       </Card.Body>
     </Card>
   )

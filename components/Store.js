@@ -239,6 +239,7 @@ function useStore() {
             season,
           }),
         })
+        await getDates(true)
         return resp
       } else {
         const resp = await fetch("/api/addBowlerToSquad", {
@@ -253,6 +254,7 @@ function useStore() {
             season,
           }),
         })
+        await getDates(true)
         return resp
       }
     } catch (error) {
@@ -356,6 +358,7 @@ function useStore() {
 
       if (resp.ok) {
         await getDates(true)
+        console.log('updated squad', data)
       }
       return resp
     } catch (error) {
