@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .collection("dates")
 /*       .find({ season: getSeason() }) */
       .find({season: {$gte:(getSeason())}})
-      .project({ squad: 0, _id: 0 })
+      .project({  _id: 0 })
       .sort({ date: -1 })
       .toArray();
     //console.log("found dates", docs.length);

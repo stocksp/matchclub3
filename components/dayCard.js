@@ -4,19 +4,14 @@ import { useState } from "react"
 import { useStoreContext } from "components/Store"
 
 function DayCard(props) {
-  const [userIsInSquad, setUserIsInSquad] = useState(false)
   const { user } = useStoreContext()
-  
-  const checkForUser = async () => {
-    const response = await fetch(`/api/getData?memberId=${user.memberId}&dateId=${props.data.date.dateId}&name=userInSquad`)
-    const data = await response.json()
-    console.log("userInSquad", data)
-    if(data.member)
-      setUserIsInSquad(true)
+
+  var signedUp = false
+  function checkSignedUp() {
+      const foundIt = props.data.date.squad.find((s) => s.id === user.memberId)
+      foundIt ? (signedUp = true) : (signedUp = false)
   }
-  if( user && !userIsInSquad) {
-    checkForUser()
-  }
+  if (user) checkSignedUp()
 
   // //console.log("data", props.data);
   const { host, guest, location, date, hasmeeting } = props.data.date
@@ -79,6 +74,7 @@ function DayCard(props) {
             ""
           )}
         </Badge>
+        <Badge style={{ marginLeft: "auto" }}>{signedUp ? "✔️" : ""}</Badge>
         <Badge
           style={{
             fontSize: "16px",
@@ -115,7 +111,9 @@ function DayCard(props) {
         <Card.Subtitle style={styles}>
           <strong>{location}</strong>
         </Card.Subtitle>
-        {location !== "Double Decker Lanes" ? <div style={mapStyle}> Map</div> : null}
+        {location !== "Double Decker Lanes" ? (
+          <div style={mapStyle}> Map</div>
+        ) : null}
       </Card.Body>
     </Card>
   )
