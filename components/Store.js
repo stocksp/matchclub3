@@ -317,7 +317,7 @@ function useStore() {
       const message = await resp.json()
 
       if (message.message === "aok") {
-        await getSquads(true)
+        await getDates(true)
       }
       return message
     } catch (error) {
