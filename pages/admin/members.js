@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Header from "components/header";
 import AdminHeader from "components/adminHeader";
 import { Container, Button, Table, Spinner } from "react-bootstrap";
-import EditMember from "components/editMember";
+import EditMember from "components/editMember.tsx";
 import { useStoreContext } from "components/Store";
 import { MdEdit } from "react-icons/md";
 
