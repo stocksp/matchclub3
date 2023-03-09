@@ -1,129 +1,40 @@
-import React, { useState, useEffect } from "react";
-import Header from "../../components/header";
-import AdminHeader from "../../components/adminHeader";
-import { Container } from "react-bootstrap";
-import { format, compareAsc } from "date-fns";
+import React, { useState, useEffect } from "react"
+import Header from "components/header"
+import AdminHeader from "components/adminHeader"
+import { Container } from "react-bootstrap"
+import { format, compareAsc } from "date-fns"
+import EditGames from "components/editGames"
 
-import { Table, Button, Row, Col, Form, Spinner } from "react-bootstrap";
-import { Formik, Field, FieldArray, getIn, ErrorMessage } from "formik";
-import * as yup from "yup";
-//import { useForm, Controller, ErrorMessage } from "react-hook-form";
-import { useStoreContext } from "../../components/Store";
-import Router from "next/router";
+import { Table, Button, Row, Col, Form, Spinner } from "react-bootstrap"
 
-const schema = yup.object().shape({
-  squad: yup.array().of(
-    yup.object().shape({
-      games: yup.array().of(
-        yup
-          .number()
-          .transform((v) => {
-            ///console.log("type", typeof v);
-            return isNaN(v) || v === 0 ? void 0 : v;
-          })
-          .integer()
-          .moreThan(-1, "no negatives!")
-          .lessThan(301, "Really!?")
-      ),
-    })
-  ),
-  won: yup
-    .number()
-    .integer()
-    .moreThan(-1, "no negatives!")
-    .lessThan(5, "4 or less"),
-  lost: yup
-    .number()
-    .integer()
-    .moreThan(-1, "no negatives!")
-    .lessThan(5, "4 or less"),
-});
+import * as yup from "yup"
+import { ErrorMessage } from "@hookform/error-message"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useForm, Controller } from "react-hook-form"
+import { useStoreContext } from "components/Store"
+import Router from "next/router"
 
 function Games() {
-  // const { register, handleSubmit, errors, contro, getValues } = useForm({
-  //   mode: "onChange",
-  // });
-  const {
-    hasDates,
-    hasScores,
-    dates,
-    setActive,
-    scores,
-    getScores,
-    updateScores,
-  } = useStoreContext();
+  const { hasDates, dates, setActive, scores, getScores, hasScores, updateScores } =
+    useStoreContext()
+
   useEffect(() => {
-    setActive("admin.games");
-    getScores();
-  }, []);
+    setActive("admin.games")
+    getScores()
+  }, [])
 
-  const [dateId, setDateId] = useState(null);
-  const handleDateChange = (event) => {
-    setDateId(parseInt(event.target.value));
-  };
-
+  // send to EditGames
+  // return only dates in the past
+  // can't have scores for dates that have not happened
   const filterDates = () => {
-    const now = new Date();
+    const now = new Date()
     let thedates = dates.filter((elem, index) => {
-      return compareAsc(now, elem.date) === 1;
-    });
-
-    return thedates;
-  };
-  function fsubmit(values) {
-    // same shape as initial values
-    console.log("all the data ", values);
-    const scores = [];
-    const dateId = values.date.dateId;
-    const match = `${values.date.host}-${values.date.guest}`;
-    const season = values.date.season;
-
-    values.squad.forEach((s) => {
-      if (!s.games.includes(0)) {
-        const games = s.games.map((g) => parseInt(g));
-        scores.push({
-          games,
-          dateId,
-          match,
-          season,
-          memberId: s.id,
-          alias: s.name,
-          date: values.date.date,
-        });
-      }
-    });
-    console.log(
-      "submit",
-      dateId,
-      match,
-      season,
-      scores,
-      values.won,
-      values.lost
-    );
-
-    values.updateScores(dateId, match, season, scores, values.won, values.lost);
+      return compareAsc(now, elem.date) === 1
+    })
+    return thedates
   }
-  const handleFocus = (event) => {
-    event.target.select();
-  };
 
   if (dates?.length > 0 && scores?.length > 0) {
-    //console.log("errors", errors, "values", getValues());
-    const theDates = filterDates(dates);
-    const theScores = scores.find(
-      (s) => s.dateId === (dateId ? dateId : theDates[0].dateId)
-    );
-    // sort by last name
-    theScores.squad.sort((a, b) => {
-      const a1 = a.name.split(" ").slice(-1)[0];
-      const b1 = b.name.split(" ").slice(-1)[0];
-      if (a1 < b1) return -1;
-      if (a1 > b1) return 1;
-      return 0;
-    });
-
-    console.log("theScores", theScores);
     return (
       <>
         <Header />
@@ -134,7 +45,8 @@ function Games() {
         >
           <AdminHeader />
           <h2>Scores By Date</h2>
-          <Formik
+          <EditGames dates={filterDates()} scores={scores} />
+          {/*           <Formik
             enableReinitialize={true}
             initialValues={{
               squad: theScores.squad,
@@ -310,10 +222,10 @@ function Games() {
                 </Form>
               );
             }}
-          </Formik>
+          </Formik> */}
         </Container>
       </>
-    );
+    )
   } else if (dates?.length > 0 && scores?.length === 0) {
     return (
       <>
@@ -327,11 +239,11 @@ function Games() {
           <h2>No Games Bowled this Season!!!</h2>
         </Container>
       </>
-    );
+    )
   } else {
     if (hasDates && scores?.length === 0) {
-      Router.push("/admin/dates");
-      return null;
+      Router.push("/admin/dates")
+      return null
     }
     return (
       <Container
@@ -343,8 +255,8 @@ function Games() {
         <Spinner animation="border" variant="dark" />
         <Spinner animation="grow" variant="dark" />{" "}
       </Container>
-    );
+    )
   }
 }
 
-export default Games;
+export default Games

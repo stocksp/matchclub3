@@ -472,6 +472,7 @@ function useStore() {
     highScores,
     user,
     windowSize,
+    hasScores,
   }
 }
 
