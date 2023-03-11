@@ -61,9 +61,9 @@ function calcStats(scores) {
       hiSeries = ser;
       hiSeriesGames = games;
     }
-    if (hg + hdi > hiGameHandi) hiGameHandi = hg + hdi;
-    if (ser + 3 * hdi > hiSeriesHandi) {
-      hiSeriesHandi = ser + 3 * hdi;
+    if (hg + handi > hiGameHandi) hiGameHandi = hg + handi;
+    if (ser + 3 * handi > hiSeriesHandi) {
+      hiSeriesHandi = ser + 3 * handi;
       hiSeriesHandiGames = games;
     }
 
