@@ -156,8 +156,8 @@ function useStore() {
     }
   }
   const updateScores = async (dateId, match, season, scores, won, lost) => {
-    console.log("going to call fetch with /api/updateScores")
-    console.log("scores", scores)
+    //console.log("going to call fetch with /api/updateScores")
+    //console.log("scores", scores)
     const theData = JSON.stringify({
       dateId,
       match,
@@ -168,7 +168,7 @@ function useStore() {
     })
 
     try {
-      const resp = await fetch("/api/updateScores", {
+      let resp = await fetch("/api/updateScores", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -176,6 +176,7 @@ function useStore() {
         },
         body: theData,
       })
+      resp = await resp.json()
       console.log("updateScores returned", resp)
       // TODO maybe just update the local data with what we have ??
       // for now just get all the scores from the server

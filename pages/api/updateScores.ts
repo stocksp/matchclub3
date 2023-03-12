@@ -9,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     "running updateScores",
     req.body.dateId,
     req.body.match,
-    req.body.scores,
+    
     req.body.won,
     req.body.lost,
     req.body.season
@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const won = parseInt(req.body.won)
     const lost = parseInt(req.body.lost)
     const season = req.body.season
-    console.log("scores", scores)
+    //console.log("scores", scores)
 
     if (dateId && match && scores && !isNaN(won) && !isNaN(lost)) {
       // update the dateResults
@@ -31,10 +31,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       let resp = await db
         .collection("dateResults")
         .updateOne({ dateId }, { $set: { dateId, won, lost, match, season } }, { upsert: true })
-      console.log("won lost ok", resp.acknowledged)
+      //console.log("won lost ok", resp.acknowledged)
       // delete all old scores for this date
       let resp2 = await db.collection("matchScores").deleteMany({ dateId })
-      console.log("delete old scores ok", resp.acknowledged)
+      //console.log("delete old scores ok", resp.acknowledged)
       // insert the new ones
       // first convert the data from JSON strings to ints and date
       // then make it an array
@@ -49,10 +49,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
       // now insert them
       let resp3 = await db.collection("matchScores").insertMany(scoreArray)
-      console.log("inserting new scores ok", resp.acknowledged)
+      //console.log("inserting new scores ok", resp.acknowledged)
       // rebuild update and return the handicaps for all bowlers
       const handi = await makeHandi(db)
-      console.log("handi", handi)
+      //console.log("handi", handi)
       // make memberStats
 
       // get ALL the scores for this seaon
@@ -70,7 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .collection("matchScores")
         .distinct("memberId", { season: getSeason() })
 
-      console.log("ids", theIds)
+      //console.log("ids", theIds)
 
       let bulkWrites = []
       theIds.forEach((id) => {
@@ -80,7 +80,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           const stats = calcStats(theScores)
           stats.member = theScores[0].alias
           stats.memberId = id
-          console.log("stats", stats)
+          //console.log("stats", stats)
           bulkWrites.push({
             updateOne: {
               filter: { memberId: id },

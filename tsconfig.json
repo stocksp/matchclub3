@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "sourceMap": true,
     "lib": [
       "dom",
       "dom.iterable",

@@ -61,9 +61,9 @@ function calcStats(scores) {
       hiSeries = ser;
       hiSeriesGames = games;
     }
-    if (hg + hdi > hiGameHandi) hiGameHandi = hg + hdi;
-    if (ser + 3 * hdi > hiSeriesHandi) {
-      hiSeriesHandi = ser + 3 * hdi;
+    if (hg + handi > hiGameHandi) hiGameHandi = hg + handi;
+    if (ser + 3 * handi > hiSeriesHandi) {
+      hiSeriesHandi = ser + 3 * handi;
       hiSeriesHandiGames = games;
     }
 
@@ -96,7 +96,7 @@ async function makeHandi(db) {
   // make unique (no duplicate) ids
   const memIds = [...new Set(memberIds)];
   memIds.sort((a, b) => a - b);
-  console.log(memIds);
+  //console.log(memIds);
   const handiObj = {};
   memIds.forEach((m) => {
     const theScores = scores.filter((s) => s.memberId === m);
@@ -125,7 +125,7 @@ async function makeHandi(db) {
     })
   });
   handiObj.season = getSeason(new Date());
-  console.log(handiObj);
+  //console.log(handiObj);
   let res = await db
     .collection("handicaps")
     .updateOne(
@@ -133,7 +133,7 @@ async function makeHandi(db) {
       { $set: handiObj },
       { upsert: true }
     );
-  console.log("write handi obj ", res.result);
+  //console.log("write handi obj ", res.result);
   return handiObj;
 }
 function makeHighScores(scoreArray, handi) {

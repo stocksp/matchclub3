@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react"
 import * as yup from "yup"
 import { BsPlusCircleFill, BsDashCircleFill, BsFillInfoCircleFill } from "react-icons/bs"
 
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { yupResolver } from "@hookform/resolvers/yup"
 
 import { useStoreContext } from "components/Store"
-import { fi } from "date-fns/locale"
 type FormValues = {
   alias: string
   email: string
@@ -36,10 +34,9 @@ const schema = yup.object().shape({
 })
 
 function EditMember(props) {
-  
   const { member, members } = props
   const fromAdmin = props.fromAdmin ? true : false
-  console.log("props", props, "fromAdmin", fromAdmin, "member:", member)
+  //console.log("props", props, "fromAdmin", fromAdmin, "member:", member)
   const { updateMember } = useStoreContext()
 
   // only called by admin
@@ -51,7 +48,7 @@ function EditMember(props) {
     )
   }
   const onSubmit = async (data, form) => {
-    console.log("data", data)
+    //console.log("data", data)
     let theData
     // upsert: false don't allow adding new member!
     if (props.fromAdmin) {
@@ -67,7 +64,7 @@ function EditMember(props) {
     }
     delete theData._id
     // reminders
-    theData.reminders = data.reminders.map(d => d.value)
+    theData.reminders = data.reminders.map((d) => d.value)
     /* if (!props.fromAdmin) {
       delete theData.active;
       delete theData.guest;
@@ -138,7 +135,7 @@ function EditMember(props) {
     control,
     name: "reminders",
   })
-  console.log("props", fromAdmin, props, "fields", fields)
+  //console.log("props", fromAdmin, props, "fields", fields)
   register("memberId")
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form">
@@ -255,7 +252,7 @@ function EditMember(props) {
 
                   {fields.length != 0 && (
                     <div
-                    style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer" }}
                       className="ms-3"
                       onClick={(e) => {
                         remove(index)
@@ -299,320 +296,6 @@ function EditMember(props) {
       </>
     </form>
   )
-  /*       <Formik
-        initialValues={props.member}
-        onSubmit={onSubmit}
-        validationSchema={schema}
-        enableReinitialize={true}
-      >
-        {({
-          handleSubmit,
-          handleChange,
-          handleBlur,
-          values,
-          errors,
-          touched,
-          dirty,
-          isValid,
-          setFieldValue,
-          setStatus,
-          status,
-        }) => {
-          console.log("member values", values, errors, touched);
-          return (
-            <Form>
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={(!dirty || !isValid) && status !== "shit"}
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>{" "}
-              {props.fromAdmin && (
-                <Button variant="link" onClick={() => props.doClose()}>
-                  Back to Members List
-                </Button>
-              )}
-              <Form.Group as={Row}>
-                <Form.Label column sm={1}>
-                  alias
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="alias"
-                    type="text"
-                    placeholder="Enter alias"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.alias}
-                  />
-                  <ErrorMessage
-                    name="alias"
-                    component="div"
-                    className="formError"
-                  />
-                </Col>
-                <Form.Label column sm={1}>
-                  Email
-                </Form.Label>
-                <Col sm={3}>
-                  {props.fromAdmin ? (
-                    <Form.Control
-                      name="email"
-                      type="text"
-                      placeholder="Enter email"
-                      value={values.email}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    <InputGroup>
-                      <InputGroup.Text>
-                        {" "}
-                        <OverlayTrigger
-                          placement="right"
-                          delay={{ show: 250, hide: 400 }}
-                          overlay={renderTooltip}
-                        >
-                          <div>
-                            <BsFillInfoCircleFill
-                              size={"1.5em"}
-                              style={{ cursor: "pointer" }}
-                            />
-                          </div>
-                        </OverlayTrigger>
-                      </InputGroup.Text>
-                      <Form.Control
-                        name="email"
-                        type="text"
-                        placeholder="Enter email"
-                        value={values.email}
-                        onChange={handleChange}
-                        disabled
-                      />
-                    </InputGroup>
-                  )}
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row}>
-                <Form.Label column sm={1}>
-                  First
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="first"
-                    type="text"
-                    placeholder="Enter first name"
-                    onChange={handleChange}
-                    value={values.first}
-                  />
-                </Col>
-                <Form.Label column sm={1}>
-                  Last
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="last"
-                    type="text"
-                    placeholder="Enter last name"
-                    onChange={handleChange}
-                    value={values.last}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row}>
-                <Form.Label column sm={1}>
-                  Address
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="address"
-                    type="text"
-                    placeholder="Enter address"
-                    onChange={handleChange}
-                    value={values.address}
-                  />
-                </Col>
-                <Form.Label column sm={1}>
-                  City
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="city"
-                    type="text"
-                    placeholder="Enter City"
-                    onChange={handleChange}
-                    value={values.city}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row}>
-                <Form.Label column sm={1}>
-                  State
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="state"
-                    type="text"
-                    placeholder="Enter state"
-                    onChange={handleChange}
-                    value={values.state}
-                  />
-                </Col>
-                <Form.Label column sm={1}>
-                  Zip
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="zip"
-                    type="text"
-                    placeholder="Enter zip code"
-                    onChange={handleChange}
-                    value={values.zip}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row}>
-                <Form.Label column sm={1}>
-                  Phone
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="phone"
-                    type="text"
-                    placeholder="Enter phone"
-                    onChange={handleChange}
-                    value={values.phone}
-                  />
-                </Col>
-                <Form.Label column sm={1}>
-                  Cell
-                </Form.Label>
-                <Col sm={3}>
-                  <Form.Control
-                    name="cell"
-                    type="text"
-                    placeholder="Enter cell"
-                    onChange={handleChange}
-                    value={values.cell}
-                  />
-                </Col>
-              </Form.Group>
-              <FieldArray name="reminders">
-                {({ move, swap, push, insert, unshift, pop, remove }) => {
-                  if (values.reminders && values.reminders.length > 0)
-                    return values.reminders.map((s, i) => {
-                      return (
-                        <Form.Group as={Row} key={i}>
-                          <Form.Label column sm={2}>
-                            Reminder {i + 1}
-                          </Form.Label>
-                          <Col sm={2}>
-                            <Form.Control
-                              name={`reminders.${i}`}
-                              as="select"
-                              onChange={(v) => {
-                                setFieldValue(
-                                  `reminders.${i}`,
-                                  parseInt(v.target.value)
-                                );
-                              }}
-                              style={{ width: "100%" }}
-                              value={s}
-                            >
-                              {theOptions.map((o, i) => {
-                                return (
-                                  <option key={i} value={o.value}>
-                                    {o.label}
-                                  </option>
-                                );
-                              })}
-                            </Form.Control>
-                          </Col>
-                          {values.reminders.length != 0 && (
-                            <div style={{ width: "20%" }}>
-                              <OverlayTrigger
-                                placement="right"
-                                delay={{ show: 250, hide: 400 }}
-                                overlay={reminderTooltip}
-                              >
-                                <div style={{ display: "inline" }}>
-                                  <BsDashCircleFill
-                                    size={"2em"}
-                                    color={"red"}
-                                    onClick={() => {
-                                      remove(i);
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                </div>
-                              </OverlayTrigger>
-                            </div>
-                          )}
-                          {values.reminders.length < 2 && (
-                            <div>
-                              Click to add a second email reminder&nbsp;&nbsp;
-                              <BsPlusCircleFill
-                                size={"2em"}
-                                color={"blue"}
-                                onClick={() => {
-                                  push(1);
-                                }}
-                                style={{ cursor: "pointer" }}
-                              />
-                            </div>
-                          )}
-                        </Form.Group>
-                      );
-                    });
-                  else
-                    return (
-                      <div>
-                        Click to add an email reminder&nbsp;&nbsp;
-                        <div style={{ display: "inline" }}>
-                          <BsPlusCircleFill
-                            size={"2em"}
-                            color={"blue"}
-                            onClick={() => {
-                              push(1);
-                            }}
-                            style={{ cursor: "pointer" }}
-                          />
-                        </div>
-                      </div>
-                    );
-                }}
-              </FieldArray>
-              {props.fromAdmin && (
-                <Form.Check
-                  id="active"
-                  type="switch"
-                  name="active"
-                  label="Active"
-                  onChange={() => {
-                    setActive(!active);
-                    setFieldValue("active", !active);
-                  }}
-                  checked={active}
-                />
-              )}
-              {props.fromAdmin && (
-                <Form.Check
-                  id="guest"
-                  type="switch"
-                  name="guest"
-                  label="Guest"
-                  onChange={() => {
-                    setGuest(!guest);
-                    setFieldValue("guest", !guest);
-                  }}
-                  checked={guest}
-                />
-              )}
-            </Form>
-          );
-        }}
-      </Formik> */
 }
 
 export default EditMember
