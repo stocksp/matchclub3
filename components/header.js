@@ -1,48 +1,84 @@
-import React, { useContext, useState, useEffect } from "react";
-import Link from "next/link";
-import Head from "next/head";
-import { Navbar, Nav, NavDropdown, Button, Modal, Form } from "react-bootstrap";
+import React, { useContext, useState, useEffect } from "react"
+import Link from "next/link"
+import Head from "next/head"
+import {
+  Navbar,
+  Nav,
+  NavDropdown,
+  Button,
+  Modal,
+  Form,
+  Container,
+} from "react-bootstrap"
 
-import { useStoreContext } from "./Store";
-import Router from "next/router";
-import { format, addMonths, getDay, getDaysInMonth, startOfDay } from "date-fns";
-const active = "0";
+import { useStoreContext } from "./Store"
+import Router from "next/router"
+import { format, addMonths, getDay, getDaysInMonth, startOfDay } from "date-fns"
+import PersonalBest from "components/personalBest"
+const active = "0"
 
 const navbar = {
   backgroundColor: "rgb(6, 156, 194)",
-};
+}
 const datebar = {
   backgroundColor: "lightblue",
   padding: "2px",
-};
+}
 
 const Header = () => {
-  const [showLogin, setShowLogin] = useState(false);
-
-  const { currentDate, setCurrentDate, active, user, doLoggin } =
-    useStoreContext();
+  const {
+    currentDate,
+    setCurrentDate,
+    active,
+    user,
+    doLoggin,
+    highScores,
+    dateId,
+    dates,
+    windowSize,
+  } = useStoreContext()
 
   const today = () => {
-    console.log("today");
-    setCurrentDate(startOfDay(new Date()));
-  };
+    console.log("today")
+    setCurrentDate(startOfDay(new Date()))
+  }
   const nextMonth = () => {
-    setCurrentDate(addMonths(currentDate, +1));
-  };
+    setCurrentDate(addMonths(currentDate, +1))
+  }
   const previoustMonth = () => {
-    setCurrentDate(addMonths(currentDate, -1));
-  };
+    setCurrentDate(addMonths(currentDate, -1))
+  }
   const handleLogin = () => {
-    console.log("handle login");
+    console.log("handle login")
 
     if (user) {
-      doLoggin();
+      doLoggin()
     } else {
-      Router.push("/login");
+      Router.push("/login")
     }
-  };
+  }
 
-  console.log("now", currentDate.toLocaleDateString(), "user", user?.memberId);
+  const getTheDate = () => {
+    const data = dates.find((d) => {
+      return d.dateId === dateId
+    })
+    console.log("header date", data.date)
+    return data.date
+  }
+
+  // Shrink navbar div prior to size when hamburger appears
+  const windowSizeStyle = windowSize.width < 585 ? "25%" : "60%"
+
+  console.log(
+    "now",
+    currentDate.toLocaleDateString(),
+    "user",
+    user?.memberId,
+    "highScores",
+    highScores,
+    "dateId",
+    dateId
+  )
   return (
     <div
       style={{
@@ -86,46 +122,55 @@ const Header = () => {
           </Button>
         </span>
       </div>
-
-      <Navbar expand="sm" collapseOnSelect variant="dark" style={navbar}>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav activeKey={active}>
-            <Link href="/" passHref legacyBehavior>
-              <Nav.Link eventKey="0">HOME</Nav.Link>
-            </Link>
-            <Link href="/teamStats" passHref legacyBehavior>
-              <Nav.Link eventKey="teamStats">TEAM STATS</Nav.Link>
-            </Link>
-            <Link href="/matchStats" passHref legacyBehavior>
-              <Nav.Link eventKey="matchStats">MATCH STATS</Nav.Link>
-            </Link>
-            <Link href="/memberStats" passHref legacyBehavior>
-              <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
-            </Link>
-            {user && (
-              <Link
-                href="/member/[id]"
-                as={`/member/${user.memberId}`}
-                passHref
-                legacyBehavior
-              >
-                <Nav.Link eventKey="member">Your Stuff</Nav.Link>
-              </Link>
-            )}
-            {user && user.role === "admin" && (
-              <Link href="/admin/games" passHref legacyBehavior>
-                <Nav.Link>ADMIN</Nav.Link>
-              </Link>
-            )}
-            <Link href="/about" passHref legacyBehavior>
-              <Nav.Link>ABOUT</Nav.Link>
-            </Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <div className="navbar-container">
+        <div style={{ width: windowSizeStyle }}>
+          <Navbar expand="sm" collapseOnSelect variant="dark" style={navbar}>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav activeKey={active}>
+                <Link href="/" passHref legacyBehavior>
+                  <Nav.Link eventKey="0">HOME</Nav.Link>
+                </Link>
+                <Link href="/teamStats" passHref legacyBehavior>
+                  <Nav.Link eventKey="teamStats">TEAM STATS</Nav.Link>
+                </Link>
+                <Link href="/matchStats" passHref legacyBehavior>
+                  <Nav.Link eventKey="matchStats">MATCH STATS</Nav.Link>
+                </Link>
+                <Link href="/memberStats" passHref legacyBehavior>
+                  <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
+                </Link>
+                {user && (
+                  <Link
+                    href="/member/[id]"
+                    as={`/member/${user.memberId}`}
+                    passHref
+                    legacyBehavior
+                  >
+                    <Nav.Link eventKey="member">Your Stuff</Nav.Link>
+                  </Link>
+                )}
+                {user && user.role === "admin" && (
+                  <Link href="/admin/games" passHref legacyBehavior>
+                    <Nav.Link>ADMIN</Nav.Link>
+                  </Link>
+                )}
+                <Link href="/about" passHref legacyBehavior>
+                  <Nav.Link>ABOUT</Nav.Link>
+                </Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+        </div>
+        {/* <div style={{ padding: "0px 0px 0px 10px" }}>
+          {highScores ? (
+            <p>Best stuff on {getTheDate().toLocaleDateString()}</p>
+          ) : null}
+          {highScores ? <PersonalBest /> : null}
+        </div> */}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

@@ -50,6 +50,10 @@
   margin-bottom: 2px;
 }
 
+.navbar-container {
+  display: flex;
+}
+
 .hide-on-screen {display:none;}
 
 

@@ -46,8 +46,8 @@ function TeamStats() {
   }
   const makeHandiSeries = (games, hiSeries) => {
     let sum = games.reduce(function (a, b) {
-      return a + b;
-    }, 0);
+      return a + b
+    }, 0)
     return `${games.join(",")} +${hiSeries - sum}`
   }
   if (teamStats.length) teamStats.sort(sorter)

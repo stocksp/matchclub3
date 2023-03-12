@@ -14,6 +14,7 @@ function useStore() {
   const [active, setActive] = useState("0")
   const [dates, setDates] = useState([])
   const [hasDates, setHasDates] = useState(false)
+  const [dateId, setDateId] = useState(null)
   const [teamStats, setTeamStats] = useState([])
   const [hasTeamStats, setHasTeamStats] = useState(false)
   const [matchStats, setMatchStats] = useState(null)
@@ -59,7 +60,7 @@ function useStore() {
   const checkUser = async () => {
     const response = await fetch("/api/user")
     const theUser = await response.json()
-    console.log("checkUser", theUser)
+    //console.log("checkUser", theUser)
     setUser(theUser.user)
   }
 
@@ -106,21 +107,33 @@ function useStore() {
   const getDates = async (force = false) => {
     if (!hasDates || force) {
       try {
-        console.log("store getDates called")
+        //console.log("store getDates called")
         const response = await fetch("/api/getData?name=getDates")
         const myJson = await response.json()
-        console.log("getDates called", myJson)
+        //console.log("getDates called", myJson)
         // convert the Json date
         myJson.forEach((d) => {
           d.date = new Date(d.date)
         })
         setDates(myJson)
+        const scores = await getHighScores()
+        const id = getDateId(scores, myJson)
         setHasDates(true)
+        setDateId(id)
         console.log("we have dates!")
       } catch (e) {
         console.log("Can't get dates", e)
       }
     }
+  }
+  // this computes the most recent dateId
+  // which is the last match bowled
+  const getDateId = (hs, theDates) => {
+    const filteredDates = theDates.filter((d) => {
+      const found = hs.dateResults.find((r) => r.dateId === d.dateId)
+      return found !== undefined
+    })
+    return filteredDates[0].dateId
   }
   const getTeamStats = async (force = false) => {
     if (!hasTeamStats || force) {
@@ -227,6 +240,7 @@ function useStore() {
             season,
           }),
         })
+        await getDates(true)
         return resp
       } else {
         const resp = await fetch("/api/addBowlerToSquad", {
@@ -241,6 +255,7 @@ function useStore() {
             season,
           }),
         })
+        await getDates(true)
         return resp
       }
     } catch (error) {
@@ -303,7 +318,7 @@ function useStore() {
       const message = await resp.json()
 
       if (message.message === "aok") {
-        await getSquads(true)
+        await getDates(true)
       }
       return message
     } catch (error) {
@@ -344,6 +359,7 @@ function useStore() {
 
       if (resp.ok) {
         await getDates(true)
+        console.log('updated squad', data)
       }
       return resp
     } catch (error) {
@@ -426,6 +442,7 @@ function useStore() {
       const response = await fetch("/api/getData?name=getHighScores")
       const myJson = await response.json()
       setHighScores(myJson)
+      return myJson
     } catch (e) {
       alert(`Sorry ${e}`)
     }
@@ -435,6 +452,8 @@ function useStore() {
     getDates,
     hasDates,
     dates,
+    dateId,
+    setDateId,
     currentDate,
     setCurrentDate,
     active,
