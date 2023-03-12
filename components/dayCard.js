@@ -1,21 +1,38 @@
-import { Badge, Card } from "react-bootstrap";
-import { format, getMinutes } from "date-fns";
+import { Badge, Card } from "react-bootstrap"
+import { format, getMinutes } from "date-fns"
+import { useState, useEffect } from "react"
+import { useStoreContext } from "components/Store"
 
 function DayCard(props) {
-  // const classes = useStyles();
+  const { user } = useStoreContext()
 
-  // //console.log("data", props.data);
-  const { host, guest, location, date, hasmeeting } = props.data.date;
-  const theMinutes = date.getMinutes();
-  const theHour = theMinutes != 0 ? format(date, "h:m a") : format(date, "h a");
-  const theDay = props.data.day;
-  const now = new Date();
+  const [signedUp, setsignedUp] = useState(false)
+  const { host, guest, location, date, hasmeeting } = props.data.date
+  useEffect(() => {
+    if (user) {
+      const foundIt = props.data.date.squad.find((s) => {
+        return s.id === user.memberId
+      })
+      if (foundIt) {
+        setsignedUp(true)
+      } else {
+        setsignedUp(false)
+      }
+    }
+  }, [user, props.data.date.squad])
+
+  console.log("squad", date.squad)
+
+  const theMinutes = date.getMinutes()
+  const theHour = theMinutes != 0 ? format(date, "h:m a") : format(date, "h a")
+  const theDay = props.data.day
+  const now = new Date()
   const styles = {
     fontSize: "0.675rem",
     marginBottom: "7px",
     textAlign: "left",
     color: "rgb(100, 100, 100)",
-  };
+  }
   const mapStyle = {
     fontSize: "11px",
     position: "absolute",
@@ -27,7 +44,8 @@ function DayCard(props) {
     backgroundColor: "gold",
     color: "Black",
     cursor: "crosshair",
-  };
+  }
+
   return (
     <Card onClick={props.onClick}>
       <Card.Header
@@ -80,17 +98,25 @@ function DayCard(props) {
         </Badge>
       </Card.Header>
       <Card.Body
-        style={{
-          padding: "10px 10px",
-          background:
-            now.getDate() == date.getDate() &&
-            now.getMonth() == date.getMonth() &&
-            now.getFullYear() == date.getFullYear()
-              ? "orange"
-              : "aqua",
-          cursor: "pointer",
-          verticalAlign: "center",
-        }}
+        style={
+          !signedUp
+            ? {
+                padding: "10px 10px",
+                background:
+                  now.getDate() == date.getDate() &&
+                  now.getMonth() == date.getMonth() &&
+                  now.getFullYear() == date.getFullYear()
+                    ? "orange"
+                    : "aqua",
+                cursor: "pointer",
+                verticalAlign: "center",
+              }
+            : {
+                padding: "10px 10px",
+                cursor: "pointer",
+                backgroundImage: "linear-gradient(to right, orange , white)",
+              }
+        }
       >
         <Card.Subtitle style={styles}>
           <strong>{host}</strong> hosting
@@ -106,6 +132,6 @@ function DayCard(props) {
         ) : null}
       </Card.Body>
     </Card>
-  );
+  )
 }
-export default DayCard;
+export default DayCard

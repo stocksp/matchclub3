@@ -1,6 +1,12 @@
 import { parseISO } from "date-fns"
 import clientPromise from "libs/mongo"
-import { makeHandi, getSeason, calcStats, makeHighScores } from "../../libs/utils"
+import {
+  makeHandi,
+  getSeason,
+  calcStats,
+  makeHighScores,
+  computePersonalBest,
+} from "../../libs/utils"
 
 import type { NextApiRequest, NextApiResponse } from "next"
 
@@ -53,33 +59,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       // rebuild update and return the handicaps for all bowlers
       const handi = await makeHandi(db)
       console.log("handi", handi)
-      // make memberStats
 
-      // get ALL the scores for this seaon
+      const theDate = scoreArray[0].date
+
+      // get ALL the scores for this season
       const docs = await db
         .collection("matchScores")
-        .find({ season: getSeason() })
+        .find({ season: season })
         .sort({ date: 1 })
         .project({ _id: 0 })
         .toArray()
       // ids for all the members who have bowled
       // TODO shouldn't we just filter the above docs
       // and make theIds instead of another trip to the db??
-      const theIds = await db
-
-        .collection("matchScores")
-        .distinct("memberId", { season: getSeason() })
+      const theIds = await db.collection("matchScores").distinct("memberId", { season: season })
 
       console.log("ids", theIds)
 
       let bulkWrites = []
+      let bulkWritesPersonal = []
       theIds.forEach((id) => {
-        const theScores = docs.filter((d) => d.memberId === id)
+        const theScores = docs.filter((d) => d.memberId === id) as Array<Score>
         if (theScores.length === 0) console.log(`NO SCORES FOUND for memberId: ${id}`)
         else {
-          const stats = calcStats(theScores)
-          stats.member = theScores[0].alias
-          stats.memberId = id
+          const stats: MemberStat = calcStats(theScores)
           console.log("stats", stats)
           bulkWrites.push({
             updateOne: {
@@ -88,10 +91,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               upsert: true,
             },
           })
+          //most improved if they bowled this match and a previous match
+          if (
+            theScores.find((d) => d.date < theDate) &&
+            theScores.find((s) => s.memberId === id && s.dateId === dateId)
+          ) {
+            // they have bowled more than this match so
+            const previousScores = theScores.filter((d: Score) => d.dateId !== dateId)
+            bulkWritesPersonal = bulkWritesPersonal.concat(
+              computePersonalBest(previousScores, stats, dateId)
+            )
+          }
         }
       })
 
-      let resp4 = await db.collection("memberstats").bulkWrite(bulkWrites)
+      await db.collection("memberstats").bulkWrite(bulkWrites)
+      if (bulkWritesPersonal.length > 0)
+        await db.collection("improvements").bulkWrite(bulkWritesPersonal)
 
       // now do the highScores for this date
       const theScores = makeHighScores(scoreArray, handi)

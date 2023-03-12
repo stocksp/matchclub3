@@ -123,7 +123,7 @@ function Games() {
       return 0;
     });
 
-    console.log("theScores", theScores);
+    //console.log("theScores", theScores);
     return (
       <>
         <Header />
@@ -156,20 +156,20 @@ function Games() {
               dirty,
               isValid,
             }) => {
-              console.log(
-                "values",
-                values,
-                "touched",
-                touched,
-                "errors",
-                errors,
-                "dirty",
-                dirty,
-                "isValid",
-                isValid,
-                "won",
-                theScores.won
-              );
+              // console.log(
+              //   "values",
+              //   values,
+              //   "touched",
+              //   touched,
+              //   "errors",
+              //   errors,
+              //   "dirty",
+              //   dirty,
+              //   "isValid",
+              //   isValid,
+              //   "won",
+              //   theScores.won
+              // );
               return (
                 <Form>
                   <Form.Group controlId="games">
