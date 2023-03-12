@@ -83,7 +83,6 @@ function DayCard(props) {
             ""
           )}
         </Badge>
-        <Badge style={{ marginLeft: "auto" }}>{signedUp ? "✔️" : ""}</Badge>
         <Badge
           style={{
             fontSize: "16px",
@@ -99,17 +98,25 @@ function DayCard(props) {
         </Badge>
       </Card.Header>
       <Card.Body
-        style={{
-          padding: "10px 10px",
-          background:
-            now.getDate() == date.getDate() &&
-            now.getMonth() == date.getMonth() &&
-            now.getFullYear() == date.getFullYear()
-              ? "orange"
-              : "aqua",
-          cursor: "pointer",
-          verticalAlign: "center",
-        }}
+        style={
+          !signedUp
+            ? {
+                padding: "10px 10px",
+                background:
+                  now.getDate() == date.getDate() &&
+                  now.getMonth() == date.getMonth() &&
+                  now.getFullYear() == date.getFullYear()
+                    ? "orange"
+                    : "aqua",
+                cursor: "pointer",
+                verticalAlign: "center",
+              }
+            : {
+                padding: "10px 10px",
+                cursor: "pointer",
+                backgroundImage: "linear-gradient(to right, orange , white)",
+              }
+        }
       >
         <Card.Subtitle style={styles}>
           <strong>{host}</strong> hosting
@@ -120,7 +127,9 @@ function DayCard(props) {
         <Card.Subtitle style={styles}>
           <strong>{location}</strong>
         </Card.Subtitle>
-        {location !== "Double Decker Lanes" ? <div style={mapStyle}> Map</div> : null}
+        {location !== "Double Decker Lanes" ? (
+          <div style={mapStyle}> Map</div>
+        ) : null}
       </Card.Body>
     </Card>
   )
