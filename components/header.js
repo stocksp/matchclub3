@@ -162,12 +162,12 @@ const Header = () => {
             </Navbar.Collapse>
           </Navbar>
         </div>
-        <div style={{ padding: "0px 0px 0px 10px" }}>
+        {/* <div style={{ padding: "0px 0px 0px 10px" }}>
           {highScores ? (
             <p>Best stuff on {getTheDate().toLocaleDateString()}</p>
           ) : null}
           {highScores ? <PersonalBest /> : null}
-        </div>
+        </div> */}
       </div>
     </div>
   )
