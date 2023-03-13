@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     "running updateScores",
     req.body.dateId,
     req.body.match,
-    
+
     req.body.won,
     req.body.lost,
     req.body.season
@@ -70,16 +70,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .sort({ date: 1 })
         .project({ _id: 0 })
         .toArray()
+      
       // ids for all the members who have bowled
-      // TODO shouldn't we just filter the above docs
-      // and make theIds instead of another trip to the db??
-      const theIds = await db.collection("matchScores").distinct("memberId", { season: season })
-
-        .collection("matchScores")
-        .distinct("memberId", { season: getSeason() })
-
-      //console.log("ids", theIds)
-
+      let theIds = docs.map(d => d.memberId)
+      theIds = [...new Set(theIds)]
+      
       let bulkWrites = []
       let bulkWritesPersonal = []
       theIds.forEach((id) => {

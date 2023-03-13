@@ -157,7 +157,7 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
   } = useForm<FormValues>({
     mode: "onBlur",
     defaultValues: calcScores(dateId),
-    resolver: yupResolver(schema),
+    //  resolver: yupResolver(schema),
   })
   const { fields } = useFieldArray({
     name: "squad",
@@ -174,18 +174,20 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
   }
   const doseries = (index: number) => {
     let data = getValues(`squad.${index}.games`)
-
     const series = data.reduce((a, b) => {
       //console.log(`squad.${index}.games`, getValues(`squad.${index}.games`))
-      console.log("a,b", a, b, a + b)
-      return a + b
+      console.log("a,b", a, b, a + (isNaN(b) ? 0 : b))
+      return a + (isNaN(b) ? 0 : b)
     }, 0)
     setValue(`squad.${index}.series`, series)
   }
-  const validateGame = (value: number) => {
-    const val = !isNaN(value) && Number.isInteger(value) && value < 300 && value > -1
-    console.log("value", value, val)
-    return val
+  const validateGame = (value: any) => {
+    const parsed = parseInt(value)
+    if (!parsed && parsed !== 0) return "Not a Number"
+    if (parsed > 300) return "A bit to big!"
+    if (parsed < 0) return "Can't be negative"
+
+    return true
   }
   const { onChange, onBlur, name, ref } = register("date")
   console.log("theScores", getValues(), errors)
@@ -261,15 +263,21 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
                       key={field.id}
                       {...register(`squad.${index}.games.0` as const, {
                         valueAsNumber: true,
+                        validate: (value) => validateGame(value),
                       })}
                       onBlur={(e) => {
                         doseries(index)
                         onBlur(e)
                       }}
                     />
-                    <div>
-                      <ErrorMessage errors={errors} name={`squad.${index}.games.0`} />
-                    </div>
+
+                    <ErrorMessage
+                      errors={errors}
+                      name={`squad.${index}.games.0`}
+                      render={({ message }) => {
+                        return <div className="text-bg-danger p-1">{message}</div>
+                      }}
+                    />
                   </td>
                   <td key={3}>
                     <input
@@ -284,20 +292,35 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
                       }}
                     />
                     <div>
-                      <ErrorMessage errors={errors} name={`squad.${index}.games.1`} />
+                      <ErrorMessage
+                        errors={errors}
+                        name={`squad.${index}.games.1`}
+                        render={({ message }) => {
+                          return <div className="text-bg-danger p-1">{message}</div>
+                        }}
+                      />
                     </div>
                   </td>
                   <td key={4}>
                     <input
                       key={field.id}
-                      {...register(`squad.${index}.games.2` as const, { valueAsNumber: true })}
+                      {...register(`squad.${index}.games.2` as const, {
+                        valueAsNumber: true,
+                        validate: (value) => validateGame(value),
+                      })}
                       onBlur={(e) => {
                         doseries(index)
                         onBlur(e)
                       }}
                     />
                     <div>
-                      <ErrorMessage errors={errors} name={`squad.${index}.games.2`} />
+                      <ErrorMessage
+                        errors={errors}
+                        name={`squad.${index}.games.2`}
+                        render={({ message }) => {
+                          return <div className="text-bg-danger p-1">{message}</div>
+                        }}
+                      />
                     </div>
                   </td>
                   <td key={5}>
