@@ -1,13 +1,9 @@
 import React, { useState } from "react"
-
 import { format } from "date-fns"
-
-import * as yup from "yup"
 import { ErrorMessage } from "@hookform/error-message"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm, useFieldArray } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
-import { isInteger } from "formik"
+
 const notify = () =>
   toast("Update Good!", {
     duration: 4000,
@@ -29,25 +25,6 @@ const notify = () =>
     },
   })
 
-const schema = yup.object().shape({
-  squad: yup.array().of(
-    yup.object().shape({
-      games: yup.array().of(
-        yup
-          .number("Not a number")
-          .transform((v) => {
-            //console.log("type", typeof v)
-            return isNaN(v) || v === 0 ? 0 : v
-          })
-          .integer()
-          .moreThan(-1, "No Negatives!")
-          .lessThan(301, "Really!?")
-      ),
-    })
-  ),
-  won: yup.number().integer().moreThan(-1, "No Negatives!").lessThan(5, "4 or less"),
-  lost: yup.number().integer().moreThan(-1, "No Negatives!").lessThan(5, "4 or less"),
-})
 type MCDate = {
   date: Date
   guest: string
@@ -153,11 +130,12 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
     setValue,
     getValues,
     reset,
+    setError,
+    clearErrors,
     formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
-    mode: "onBlur",
+    //mode: "onBlur",
     defaultValues: calcScores(dateId),
-    //  resolver: yupResolver(schema),
   })
   const { fields } = useFieldArray({
     name: "squad",
@@ -176,21 +154,37 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
     let data = getValues(`squad.${index}.games`)
     const series = data.reduce((a, b) => {
       //console.log(`squad.${index}.games`, getValues(`squad.${index}.games`))
-      console.log("a,b", a, b, a + (isNaN(b) ? 0 : b))
+      //console.log("a,b", a, b, a + (isNaN(b) ? 0 : b))
       return a + (isNaN(b) ? 0 : b)
     }, 0)
     setValue(`squad.${index}.series`, series)
   }
-  const validateGame = (value: any) => {
+
+  const validateGame = (value: any, index: number, game: number) => {
+    //console.log("validateGame", value)
     const parsed = parseInt(value)
-    if (!parsed && parsed !== 0) return "Not a Number"
-    if (parsed > 300) return "A bit to big!"
-    if (parsed < 0) return "Can't be negative"
+    if (!parsed && parsed !== 0) {
+      setError(`squad.${index}.games.${game}`, { type: "custom", message: "Not a Number" })
+      return
+    }
+    if (!Number.isInteger(value)) {
+      setError(`squad.${index}.games.${game}`, { type: "custom", message: "Not an Integer" })
+      return
+    }
+    if (parsed > 300) {
+      setError(`squad.${index}.games.${game}`, { type: "custom", message: "A bit too big!" })
+      return
+    }
+    if (parsed < 0) {
+      setError(`squad.${index}.games.${game}`, { type: "custom", message: "Can't be negative" })
+      return
+    }
+    clearErrors(`squad.${index}.games.${game}`)
 
     return true
   }
   const { onChange, onBlur, name, ref } = register("date")
-  console.log("theScores", getValues(), errors)
+  //console.log("theScores", getValues(), errors, getValues('squad.0.games.1'))
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="form">
@@ -255,22 +249,22 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
           </thead>
           <tbody>
             {fields.map((field, index) => {
+              
               return (
                 <tr key={field.id}>
                   <td key={1}>{field.name}</td>
                   <td key={2}>
-                    <input
+                  <input
                       key={field.id}
                       {...register(`squad.${index}.games.0` as const, {
                         valueAsNumber: true,
-                        validate: (value) => validateGame(value),
+                        //validate: (value) => validateGame(value),
                       })}
                       onBlur={(e) => {
                         doseries(index)
-                        onBlur(e)
+                        validateGame(getValues(`squad.${index}.games.0`), index, 0)
                       }}
                     />
-
                     <ErrorMessage
                       errors={errors}
                       name={`squad.${index}.games.0`}
@@ -284,11 +278,11 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
                       key={field.id}
                       {...register(`squad.${index}.games.1` as const, {
                         valueAsNumber: true,
-                        validate: (value) => validateGame(value),
+                        //validate: (value) => validateGame(value),
                       })}
                       onBlur={(e) => {
                         doseries(index)
-                        onBlur(e)
+                        validateGame(getValues(`squad.${index}.games.1`), index, 1)
                       }}
                     />
                     <div>
@@ -306,11 +300,11 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
                       key={field.id}
                       {...register(`squad.${index}.games.2` as const, {
                         valueAsNumber: true,
-                        validate: (value) => validateGame(value),
+                        //validate: (value) => validateGame(value),
                       })}
                       onBlur={(e) => {
                         doseries(index)
-                        onBlur(e)
+                        validateGame(getValues(`squad.${index}.games.2`), index, 2)
                       }}
                     />
                     <div>

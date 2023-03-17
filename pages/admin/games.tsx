@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react"
 import Header from "components/header"
 import AdminHeader from "components/adminHeader"
 import { Container } from "react-bootstrap"
-import { format, compareAsc } from "date-fns"
+import { compareAsc } from "date-fns"
 import EditGames from "components/editGames"
 
-import { Table, Button, Row, Col, Form, Spinner } from "react-bootstrap"
+import { Spinner } from "react-bootstrap"
 
-import * as yup from "yup"
-import { ErrorMessage } from "@hookform/error-message"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { useForm, Controller } from "react-hook-form"
+
 import { useStoreContext } from "components/Store"
 import Router from "next/router"
 

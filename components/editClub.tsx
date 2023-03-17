@@ -24,8 +24,7 @@ type FormValues = {
 
 const EditClub = (props) => {
   const { allClubs, doClose, locations } = props
-  const club = useRef(props.club);
-  
+  const club = useRef(props.club)
 
   const { updateClub } = useStoreContext()
 
@@ -45,6 +44,8 @@ const EditClub = (props) => {
     trigger,
     formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
+    mode: "onChange",
+    
     defaultValues: {
       name: club.current.name,
       houseName: club.current.houseName,
@@ -52,13 +53,13 @@ const EditClub = (props) => {
       city: club.current.city,
       phone: club.current.phone,
     },
-    resolver: yupResolver(schema),
+    //resolver: yupResolver(schema),
   })
 
   const { onChange, onBlur, name, ref } = register("houseName")
 
   const onSubmit = (data, form) => {
-    console.log("data", data, 'club', club.current)
+    console.log("data", data, "club", club.current)
     let theData = { ...club.current, ...data }
     theData.clubId = club.current.clubId ? club.current.clubId : nextClubId()
     updateClub(theData)
@@ -66,11 +67,16 @@ const EditClub = (props) => {
 
     console.log("good submit ", theData)
   }
-  const doHouseChange =  (ev) => {
-    console.log("new house name", ev.target.value, 'club', club)
+  const doHouseChange = (ev) => {
+    console.log("new house name", ev.target.value, "club", club)
     const newLocation = props.locations.find((l) => l.name === ev.target.value)
-    club.current = { ...newLocation, ...club.current, houseName: ev.target.value, name: getValues("name") }
-    console.log('updated club', club.current)
+    club.current = {
+      ...newLocation,
+      ...club.current,
+      houseName: ev.target.value,
+      name: getValues("name"),
+    }
+    console.log("updated club", club.current)
     setValue("address", club.current.address)
     setValue("phone", club.current.phone)
     setValue("city", club.current.city)
@@ -78,6 +84,12 @@ const EditClub = (props) => {
 
     console.log("club now", club)
   }
+  const validateName = (value: string, which: string) => {
+    if (which === "name" && value === "") return "Must have a name!"
+    if (which === "house" && value.match(/^((?!Select House).)*$/)) return "Must Select a House"
+    return true
+  }
+
   console.log("Club:", club.current, "errors", errors, "dirty", isDirty, "valid", isValid)
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form">
@@ -87,8 +99,18 @@ const EditClub = (props) => {
       <div className="row">
         <label className="col-sm-1 col-form-label">Name</label>
         <div className="p-1 col-sm-3">
-          <input {...register("name")} placeholder="Enter Name" className="form-control" />
-          <ErrorMessage errors={errors} name="name" />
+          <input
+            {...register("name", { validate: (value) => validateName(value, "name") })}
+            placeholder="Enter Name"
+            className="form-control"
+          />
+          <ErrorMessage
+            errors={errors}
+            name="name"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
         <label className="col-sm-2 col-form-label">Address</label>
         <div className="col-sm-3">
@@ -107,7 +129,9 @@ const EditClub = (props) => {
               doHouseChange(e)
               onChange(e)
             }}
-            onBlur={onBlur}
+            onBlur={(e) => {
+              onBlur(e)
+            }}
             name={name}
             ref={ref}
             className="form-control"
@@ -120,6 +144,13 @@ const EditClub = (props) => {
               )
             })}
           </select>
+          <ErrorMessage
+            errors={errors}
+            name="houseName"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
       </div>
       <div className="row">
