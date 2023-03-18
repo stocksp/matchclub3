@@ -92,22 +92,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           })
           //most improved if they bowled this match and a previous match
-          if (
-            theScores.find((d) => d.date < theDate) &&
-            theScores.find((s) => s.memberId === id && s.dateId === dateId)
-          ) {
-            // they have bowled more than this match so
-            const previousScores = theScores.filter((d: Score) => d.dateId !== dateId)
-            bulkWritesPersonal = bulkWritesPersonal.concat(
-              computePersonalBest(previousScores, stats, dateId)
-            )
-          }
+          // if (
+          //   theScores.find((d) => d.date < theDate) &&
+          //   theScores.find((s) => s.memberId === id && s.dateId === dateId)
+          // ) {
+          //   // they have bowled more than this match so
+          //   const previousScores = theScores.filter((d: Score) => d.dateId !== dateId)
+          //   bulkWritesPersonal = bulkWritesPersonal.concat(
+          //     computePersonalBest(previousScores, stats, dateId)
+          //   )
+          // }
         }
       })
 
       await db.collection("memberstats").bulkWrite(bulkWrites)
-      if (bulkWritesPersonal.length > 0)
-        await db.collection("improvements").bulkWrite(bulkWritesPersonal)
+      // if (bulkWritesPersonal.length > 0)
+      //   await db.collection("improvements").bulkWrite(bulkWritesPersonal)
 
       // now do the highScores for this date
       const theScores = makeHighScores(scoreArray, handi)
