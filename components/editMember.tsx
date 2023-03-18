@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react"
-import * as yup from "yup"
+
 import { BsPlusCircleFill, BsDashCircleFill, BsFillInfoCircleFill } from "react-icons/bs"
 
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { yupResolver } from "@hookform/resolvers/yup"
 
 import { useStoreContext } from "components/Store"
 type FormValues = {
@@ -28,9 +27,6 @@ type FormValues = {
 
 const theOptions = [1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 21].map((n, i) => {
   return { label: `${n} day${n === 0 ? "" : "s"} before`, value: n }
-})
-const schema = yup.object().shape({
-  alias: yup.string().min(2, "Too Short!").max(25, "Too Long!").required("Required"),
 })
 
 function EditMember(props) {
@@ -129,12 +125,12 @@ function EditMember(props) {
       memberId: props.member.memberId,
       reminders: props.member.reminders.map((v) => ({ value: v })),
     },
-    resolver: yupResolver(schema),
   })
   const { fields, append, remove } = useFieldArray({
     control,
     name: "reminders",
   })
+  console.log("Member:", props.member, "errors", errors, "dirty", isDirty, "valid", isValid)
   //console.log("props", fromAdmin, props, "fields", fields)
   register("memberId")
   return (
@@ -149,11 +145,25 @@ function EditMember(props) {
           </button>
         )}
 
-        <div className="row">
+        <div className="row mb-1">
           <label className="col-sm-1 input-group-text col-form-label">Alias</label>
           <div className="p-1 col-sm-2">
-            <input {...register("alias")} placeholder="Enter Alias" className="form-control" />
-            <ErrorMessage errors={errors} name="alias" />
+            <input
+              {...register("alias", {
+                required: "This is required.",
+                minLength: {value: 2, message: 'At least 2 chars'},
+                maxLength: {value: 25, message:'Too many chars'}
+              })}
+              placeholder="Enter Alias"
+              className="form-control"
+            />
+            <ErrorMessage
+              errors={errors}
+              name="alias"
+              render={({ message }) => {
+                return <div className="text-bg-danger p-1">{message}</div>
+              }}
+            />
           </div>
           {props.fromAdmin ? (
             <>
@@ -192,7 +202,7 @@ function EditMember(props) {
             </>
           )}
         </div>
-        <div className="row">
+        <div className="row mb-1">
           <label className="col-sm-1 input-group-text col-form-label">First</label>
           <div className="p-1 col-sm-2">
             <input {...register("first")} placeholder="Enter First Name" className="form-control" />
@@ -202,7 +212,7 @@ function EditMember(props) {
             <input {...register("last")} placeholder="Enter Last Name" className="form-control" />
           </div>
         </div>
-        <div className="row">
+        <div className="row mb-1">
           <label className="col-sm-1 input-group-text col-form-label">Address</label>
           <div className="p-1 col-sm-2">
             <input {...register("address")} placeholder="Enter Address" className="form-control" />
@@ -212,7 +222,7 @@ function EditMember(props) {
             <input {...register("city")} placeholder="Enter City" className="form-control" />
           </div>
         </div>
-        <div className="row">
+        <div className="row mb-1">
           <label className="col-sm-1 input-group-text col-form-label">State</label>
           <div className="p-1 col-sm-2">
             <input {...register("state")} placeholder="Enter State" className="form-control" />
@@ -222,7 +232,7 @@ function EditMember(props) {
             <input {...register("zip")} placeholder="Enter Zipcode" className="form-control" />
           </div>
         </div>
-        <div className="row">
+        <div className="row mb-1">
           <label className="col-sm-1 input-group-text col-form-label">Phone</label>
           <div className="p-1 col-sm-2">
             <input {...register("phone")} placeholder="Enter Phone" className="form-control" />
