@@ -1,22 +1,9 @@
 import React, { useContext, useRef, useState } from "react"
 import { useStoreContext } from "components/Store"
-//import { Formik, Field, ErrorMessage } from "formik";
 
-import { Form, Button, Row, Col, InputGroup, Tooltip } from "react-bootstrap"
-import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { yupResolver } from "@hookform/resolvers/yup"
 
-
-const schema = Yup.object().shape({
-  // name: Yup.string().required("Required"),
-  address: Yup.string().required("Required"),
-  city: Yup.string().required("Required"),
-  state: Yup.string().required("Required"),
-  zip: Yup.string().required("Required"),
-  phone: Yup.string().required("Required"),
-})
 type FormValues = {
   name: string
   zip: string
@@ -27,9 +14,6 @@ type FormValues = {
 }
 
 const EditLocation = (props) => {
-
-  
-  
   const { location, allLocations, doClose } = props
 
   const { updateLocation } = useStoreContext()
@@ -47,7 +31,7 @@ const EditLocation = (props) => {
     watch,
     formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       name: location.name,
       zip: location.zip,
@@ -56,16 +40,12 @@ const EditLocation = (props) => {
       state: location.state,
       phone: location.phone,
     },
-    resolver: yupResolver(schema),
   })
-  
 
   const onSubmit = (data, form) => {
     console.log("data", data)
     let theData = { ...data }
-    theData.locationId = location.locationId
-      ? location.locationId
-      : nextLocationId()
+    theData.locationId = location.locationId ? location.locationId : nextLocationId()
     updateLocation(theData)
     doClose()
 
@@ -85,32 +65,68 @@ const EditLocation = (props) => {
             placeholder="Enter Name"
             className="form-control"
           />
-          <ErrorMessage errors={errors} name="name" />
+          <ErrorMessage
+            errors={errors}
+            name="name"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
         <label className="col-sm-1 col-form-label">Address</label>
         <div className="p-1 col-sm-3">
-          <input {...register("address")} placeholder="Enter Address" className="form-control" />
-          <ErrorMessage errors={errors} name="address" />
+          <input {...register("address", { required: "This is required." })} placeholder="Enter Address" className="form-control" />
+          <ErrorMessage
+            errors={errors}
+            name="address"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
         <label className="col-sm-1 col-form-label">City</label>
         <div className="p-1 col-sm-3">
-          <input {...register("city")} placeholder="Enter City" className="form-control" />
-          <ErrorMessage errors={errors} name="city" />
+          <input {...register("city", { required: "This is required." })} placeholder="Enter City" className="form-control" />
+          <ErrorMessage
+            errors={errors}
+            name="city"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
         <label className="col-sm-1 col-form-label">State</label>
         <div className="p-1 col-sm-3">
-          <input {...register("state")} placeholder="Enter State" className="form-control" />
-          <ErrorMessage errors={errors} name="state" />
+          <input {...register("state", { required: "This is required." })} placeholder="Enter State" className="form-control" />
+          <ErrorMessage
+            errors={errors}
+            name="state"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
         <label className="col-sm-1 col-form-label">Zip</label>
         <div className="p-1 col-sm-3">
-          <input {...register("zip")} placeholder="Enter Zipcode" className="form-control" />
-          <ErrorMessage errors={errors} name="zip" />
+          <input {...register("zip", { required: "This is required." })} placeholder="Enter Zipcode" className="form-control" />
+          <ErrorMessage
+            errors={errors}
+            name="zip"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
         <label className="col-sm-1 col-form-label">Phone</label>
         <div className="p-1 col-sm-3">
-          <input {...register("phone")} placeholder="Enter Zipcode" className="form-control" />
-          <ErrorMessage errors={errors} name="phone" />
+          <input {...register("phone", { required: "This is required." })} placeholder="Phone number" className="form-control" />
+          <ErrorMessage
+            errors={errors}
+            name="phone"
+            render={({ message }) => {
+              return <div className="text-bg-danger p-1">{message}</div>
+            }}
+          />
         </div>
       </div>
 

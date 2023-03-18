@@ -1,19 +1,12 @@
 import React, { useRef } from "react"
 
 import { useStoreContext } from "components/Store"
-//
-import * as Yup from "yup"
+
+
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { yupResolver } from "@hookform/resolvers/yup"
 
-const schema = Yup.object().shape({
-  name: Yup.string().required("Required"),
-  houseName: Yup.string().matches(/^((?!Select House).)*$/),
-  address: Yup.string(),
-  phone: Yup.string(),
-  city: Yup.string(),
-})
+
 type FormValues = {
   name: string
   houseName: string
@@ -36,12 +29,10 @@ const EditClub = (props) => {
     )
   }
   const {
-    watch,
     handleSubmit,
     register,
     getValues,
     setValue,
-    trigger,
     formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
     mode: "onChange",
@@ -53,7 +44,6 @@ const EditClub = (props) => {
       city: club.current.city,
       phone: club.current.phone,
     },
-    //resolver: yupResolver(schema),
   })
 
   const { onChange, onBlur, name, ref } = register("houseName")
