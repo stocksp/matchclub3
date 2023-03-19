@@ -3,27 +3,8 @@ import { format } from "date-fns"
 import { ErrorMessage } from "@hookform/error-message"
 import { useForm, useFieldArray } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
+import notify  from "libs/notify"
 
-const notify = () =>
-  toast("Update Good!", {
-    duration: 4000,
-    position: "top-center",
-    // Styling
-    style: {},
-    className: "",
-    // Custom Icon
-    icon: "👏",
-    // Change colors of success/error/loading icon
-    iconTheme: {
-      primary: "#000",
-      secondary: "#fff",
-    },
-    // Aria
-    ariaProps: {
-      role: "status",
-      "aria-live": "polite",
-    },
-  })
 
 type MCDate = {
   date: Date
@@ -117,9 +98,9 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
     if (resp.message === "aok") {
       // clear dirty so submit is disabled
       reset({ ...values })
-      notify()
+      notify("Update Good!", 2000)
     } else {
-      toast.error("Somethin went wrong with the update!!")
+      toast.error("Somethin went wrong with the update!!", {duration: 2000})
     }
   }
 

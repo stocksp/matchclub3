@@ -4,6 +4,8 @@ import { BsPlusCircleFill, BsDashCircleFill, BsFillInfoCircleFill } from "react-
 
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
+import toast, { Toaster } from "react-hot-toast"
+import notify from "libs/notify"
 
 import { useStoreContext } from "components/Store"
 type FormValues = {
@@ -72,32 +74,37 @@ function EditMember(props) {
       theData.add = true
     }
     // TODO check return here for aok!!!
-    await updateMember(theData)
-    // in admin we have to update the members array AND we have allMembers
-    //clear termination and add
-    delete theData.terminate
-    delete theData.add
+    const resp = await updateMember(theData)
 
-    if (!props.fromAdmin) {
-      props.setMember(theData)
-    } else {
-      // find the element
-      const i = props.allMembers.findIndex((m) => m.memberId === props.memberId)
-      if (i == -1) {
-        // just add it
-        props.allMembers.push(theData)
+    if (resp.message === "aok") {
+      // in admin we have to update the members array AND we have allMembers
+      //clear termination and add
+      delete theData.terminate
+      delete theData.add
+
+      if (!props.fromAdmin) {
+        props.setMember(theData)
       } else {
-        props.allMembers[i] = { ...props.allMembers[i], ...data }
+        // find the element
+        const i = props.allMembers.findIndex((m) => m.memberId === props.memberId)
+        if (i == -1) {
+          // just add it
+          props.allMembers.push(theData)
+        } else {
+          props.allMembers[i] = { ...props.allMembers[i], ...data }
+        }
       }
+      reset(
+        (formValues) => ({
+          ...formValues,
+        }),
+        { keepDirty: false }
+      )
+      notify("Update Good!", 2000)
+      console.log("good Member submit ", theData)
+    } else {
+      toast.error("Somethin went wrong with the update!!", {duration: 2000})
     }
-    reset(
-      (formValues) => ({
-        ...formValues,
-      }),
-      { keepDirty: false }
-    )
-
-    console.log("good submit ", theData)
   }
   const {
     control,
@@ -136,6 +143,11 @@ function EditMember(props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form">
       <>
+        <Toaster
+          containerStyle={{
+            position: "relative",
+          }}
+        />
         <button type="submit" className="btn btn-primary" disabled={!isDirty || !isValid}>
           Submit
         </button>

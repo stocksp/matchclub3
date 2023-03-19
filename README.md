@@ -14,6 +14,9 @@ https://github.com/react-hook-form/error-message
 date-fns
 https://date-fns.org/docs/Getting-Started
 
+react-hot-toast
+https://react-hot-toast.com/
+
 
 ## Debugging client side
 
