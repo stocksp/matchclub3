@@ -1,17 +1,14 @@
 import React, { useState } from "react"
 import { Form, Button, ButtonToolbar } from "react-bootstrap"
-import * as Yup from "yup"
+
 import { useStoreContext } from "./Store"
 import { useForm } from "react-hook-form"
 import type { SubmitHandler, DefaultValues } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { yupResolver } from "@hookform/resolvers/yup"
+
 
 import Router from "next/router"
 
-const SignupSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-})
 type FormValues = {
   email: string
 }
@@ -34,7 +31,6 @@ const Login = (props) => {
     formState: { errors, isValid },
   } = useForm<FormValues>({
     defaultValues,
-    resolver: yupResolver(SignupSchema),
   })
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     const response = await fetch(
@@ -60,7 +56,15 @@ const Login = (props) => {
     <form onSubmit={handleSubmit(onSubmit)} className="form">
       <Form.Group controlId="email">
         <Form.Label>Email address</Form.Label>
-        <Form.Control placeholder="Enter email" {...register("email")} />
+        <Form.Control
+          placeholder="Enter email"
+          {...register("email", {
+            pattern: {
+              value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+              message: "Not valid email address",
+            },
+          })}
+        />
         <ErrorMessage errors={errors} name="email" />
       </Form.Group>
       <ButtonToolbar className="justify-content-between">

@@ -151,8 +151,8 @@ function EditMember(props) {
             <input
               {...register("alias", {
                 required: "This is required.",
-                minLength: {value: 2, message: 'At least 2 chars'},
-                maxLength: {value: 25, message:'Too many chars'}
+                minLength: { value: 2, message: "At least 2 chars" },
+                maxLength: { value: 25, message: "Too many chars" },
               })}
               placeholder="Enter Alias"
               className="form-control"
@@ -170,9 +170,22 @@ function EditMember(props) {
               <label className="col-sm-1 input-group-text col-form-label">Email</label>
               <div className="p-1 col-sm-3">
                 <input
-                  {...register("email")}
+                  {...register("email", {
+                    required: "This is required.",
+                    pattern: {
+                      value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                      message: "Not valid email address",
+                    },
+                  })}
                   placeholder="Email Address"
                   className="form-control"
+                />
+                <ErrorMessage
+                  errors={errors}
+                  name="email"
+                  render={({ message }) => {
+                    return <div className="text-bg-danger p-1">{message}</div>
+                  }}
                 />
               </div>
             </>
