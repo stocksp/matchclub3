@@ -26,6 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const date = new Date(req.body.date)
     const hasmeeting = req.body.hasmeeting
     const season = req.body.season
+    const squad = req.body.squad
 
     if (season && dateId && host && guest && location && !isNaN(teamsizemax) && isValid(date)) {
       const data: data = {
@@ -36,8 +37,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         date,
         hasmeeting,
         season,
+        squad,
       }
-      if (req.body.squad) data.squad = []
       let resp = await db.collection("dates").updateOne(
         { dateId },
         {

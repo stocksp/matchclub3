@@ -20,7 +20,6 @@ type FormValues = {
   squad?: Array<any>
   dateId?: number
   season?: string
-
 }
 
 const EditDate = (props) => {
@@ -74,7 +73,7 @@ const EditDate = (props) => {
     else {
       //let theData = {}
 
-      const theData : FormValues = {
+      const theData: FormValues = {
         dateId: props.date.dateId ? props.date.dateId : nextDateId(),
         guest: data.guest,
         host: data.host,
@@ -83,10 +82,8 @@ const EditDate = (props) => {
         date: data.date.toJSON(),
         hasmeeting: data.hasmeeting,
         season: getSeason(data.date),
+        squad: props.date.squad,
       }
-      // if a new Date add empth squad we added a squad to the props
-      // to signal its a new one
-      if (props.date.squad) theData['squad'] = []
 
       updateDate(theData)
       //form.resetForm({ values: data })
@@ -124,7 +121,9 @@ const EditDate = (props) => {
       </div>
 
       <div className="row pb-1">
-        <label className="col-sm-2 input-group-text col-form-label">Host Club</label>
+        <label className="col-sm-2 input-group-text col-form-label">
+          Host Club
+        </label>
         <div className="col-sm-3">
           <select {...register("host")} className="form-control">
             {[{ name: "Select Club" }, ...clubs].map((c, i) => {
@@ -139,7 +138,9 @@ const EditDate = (props) => {
         </div>
       </div>
       <div className="row pb-1">
-        <label className="col-sm-2 input-group-text col-form-label">Guest Club</label>
+        <label className="col-sm-2 input-group-text col-form-label">
+          Guest Club
+        </label>
         <div className="col-sm-3">
           <select {...register("guest")} className="form-control">
             {[{ name: "Select Club" }, ...clubs].map((c, i) => {
@@ -154,7 +155,9 @@ const EditDate = (props) => {
         </div>
       </div>
       <div className="row pb-1">
-        <label className="col-sm-2 input-group-text col-form-label">Location</label>
+        <label className="col-sm-2 input-group-text col-form-label">
+          Location
+        </label>
         <div className="col-sm-3">
           <select {...register("location")} className="form-control">
             {[{ name: "Select House" }, ...locations].map((c, i) => {
@@ -169,7 +172,9 @@ const EditDate = (props) => {
         </div>
       </div>
       <div className="row pb-1">
-        <label className="col-sm-2 input-group-text col-form-label">Squad Size</label>
+        <label className="col-sm-2 input-group-text col-form-label">
+          Squad Size
+        </label>
         <div className="col-sm-3">
           <select {...register("teamsizemax")} className="form-control">
             {teamSizeMaxArr.map((c, i) => {
@@ -183,12 +188,22 @@ const EditDate = (props) => {
         </div>
       </div>
       <div className="row pb-1">
-        <label className="col-sm-2 input-group-text form-check-label">Has Meeting</label>
+        <label className="col-sm-2 input-group-text form-check-label">
+          Has Meeting
+        </label>
         <div className="px-2 col-sm-3 form-check form-switch">
-          <input className="ms-2 mt-2 form-check-input" type="checkbox" {...register("hasmeeting")} />
+          <input
+            className="ms-2 mt-2 form-check-input"
+            type="checkbox"
+            {...register("hasmeeting")}
+          />
         </div>
       </div>
-      <button type="submit" className="btn btn-primary" disabled={!isDirty || !isValid}>
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={!isDirty || !isValid}
+      >
         Submit
       </button>
     </form>

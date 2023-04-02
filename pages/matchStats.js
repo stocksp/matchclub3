@@ -1,72 +1,72 @@
-import Header from "../components/header";
-import React, { useState, useEffect, useRef } from "react";
-import { useStoreContext } from "../components/Store";
-import { Table, Form } from "react-bootstrap";
-import { format, parseISO } from "date-fns";
-import { useReactToPrint } from "react-to-print";
+import Header from "../components/header"
+import React, { useState, useEffect, useRef } from "react"
+import { useStoreContext } from "../components/Store"
+import { Table, Form, Button, Spinner } from "react-bootstrap"
+import { format, parseISO } from "date-fns"
+import { useReactToPrint } from "react-to-print"
 
 function MatchStats() {
-  const [sortBy, setSortBy] = useState("average");
-  const [dir, setDir] = useState("desc");
-  const [dateId, setDateId] = useState(null);
-  const { getMatchStats, matchStats, setActive } = useStoreContext();
-  const componentRef = useRef();
+  const [sortBy, setSortBy] = useState("average")
+  const [dir, setDir] = useState("desc")
+  const [dateId, setDateId] = useState(null)
+  const { getMatchStats, matchStats, setActive } = useStoreContext()
+  const componentRef = useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-  });
+  })
   useEffect(() => {
-    setActive("matchStats");
-    getMatchStats();
+    setActive("matchStats")
+    getMatchStats()
     //return setActive(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const getDates = () => {
     // taken from https://stackoverflow.com/questions/36032179/remove-duplicates-in-an-object-array-javascript
     let thedates = matchStats[0].filter(
       (elem, index, self) =>
         self.findIndex((m) => {
-          return m.dateId === elem.dateId;
+          return m.dateId === elem.dateId
         }) === index
-    );
+    )
     return thedates.map((d) => {
-      return { date: d.date, match: d.match, dateId: d.dateId };
-    });
-  };
+      return { date: d.date, match: d.match, dateId: d.dateId }
+    })
+  }
 
   const getActiveDate = (dates) => {
     //const date = dateId ? dateId : dates[dates.length -1];
-    const id = dateId ? dateId : matchStats[0][0].dateId;
+    const id = dateId ? dateId : matchStats[0][0].dateId
 
-    const date = dates.find((d) => d.dateId === id).date;
-    const title = `${format(parseISO(date), "MMM. d, yyyy")}`;
+    const date = dates.find((d) => d.dateId === id).date
+    const title = `${format(parseISO(date), "MMM. d, yyyy")}`
 
-    return title;
-  };
+    return title
+  }
 
   const sortMe = (who) => {
     if (sortBy === who) {
-      setDir(dir === "desc" ? "asc" : "desc");
+      setDir(dir === "desc" ? "asc" : "desc")
     } else {
-      setSortBy(who);
+      setSortBy(who)
     }
-    console.log(who);
-  };
+    console.log(who)
+  }
   const sorter = (a, b) => {
-    if (dir === "desc") return b[sortBy] - a[sortBy];
-    else return a[sortBy] - b[sortBy];
-  };
+    if (dir === "desc") return b[sortBy] - a[sortBy]
+    else return a[sortBy] - b[sortBy]
+  }
   const handleChange = (event) => {
-    console.log("select", event.target.value);
-    setDateId(parseInt(event.target.value));
-  };
+    console.log("select", event.target.value)
+    setDateId(parseInt(event.target.value))
+  }
 
   if (matchStats) {
     const theData = matchStats[0]
       .filter((s) => s.dateId === (dateId ? dateId : matchStats[0][0].dateId))
-      .sort(sorter);
+      .sort(sorter)
     // make the dates for the input selector
-    const dates = getDates(matchStats[0]);
+    const dates = getDates(matchStats[0])
 
     return (
       <>
@@ -78,20 +78,18 @@ function MatchStats() {
             <Form.Label>Select the Match Date</Form.Label>
             <Form.Control as="select" onChange={handleChange}>
               {dates.map((d, i) => {
-                const teamRes = matchStats[1].find(
-                  (t) => t.dateId === d.dateId
-                );
+                const teamRes = matchStats[1].find((t) => t.dateId === d.dateId)
                 const title = `${format(
                   parseISO(d.date),
                   "MMM. d, yyyy"
                 )} ${d.match.replace("-", " hosting ")} [Won ${
                   teamRes.won
-                } Lost ${teamRes.lost}]  `;
+                } Lost ${teamRes.lost}]  `
                 return (
                   <option key={i} value={d.dateId}>
                     {title}
                   </option>
-                );
+                )
               })}
             </Form.Control>
           </Form.Group>
@@ -134,7 +132,7 @@ function MatchStats() {
 
                   <td key={10}>{r.handi}</td>
                 </tr>
-              );
+              )
             })}
           </tbody>
         </Table>
@@ -177,15 +175,28 @@ function MatchStats() {
 
                     <td key={10}>{r.handi}</td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </Table>
         </div>
       </>
-    );
+    )
   }
-  return <div>Waiting add Progress indicator here!</div>;
+  return (
+    <>
+      <Button variant="primary" disabled>
+        <Spinner
+          as="span"
+          animation="grow"
+          size="sm"
+          role="status"
+          aria-hidden="true"
+        />
+        <span> Loading...</span>
+      </Button>
+    </>
+  )
 }
 
-export default MatchStats;
+export default MatchStats
