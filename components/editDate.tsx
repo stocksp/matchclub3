@@ -112,7 +112,10 @@ const EditDate = (props) => {
                   {...fieldProps}
                   className="ms-2 input form-control"
                   placeholderText="Select date"
+                  showTimeSelect
                   selected={value}
+                  dateFormat="MMM d, yyyy h:mm aa"
+                  excludeDates={theDates}
                 />
               )
             }}
