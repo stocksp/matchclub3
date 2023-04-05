@@ -1,45 +1,45 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState } from "react"
 
-import { isSameDay } from "date-fns";
-import { useStoreContext } from "components/Store";
-import { Formik, Field } from "formik";
-import { getSeason } from "libs/utils";
-import Alert from "components/alert";
-import DatePicker from "react-datepicker";
-import { Form, Button, Row, Col, InputGroup, Tooltip } from "react-bootstrap";
+import { isSameDay } from "date-fns"
+import { useStoreContext } from "components/Store"
+import { Formik, Field } from "formik"
+import { getSeason } from "libs/utils"
+import Alert from "components/alert"
+import DatePicker from "react-datepicker"
+import { Form, Button, Row, Col, InputGroup, Tooltip } from "react-bootstrap"
 
 const EditDate = (props) => {
-  const [openAlert, setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false)
 
-  const { updateDate, dates } = useStoreContext();
+  const { updateDate, dates } = useStoreContext()
   // get existing dates to exclude in datepicker
-  const theDates = dates.map((d) => d.date);
-  const teamSizeMaxArr = [16, 20];
+  const theDates = dates.map((d) => d.date)
+  const teamSizeMaxArr = [16, 20]
 
-  const { clubs, locations } = props.clubsLocations;
+  const { clubs, locations } = props.clubsLocations
 
   // check that the edited (or not) date does not fall on an existing date
   // ignore the case where the date is compared to itself
   const dateIsUsed = (date) => {
     return props.dates.some((d) => {
-      const same = isSameDay(date, d.date);
-      return same && d.dateId !== props.date.dateId;
-    });
-  };
+      const same = isSameDay(date, d.date)
+      return same && d.dateId !== props.date.dateId
+    })
+  }
   const nextDateId = () => {
     return (
       props.dates.reduce((max, d) => {
-        return d.dateId > max ? d.dateId : max;
+        return d.dateId > max ? d.dateId : max
       }, 0) + 1
-    );
-  };
+    )
+  }
 
   const onSubmit = (data, form) => {
-    const conflict = dateIsUsed(data.date);
-    console.log("conflict with existing date", conflict);
-    if (conflict) setOpenAlert(true);
+    const conflict = dateIsUsed(data.date)
+    console.log("conflict with existing date", conflict)
+    if (conflict) setOpenAlert(true)
     else {
-      let theData = {};
+      let theData = {}
 
       theData = {
         dateId: props.date.dateId ? props.date.dateId : nextDateId(),
@@ -50,16 +50,15 @@ const EditDate = (props) => {
         date: data.date.toJSON(),
         hasmeeting: data.hasmeeting,
         season: getSeason(data.date),
-      };
-      // if a new add empth squad
-      if (props.date.squad) theData.squad = [];
+        squad: props.date.squad,
+      }
 
-      updateDate(theData);
-      form.resetForm({ values: data });
-      console.log("done with submit TODO", theData);
-      props.doClose();
+      updateDate(theData)
+      form.resetForm({ values: data })
+      console.log("done with submit TODO", theData)
+      props.doClose()
     }
-  };
+  }
 
   return (
     <Formik initialValues={props.date} onSubmit={onSubmit}>
@@ -74,7 +73,7 @@ const EditDate = (props) => {
         isValid,
         setFieldValue,
       }) => {
-        console.log("date values", values);
+        console.log("date values", values)
         return (
           <Form>
             <Button variant="link" onClick={() => props.doClose()}>
@@ -87,9 +86,9 @@ const EditDate = (props) => {
                 value={values.date}
                 name="date"
                 onChange={(date) => {
-                  console.log("theDate", date);
+                  console.log("theDate", date)
                   //setSelectedDate(date.toDate());
-                  setFieldValue("date", date);
+                  setFieldValue("date", date)
                 }}
                 showTimeSelect
                 selected={values.date}
@@ -110,7 +109,7 @@ const EditDate = (props) => {
                     <option key={i} value={c.name}>
                       {c.name}
                     </option>
-                  );
+                  )
                 })}
               </Form.Control>
             </Form.Group>
@@ -127,7 +126,7 @@ const EditDate = (props) => {
                     <option key={i} value={c.name}>
                       {c.name}
                     </option>
-                  );
+                  )
                 })}
               </Form.Control>
             </Form.Group>
@@ -144,7 +143,7 @@ const EditDate = (props) => {
                     <option key={i} value={c.name}>
                       {c.name}
                     </option>
-                  );
+                  )
                 })}
               </Form.Control>
             </Form.Group>
@@ -161,7 +160,7 @@ const EditDate = (props) => {
                     <option key={i} value={c}>
                       {c}
                     </option>
-                  );
+                  )
                 })}
               </Form.Control>
             </Form.Group>
@@ -192,10 +191,10 @@ const EditDate = (props) => {
               msg="You selected a date of an existing match"
             />
           </Form>
-        );
+        )
       }}
       {/* */}
     </Formik>
-  );
-};
-export default EditDate;
+  )
+}
+export default EditDate
