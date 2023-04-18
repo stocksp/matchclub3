@@ -14,7 +14,7 @@ const EditDate = (props) => {
   const { updateDate, dates } = useStoreContext()
   // get existing dates to exclude in datepicker
   const theDates = dates.map((d) => d.date)
-  const teamSizeMaxArr = [16, 20]
+  const teamSizeMaxArr = [12, 16, 20]
 
   const { clubs, locations } = props.clubsLocations
 
