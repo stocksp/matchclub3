@@ -1,38 +1,42 @@
-import React, { useContext, useState, useEffect } from "react";
-import Header from "components/header";
-import AdminHeader from "components/adminHeader";
-import { Container, Button, Table, Spinner } from "react-bootstrap";
-import EditLocation from "components/editLocation.tsx";
-import { useStoreContext } from "components/Store";
-import { MdEdit } from "react-icons/md";
+import React, { useContext, useState, useEffect } from "react"
+import Header from "components/header"
+import AdminHeader from "components/adminHeader"
+import { Container, Button, Table, Spinner } from "react-bootstrap"
+import EditLocation from "components/editLocation.tsx"
+import { useStoreContext } from "components/Store"
+import { MdEdit } from "react-icons/md"
 function Locations() {
-  const [edit, setDoEdit] = useState(false);
-  const [locToEdit, setLocToEdit] = useState(null);
-  const {
-    setActive,
-    getClubsLocations,
-    clubsLocations,
-    updateLocation,
-  } = useStoreContext();
+  const [edit, setDoEdit] = useState(false)
+  const [locToEdit, setLocToEdit] = useState(null)
+  const { setActive, getClubsLocations, clubsLocations, updateLocation } =
+    useStoreContext()
   useEffect(() => {
-    setActive("admin.locations");
-    getClubsLocations();
-  }, []);
+    setActive("admin.locations")
+    getClubsLocations()
+  }, [])
   const handleClose = () => {
-    setDoEdit(false);
-    setLocToEdit(null);
-  };
+    setDoEdit(false)
+    setLocToEdit(null)
+    getClubsLocations(true)
+  }
 
   const doEdit = (loc, index) => {
-    console.log("Setting do Edit true for", loc.Name);
-    setLocToEdit(loc);
-    setDoEdit(true);
-  };
+    console.log("Setting do Edit true for", loc.Name)
+    setLocToEdit(loc)
+    setDoEdit(true)
+  }
 
   const doNew = () => {
-    setLocToEdit({ name: "", address: "", city: "", state: "", zip: "", phone: "" });
-    setDoEdit(true);
-  };
+    setLocToEdit({
+      name: "",
+      address: "",
+      city: "",
+      state: "",
+      zip: "",
+      phone: "",
+    })
+    setDoEdit(true)
+  }
   if (!clubsLocations)
     return (
       <>
@@ -48,7 +52,7 @@ function Locations() {
           <Spinner animation="grow" variant="dark" />{" "}
         </Container>
       </>
-    );
+    )
 
   return (
     <>
@@ -95,7 +99,7 @@ function Locations() {
                         <MdEdit onClick={() => doEdit(l, i)} size={"1.5em"} />
                       </td>
                     </tr>
-                  );
+                  )
                 })}
               </tbody>
             </Table>
@@ -105,12 +109,11 @@ function Locations() {
             doClose={handleClose}
             location={locToEdit}
             allLocations={clubsLocations.locations}
-            
           ></EditLocation>
         )}
       </Container>
     </>
-  );
+  )
 }
 
-export default Locations;
+export default Locations

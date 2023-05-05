@@ -87,7 +87,7 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
           season,
           memberId: s.id,
           alias: s.name,
-          date: values.date.date,
+          date: date.date.toJSON()
         })
       }
     })

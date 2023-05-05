@@ -5,7 +5,6 @@ import {
   getSeason,
   calcStats,
   makeHighScores,
-  computePersonalBest,
 } from "../../libs/utils"
 
 import type { NextApiRequest, NextApiResponse } from "next"
@@ -47,7 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const keys = Object.keys(scores)
       const scoreArray = []
       keys.forEach((k) => {
-        scores[k].date = parseISO(scores[k].date)
+        scores[k].date = new Date(scores[k].date)
         scores[k].memberId = parseInt(scores[k].memberId)
         scores[k].dateId = parseInt(scores[k].dateId)
         scores[k].games = scores[k].games.map((g) => parseInt(g))
@@ -70,11 +69,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .sort({ date: 1 })
         .project({ _id: 0 })
         .toArray()
-      
+
       // ids for all the members who have bowled
       let theIds = docs.map(d => d.memberId)
       theIds = [...new Set(theIds)]
-      
+
       let bulkWrites = []
       let bulkWritesPersonal = []
       theIds.forEach((id) => {
@@ -93,16 +92,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           })
           //most improved if they bowled this match and a previous match
-          if (
-            theScores.find((d) => d.date < theDate) &&
-            theScores.find((s) => s.memberId === id && s.dateId === dateId)
-          ) {
-            // they have bowled more than this match so
-            const previousScores = theScores.filter((d: Score) => d.dateId !== dateId)
-            bulkWritesPersonal = bulkWritesPersonal.concat(
-              computePersonalBest(previousScores, stats, dateId)
-            )
-          }
+          //   if (
+          //     theScores.find((d) => d.date < theDate) &&
+          //     theScores.find((s) => s.memberId === id && s.dateId === dateId)
+          //   ) {
+          //     // they have bowled more than this match so
+          //     const previousScores = theScores.filter((d: Score) => d.dateId !== dateId)
+          //     bulkWritesPersonal = bulkWritesPersonal.concat(
+          //       computePersonalBest(previousScores, stats, dateId)
+          //     )
+          //   }
         }
       })
 

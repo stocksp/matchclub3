@@ -106,10 +106,10 @@ function EditMember(props) {
         }),
         { keepDirty: false }
       )
-      notify("Update Good!", 2000)
+      notify("Submission Good!", 2000)
       console.log("good Member submit ", theData)
     } else {
-      toast.error("Somethin went wrong with the update!!", { duration: 2000 })
+      toast.error("Something went wrong with the submission", { duration: 2000 })
     }
   }
   const {

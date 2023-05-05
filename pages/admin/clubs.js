@@ -1,33 +1,30 @@
-import React, { useState, useEffect } from "react";
-import Header from "components/header";
-import AdminHeader from "components/adminHeader";
-import { Container, Button, Table, Spinner } from "react-bootstrap";
-import EditClub from "components/editClub.tsx";
-import { useStoreContext } from "components/Store";
-import { MdEdit } from "react-icons/md";
+import React, { useState, useEffect } from "react"
+import Header from "components/header"
+import AdminHeader from "components/adminHeader"
+import { Container, Button, Table, Spinner } from "react-bootstrap"
+import EditClub from "components/editClub.tsx"
+import { useStoreContext } from "components/Store"
+import { MdEdit } from "react-icons/md"
 function Clubs() {
-  const [edit, setDoEdit] = useState(false);
-  const [clubToEdit, setClubToEdit] = useState(null);
-  const {
-    setActive,
-    getClubsLocations,
-    clubsLocations,
-    updateClubs,
-  } = useStoreContext();
+  const [edit, setDoEdit] = useState(false)
+  const [clubToEdit, setClubToEdit] = useState(null)
+  const { setActive, getClubsLocations, clubsLocations, updateClubs } =
+    useStoreContext()
   useEffect(() => {
-    setActive("admin.clubs");
-    getClubsLocations();
-  }, []);
+    setActive("admin.clubs")
+    getClubsLocations()
+  }, [])
   const handleClose = () => {
-    setDoEdit(false);
-    setClubToEdit(null);
-  };
+    setDoEdit(false)
+    setClubToEdit(null)
+    getClubsLocations(true)
+  }
 
   const doEdit = (club, index) => {
-    console.log("Setting do Edit true for", club.Name);
-    setClubToEdit(club);
-    setDoEdit(true);
-  };
+    console.log("Setting do Edit true for", club.Name)
+    setClubToEdit(club)
+    setDoEdit(true)
+  }
 
   const doNew = () => {
     setClubToEdit({
@@ -36,9 +33,9 @@ function Clubs() {
       city: "",
       phone: "",
       houseName: "Select House",
-    });
-    setDoEdit(true);
-  };
+    })
+    setDoEdit(true)
+  }
   if (!clubsLocations)
     return (
       <>
@@ -54,7 +51,7 @@ function Clubs() {
           <Spinner animation="grow" variant="dark" />{" "}
         </Container>
       </>
-    );
+    )
 
   return (
     <>
@@ -101,7 +98,7 @@ function Clubs() {
                         <MdEdit onClick={() => doEdit(l, i)} size={"1.5em"} />
                       </td>
                     </tr>
-                  );
+                  )
                 })}
               </tbody>
             </Table>
@@ -116,7 +113,7 @@ function Clubs() {
         )}
       </Container>
     </>
-  );
+  )
 }
 
-export default Clubs;
+export default Clubs
