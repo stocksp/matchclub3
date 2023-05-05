@@ -47,8 +47,8 @@ interface FromStore {
   getScores: any
   updateScores: any
 }
-function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any }) {
-  const { dates, scores, updateScores } = props
+function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any; getDates: any }) {
+  const { dates, scores, updateScores, getDates } = props
   const [dateId, setDateId] = useState(dates[0].dateId)
 
   const calcScores = (dateId: number) => {
@@ -98,6 +98,7 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
     if (resp.message === "aok") {
       // clear dirty so submit is disabled
       reset({ ...values })
+      getDates(true)
       notify("Update Good!", 2000)
     } else {
       toast.error("Somethin went wrong with the update!!", {duration: 2000})

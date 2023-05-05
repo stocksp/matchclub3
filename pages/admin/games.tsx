@@ -12,7 +12,7 @@ import { useStoreContext } from "components/Store"
 import Router from "next/router"
 
 function Games() {
-  const { hasDates, dates, setActive, scores, getScores, hasScores, updateScores } =
+  const { hasDates, dates, setActive, scores, getScores, hasScores, updateScores, getDates } =
     useStoreContext()
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function Games() {
         >
           <AdminHeader />
           <h2>Scores By Date</h2>
-          <EditGames dates={filterDates()} scores={scores} updateScores={updateScores} />
+          <EditGames dates={filterDates()} scores={scores} updateScores={updateScores} getDates={getDates} />
         </Container>
       </>
     )
