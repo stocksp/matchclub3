@@ -52,7 +52,7 @@ function Clubs() {
         </Container>
       </>
     )
-
+ // console.log('clubs', JSON.stringify(clubsLocations.clubs))
   return (
     <>
       <Header />
