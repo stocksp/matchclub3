@@ -41,6 +41,7 @@ const Index = () => {
   //const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false)
   const [footerText, setFooterText] = useState("")
+  const [isDisabled, setDisabled] = useState(false);
 
   const handleClose = () => {
     setHasSquad(false)
@@ -55,6 +56,7 @@ const Index = () => {
     setMapLink("")
   }
   const handleSquadAction = async (action) => {
+    setDisabled(true);
     setFooterText("updating ....")
     const resp = await doSquadAction(action, dateSelected, user.memberId, user.alias)
     console.log(resp)
@@ -64,6 +66,7 @@ const Index = () => {
       setFooterText("Houston we had a problem!!")
     }
     getSquad(dateSelected)
+    setDisabled(false)
   }
 
   const onDayClick = async (ev, data) => {
@@ -186,7 +189,7 @@ const Index = () => {
                 CLOSE
               </Button>
               {!isAfter && user && (
-                <Button variant="primary" onClick={() => handleSquadAction(actionStr)}>
+                <Button variant="primary" disabled={isDisabled} onClick={() => handleSquadAction(actionStr)} >
                   {actionStr}
                 </Button>
               )}

@@ -69,14 +69,14 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
 
   async function onSubmit(values) {
     // same shape as initial values
-    //console.log("all the data ", values)
+    
     //return
     const scores = []
     const dateId = values.dateId
     const date = dates.find((d) => d.dateId === dateId)
     const match = `${date.host}-${date.guest}`
     const season = date.season
-
+    
     values.squad.forEach((s) => {
       if (!s.games.includes(0)) {
         const games = s.games
