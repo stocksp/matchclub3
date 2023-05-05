@@ -8,7 +8,7 @@ import { MdEdit } from "react-icons/md"
 function Clubs() {
   const [edit, setDoEdit] = useState(false)
   const [clubToEdit, setClubToEdit] = useState(null)
-  const { setActive, getClubsLocations, clubsLocations, updateClubs } =
+  const { setActive, getClubsLocations, clubsLocations } =
     useStoreContext()
   useEffect(() => {
     setActive("admin.clubs")

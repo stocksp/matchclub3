@@ -58,11 +58,12 @@ const EditClub = (props) => {
     console.log("good submit ", theData)
   }
   const doHouseChange = (ev) => {
-    console.log("new house name", ev.target.value, "club", club)
+    console.log("new house name", ev.target.value, "club", club.current)
     const newLocation = props.locations.find((l) => l.name === ev.target.value)
+    console.log('new location', newLocation)
     club.current = {
-      ...newLocation,
       ...club.current,
+      ...newLocation,
       houseName: ev.target.value,
       name: getValues("name"),
     }
