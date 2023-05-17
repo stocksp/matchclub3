@@ -37,9 +37,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         date,
         hasmeeting,
         season,
-        squad
+        squad,
       }
-
+      if (req.body.squad) data.squad = []
       let resp = await db.collection("dates").updateOne(
         { dateId },
         {

@@ -181,7 +181,7 @@ function useStore() {
     })
 
     try {
-      const resp = await fetch("/api/updateScores", {
+      let resp = await fetch("/api/updateScores", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -189,6 +189,7 @@ function useStore() {
         },
         body: theData,
       })
+      resp = await resp.json()
       console.log("updateScores returned", resp)
       // TODO maybe just update the local data with what we have ??
       // for now just get all the scores from the server
@@ -426,8 +427,8 @@ function useStore() {
       //TODO why does this fail with current updateData?
       //const message = await resp.json();
 
-      if (resp.ok) {
-        await await getClubsLocations(true)
+      if (resp.statusText == 'OK') {
+        await getClubsLocations(true)
       }
       return resp
     } catch (error) {
@@ -491,6 +492,7 @@ function useStore() {
     highScores,
     user,
     windowSize,
+    hasScores,
   }
 }
 

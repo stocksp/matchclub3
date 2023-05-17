@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2015",
     "baseUrl": ".",
+    "sourceMap": true,
     "lib": [
       "dom",
       "dom.iterable",

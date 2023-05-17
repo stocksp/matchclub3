@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "components/header";
 import AdminHeader from "components/adminHeader";
 import { Container, Button, Table, Spinner } from "react-bootstrap";
-import EditMember from "components/editMember";
+import EditMember from "components/editMember.tsx";
 import { useStoreContext } from "components/Store";
 import { MdEdit } from "react-icons/md";
 
@@ -12,7 +12,6 @@ function Members() {
   const {
     getAllMembers,
     allMembers,
-    updateMember,
     setActive,
   } = useStoreContext();
   useEffect(() => {
@@ -22,7 +21,6 @@ function Members() {
   }, []);
   const handleClose = () => {
     setDoEdit(false);
-    // setDateToEdit(null);
   };
 
   const doEdit = (mem, index) => {
