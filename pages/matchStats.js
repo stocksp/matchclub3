@@ -62,6 +62,14 @@ function MatchStats() {
   }
 
   if (matchStats) {
+    if (matchStats[0].length === 0 && matchStats[1].length === 0) {
+      return (
+        <>
+          <Header />
+          <h5 className="text-center">No Data yet this season!</h5>
+        </>
+      )
+    }
     const theData = matchStats[0]
       .filter((s) => s.dateId === (dateId ? dateId : matchStats[0][0].dateId))
       .sort(sorter)

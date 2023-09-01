@@ -129,6 +129,7 @@ function useStore() {
   // this computes the most recent dateId
   // which is the last match bowled
   const getDateId = (hs, theDates) => {
+    if (hs.results.length === 0) return 0
     const filteredDates = theDates.filter((d) => {
       const found = hs.dateResults.find((r) => r.dateId === d.dateId)
       return found !== undefined
@@ -289,7 +290,9 @@ function useStore() {
       const message = await resp.json()
 
       if (message.message === "aok") {
-        const theIndex = allMembers.findIndex((m) => m.memberId === data.memberId)
+        const theIndex = allMembers.findIndex(
+          (m) => m.memberId === data.memberId
+        )
         if (theIndex > -1) {
           console.log("replacing", allMembers[theIndex], "with", data)
           allMembers[theIndex] = data
@@ -359,7 +362,7 @@ function useStore() {
 
       if (resp.ok) {
         await getDates(true)
-        console.log('updated squad', data)
+        console.log("updated squad", data)
       }
       return resp
     } catch (error) {
@@ -427,7 +430,7 @@ function useStore() {
       //TODO why does this fail with current updateData?
       //const message = await resp.json();
 
-      if (resp.statusText == 'OK') {
+      if (resp.statusText == "OK") {
         await getClubsLocations(true)
       }
       return resp
