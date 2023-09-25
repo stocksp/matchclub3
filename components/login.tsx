@@ -34,14 +34,14 @@ const Login = (props) => {
   })
   const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
     const response = await fetch(
-      `/api/getData?name=emailExists&email=${encodeURIComponent(data.email)}`
+      `/api/getData?name=emailExists&email=${encodeURIComponent(data.email.toLowerCase())}`
     )
     const myJson = await response.json()
     if (myJson.member === false) {
       setError("email", { message: "User Not found!!" }, { shouldFocus: true })
       return
     }
-    const resp = await doLoggin(data.email)
+    const resp = await doLoggin(data.email.toLowerCase())
     console.log(resp)
     if (resp) {
       data.email = ""
