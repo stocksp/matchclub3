@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react"
+import OverlayTrigger from "react-bootstrap/OverlayTrigger"
+import Tooltip from "react-bootstrap/Tooltip"
 
-import {
-  BsPlusCircleFill,
-  BsDashCircleFill,
-  BsFillInfoCircleFill,
-} from "react-icons/bs"
+import { BsPlusCircleFill, BsDashCircleFill, BsFillInfoCircleFill } from "react-icons/bs"
 
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
@@ -40,6 +38,13 @@ function EditMember(props) {
   const fromAdmin = props.fromAdmin ? true : false
   //console.log("props", props, "fromAdmin", fromAdmin, "member:", member)
   const { updateMember } = useStoreContext()
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Contact Don or Cap:
+      <br />
+      To change email!
+    </Tooltip>
+  )
 
   // only called by admin
   const nextMemberId = () => {
@@ -90,9 +95,7 @@ function EditMember(props) {
         props.setMember(theData)
       } else {
         // find the element
-        const i = props.allMembers.findIndex(
-          (m) => m.memberId === props.memberId
-        )
+        const i = props.allMembers.findIndex((m) => m.memberId === props.memberId)
         if (i == -1) {
           // just add it
           props.allMembers.push(theData)
@@ -143,16 +146,7 @@ function EditMember(props) {
     control,
     name: "reminders",
   })
-  console.log(
-    "Member:",
-    props.member,
-    "errors",
-    errors,
-    "dirty",
-    isDirty,
-    "valid",
-    isValid
-  )
+  console.log("Member:", props.member, "errors", errors, "dirty", isDirty, "valid", isValid)
   //console.log("props", fromAdmin, props, "fields", fields)
   register("memberId")
   return (
@@ -163,11 +157,7 @@ function EditMember(props) {
             position: "relative",
           }}
         />
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={!isDirty || !isValid}
-        >
+        <button type="submit" className="btn btn-primary" disabled={!isDirty || !isValid}>
           Submit
         </button>
         {fromAdmin && (
@@ -177,9 +167,7 @@ function EditMember(props) {
         )}
 
         <div className="row mb-1">
-          <label className="col-sm-1 input-group-text col-form-label">
-            Alias
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">Alias</label>
           <div className="p-1 col-sm-2">
             <input
               {...register("alias", {
@@ -200,9 +188,7 @@ function EditMember(props) {
           </div>
           {props.fromAdmin ? (
             <>
-              <label className="col-sm-1 input-group-text col-form-label">
-                Email
-              </label>
+              <label className="col-sm-1 input-group-text col-form-label">Email</label>
               <div className="p-1 col-sm-3">
                 <input
                   {...register("email", {
@@ -226,121 +212,68 @@ function EditMember(props) {
             </>
           ) : (
             <>
-              <label className="col-sm-1 input-group-text col-form-label">
-                Email
-              </label>
+              <label className="col-sm-1 input-group-text col-form-label">Email</label>
               <div className="p-1 col-sm-3">
-                <div className="input-group ">
-                  <span
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    data-bs-custom-class="custom-tooltip"
-                    data-bs-title="Contact Don or Cap:<br />To change email!"
-                    data-bs-html="true"
-                    className="input-group-text"
-                  >
-                    <BsFillInfoCircleFill
-                      size={"1.5em"}
-                      style={{ cursor: "pointer" }}
+                <OverlayTrigger
+                  placement="right"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderTooltip}
+                >
+                  <div className="input-group ">
+                    <span className="input-group-text">
+                      <BsFillInfoCircleFill size={"1.5em"} style={{ cursor: "pointer" }} />
+                    </span>
+
+                    <input
+                      {...register("email")}
+                      placeholder="Email Address"
+                      className="form-control"
+                      disabled
                     />
-                  </span>
-                  <input
-                    {...register("email")}
-                    placeholder="Email Address"
-                    className="form-control"
-                    disabled
-                  />
-                </div>
+                  </div>
+                </OverlayTrigger>
               </div>
             </>
           )}
         </div>
         <div className="row mb-1">
-          <label className="col-sm-1 input-group-text col-form-label">
-            First
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">First</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("first")}
-              placeholder="Enter First Name"
-              className="form-control"
-            />
+            <input {...register("first")} placeholder="Enter First Name" className="form-control" />
           </div>
-          <label className="col-sm-1 input-group-text col-form-label">
-            Last
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">Last</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("last")}
-              placeholder="Enter Last Name"
-              className="form-control"
-            />
+            <input {...register("last")} placeholder="Enter Last Name" className="form-control" />
           </div>
         </div>
         <div className="row mb-1">
-          <label className="col-sm-1 input-group-text col-form-label">
-            Address
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">Address</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("address")}
-              placeholder="Enter Address"
-              className="form-control"
-            />
+            <input {...register("address")} placeholder="Enter Address" className="form-control" />
           </div>
-          <label className="col-sm-1 input-group-text col-form-label">
-            City
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">City</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("city")}
-              placeholder="Enter City"
-              className="form-control"
-            />
+            <input {...register("city")} placeholder="Enter City" className="form-control" />
           </div>
         </div>
         <div className="row mb-1">
-          <label className="col-sm-1 input-group-text col-form-label">
-            State
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">State</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("state")}
-              placeholder="Enter State"
-              className="form-control"
-            />
+            <input {...register("state")} placeholder="Enter State" className="form-control" />
           </div>
-          <label className="col-sm-1 input-group-text col-form-label">
-            Zip
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">Zip</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("zip")}
-              placeholder="Enter Zipcode"
-              className="form-control"
-            />
+            <input {...register("zip")} placeholder="Enter Zipcode" className="form-control" />
           </div>
         </div>
         <div className="row mb-1">
-          <label className="col-sm-1 input-group-text col-form-label">
-            Phone
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">Phone</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("phone")}
-              placeholder="Enter Phone"
-              className="form-control"
-            />
+            <input {...register("phone")} placeholder="Enter Phone" className="form-control" />
           </div>
-          <label className="col-sm-1 input-group-text col-form-label">
-            Cell
-          </label>
+          <label className="col-sm-1 input-group-text col-form-label">Cell</label>
           <div className="p-1 col-sm-2">
-            <input
-              {...register("cell")}
-              placeholder="Enter Cell Phone"
-              className="form-control"
-            />
+            <input {...register("cell")} placeholder="Enter Cell Phone" className="form-control" />
           </div>
         </div>
         {fields.map((field, index) => {
@@ -351,10 +284,7 @@ function EditMember(props) {
               }`}</label>
               <div className="col-sm-3">
                 <div className="input-group">
-                  <select
-                    {...register(`reminders.${index}.value`)}
-                    className="form-control"
-                  >
+                  <select {...register(`reminders.${index}.value`)} className="form-control">
                     {theOptions.map((o, i) => {
                       return (
                         <option key={i} value={o.value}>
@@ -373,11 +303,7 @@ function EditMember(props) {
                       }}
                     >
                       <span className="pe-2">Delete</span>
-                      <BsDashCircleFill
-                        size={"2em"}
-                        color={"red"}
-                        style={{ cursor: "pointer" }}
-                      />
+                      <BsDashCircleFill size={"2em"} color={"red"} style={{ cursor: "pointer" }} />
                     </div>
                   )}
                 </div>
@@ -388,18 +314,12 @@ function EditMember(props) {
         {fields.length < 2 && (
           <div onClick={(e) => append({ value: 7 })}>
             Click to add a second email reminder&nbsp;&nbsp;
-            <BsPlusCircleFill
-              size={"2em"}
-              color={"blue"}
-              style={{ cursor: "pointer" }}
-            />
+            <BsPlusCircleFill size={"2em"} color={"blue"} style={{ cursor: "pointer" }} />
           </div>
         )}
         {fromAdmin && (
           <>
-            <label className="col-sm-2 input-group-text form-check-label">
-              Active
-            </label>
+            <label className="col-sm-2 input-group-text form-check-label">Active</label>
             <div className="px-2 col-sm-3 form-check form-switch">
               <input
                 className="ms-2 mt-2 form-check-input"
@@ -407,9 +327,7 @@ function EditMember(props) {
                 {...register("active")}
               />
             </div>
-            <label className="col-sm-2 input-group-text form-check-label">
-              Guest
-            </label>
+            <label className="col-sm-2 input-group-text form-check-label">Guest</label>
             <div className="px-2 col-sm-3 form-check form-switch">
               <input
                 className="ms-2 mt-2 form-check-input"
