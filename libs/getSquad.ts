@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .project({ squad: 1, _id: 0 })
       .toArray()
 
-    console.log("founda doc", docs[0])
+    // console.log("founda doc", docs[0])
     return { message: "ok", doc: docs[0] }
   } catch (error) {
     res.json("Error: " + error.toString())

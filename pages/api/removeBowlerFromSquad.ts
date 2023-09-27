@@ -23,12 +23,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     
 
     if (dateId && bowlerId) {
-      // get the squad with requested dateId
-      // squad is an object with squad property with our array
-      const squad = await db
-        .collection("dates")
-        .findOne({ dateId }, { projection: { squad: 1, _id: 0 } });
-      let theSquad = squad.squad;
+      
+      let theSquad = dateData.squad;
 
       // remove the one element
       theSquad = theSquad.filter((e) => e.id !== bowlerId);
@@ -57,19 +53,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           emailSent: false,
         });
 
-      // resp = await nodemailerMailgun.sendMail({
-      //   from: "admin@cornerpins.com",
-      //   to: ["fireater1959@gmail.com", "cap.stocks@gmail.com"], // An array if you have multiple recipients.
-      //   subject: `MatchClub Dropout`,
-      //   "h:Reply-To": "fireater1959@gmail.com",
-      //   html: `<html>
-      //    <p>${bowler.alias} dropped out of the ${format(
-      //     dateData.date,
-      //     "MM/dd/yyyy"
-      //   )} match at ${dateData.location}.</p>
-      //   <p>This was done at ${format(dateLocal, "h:mma MM/dd/yyyy")}.</p>
-      //    </html>`,
-      // });
     } else {
       res.json({ message: "no update!" });
     }
