@@ -72,7 +72,7 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
     
     //return
     const scores = []
-    const dateId = values.dateId
+    const dateId = parseInt(values.date)
     const date = dates.find((d) => d.dateId === dateId)
     const match = `${date.host}-${date.guest}`
     const season = date.season
