@@ -49,7 +49,6 @@ interface FromStore {
 }
 function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any; getDates: any }) {
   const { dates, scores, updateScores, getDates } = props
-  const [dateId, setDateId] = useState(dates[0].dateId)
 
   const calcScores = (dateId: number) => {
     let data = scores.find((s: Scores) => s.dateId === dateId)
@@ -117,7 +116,7 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
     formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
     //mode: "onBlur",
-    defaultValues: calcScores(dateId),
+    defaultValues: calcScores(dates[0].dateId),
   })
   const { fields } = useFieldArray({
     name: "squad",
@@ -126,7 +125,7 @@ function EditGames(props: { dates: MCDate[]; scores: Scores[]; updateScores: any
   const handleDateChange = (event) => {
     const val = parseInt(event.target.value)
     const theScores = calcScores(val)
-    setDateId(val)
+    
     setValue("date", val)
     setValue("won", theScores.won)
     setValue("lost", theScores.lost)

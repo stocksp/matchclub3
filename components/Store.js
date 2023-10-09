@@ -195,6 +195,7 @@ function useStore() {
       // TODO maybe just update the local data with what we have ??
       // for now just get all the scores from the server
       await getScores(true)
+      await getTeamStats(true)
       return resp
     } catch (error) {
       console.log("error in call to updateScores", error)
