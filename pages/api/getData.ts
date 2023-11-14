@@ -8,7 +8,6 @@ import getSquads from "libs/getSquads"
 import getClubsLocations from "libs/getClubsLocations"
 import getHighScores from "libs/getHighScores"
 import testMail from "libs/testMail"
-import runMailer from "libs/runMailer"
 import emailExists from "libs/emailExists"
 import getBests from "libs/getBests"
 import userInSquad from "libs/userInSquad"
@@ -65,11 +64,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (data.message == "ok") {
         res.json({ results: data.results })
       } else res.json("Error: " + data.toString())
-    } else if (name === "runMailer") {
-      const data = await runMailer(req, res)
-      if (data.message == "ok") {
-        res.json(data)
-      } else res.json(data)
     } else if (name === "emailExists") {
       const data = await emailExists(req, res)
       res.json({ member: data.member })
