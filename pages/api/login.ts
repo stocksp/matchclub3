@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
     setTokenCookie(res, token);
 
-    res.status(200).send({ done: true, user });
+    res.status(200).send({ done: true, user: {...user, alias: doc.alias, memberId: doc.memberId, role: doc.role ? doc.role : ""} });
   } catch (error) {
     console.log("login error", error.message);
     res.status(error.status || 500).end(error.message);

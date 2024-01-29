@@ -1,16 +1,10 @@
 import React, { useContext, useState, useEffect } from "react"
 import Link from "next/link"
 import Head from "next/head"
-import {
-  Navbar,
-  Nav,
-  NavDropdown,
-  Button,
-  Modal,
-  Form,
-  Container,
-} from "react-bootstrap"
+import { Navbar, Nav, NavDropdown, Button, Modal, Form, Container } from "react-bootstrap"
 
+import { userAtom } from "jotai/user"
+import { useAtom } from "jotai"
 import { useStoreContext } from "./Store"
 import Router from "next/router"
 import { format, addMonths, getDay, getDaysInMonth, startOfDay } from "date-fns"
@@ -30,13 +24,14 @@ const Header = () => {
     currentDate,
     setCurrentDate,
     active,
-    user,
-    doLoggin,
+    // user,
+    //doLoggin,
     highScores,
     dateId,
     dates,
     windowSize,
   } = useStoreContext()
+  const [user, setUser] = useAtom(userAtom)
 
   const today = () => {
     console.log("today")
@@ -48,11 +43,14 @@ const Header = () => {
   const previoustMonth = () => {
     setCurrentDate(addMonths(currentDate, -1))
   }
-  const handleLogin = () => {
-    console.log("handle login")
+
+  const handleLogInOut = async () => {
+    console.log("handle login and logout")
 
     if (user) {
-      doLoggin()
+      await fetch("/api/logout")
+      setUser(null)
+      Router.push("/")
     } else {
       Router.push("/login")
     }
@@ -112,12 +110,9 @@ const Header = () => {
             </Button>
           </span>
         )}
-        <span className="calendarDate">
-          {" "}
-          {format(currentDate, "MMMM yyyy")}{" "}
-        </span>
+        <span className="calendarDate"> {format(currentDate, "MMMM yyyy")} </span>
         <span>
-          <Button variant="primary" onClick={handleLogin}>
+          <Button variant="primary" onClick={handleLogInOut}>
             {user ? user.alias + " (log out)" : "log in"}
           </Button>
         </span>
@@ -141,12 +136,7 @@ const Header = () => {
                   <Nav.Link eventKey="memberStats">MEMBER STATS</Nav.Link>
                 </Link>
                 {user && (
-                  <Link
-                    href="/member/[id]"
-                    as={`/member/${user.memberId}`}
-                    passHref
-                    legacyBehavior
-                  >
+                  <Link href="/member/[id]" as={`/member/${user.memberId}`} passHref legacyBehavior>
                     <Nav.Link eventKey="member">Your Stuff</Nav.Link>
                   </Link>
                 )}

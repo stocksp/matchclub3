@@ -13,6 +13,9 @@ import PersonalBest from "components/personalBest"
 import DayCard from "components/dayCard"
 import EmptyCard from "components/emptyCard"
 import { format, addMonths, getDay, getDaysInMonth, differenceInHours, addHours } from "date-fns"
+import { StartUp } from "jotai/user"
+import { useAtom } from "jotai"
+import { theUserRead } from "jotai/user"
 
 const Index = () => {
   const {
@@ -25,7 +28,6 @@ const Index = () => {
     squad,
     getSquad,
     doSquadAction,
-    user,
     windowSize,
     getHighScores,
     highScores,
@@ -33,7 +35,7 @@ const Index = () => {
   useEffect(() => {
     setActive("0")
   }, [])
-
+  const [user] = useAtom(theUserRead)
   const [dateId, setDateId] = useState(null)
   const [hostAddress, setHostAddress] = useState("")
   const [mapLink, setMapLink] = useState("")
@@ -41,7 +43,7 @@ const Index = () => {
   //const [showLogin, setShowLogin] = useState(false);
   const [isAfter, setIsAfter] = useState(false)
   const [footerText, setFooterText] = useState("")
-  const [isDisabled, setDisabled] = useState(false);
+  const [isDisabled, setDisabled] = useState(false)
 
   const handleClose = () => {
     setHasSquad(false)
@@ -56,7 +58,7 @@ const Index = () => {
     setMapLink("")
   }
   const handleSquadAction = async (action) => {
-    setDisabled(true);
+    setDisabled(true)
     setFooterText("updating ....")
     const resp = await doSquadAction(action, dateSelected, user.memberId, user.alias)
     console.log(resp)
@@ -123,11 +125,12 @@ const Index = () => {
       //console.log(theWeek);
       weeks.push(theWeek)
     }
-    
+
     let doShort = windowSize.width < 950 ? true : false
 
     return (
       <Container>
+        <StartUp />
         <Header />
         <Container
           fluid
@@ -189,7 +192,11 @@ const Index = () => {
                 CLOSE
               </Button>
               {!isAfter && user && (
-                <Button variant="primary" disabled={isDisabled} onClick={() => handleSquadAction(actionStr)} >
+                <Button
+                  variant="primary"
+                  disabled={isDisabled}
+                  onClick={() => handleSquadAction(actionStr)}
+                >
                   {actionStr}
                 </Button>
               )}

@@ -3,9 +3,12 @@ import { useStoreContext } from "../components/Store";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { makeChunks } from "libs/utils";
 import Index from "pages";
+import {theUserRead} from "jotai/user"
+import { useAtom } from 'jotai';
 
 const Squad = (props) => {
-  const { user, hasSquad, squad, dates } = useStoreContext();
+  const [user] = useAtom(theUserRead);
+  const { hasSquad, squad, dates } = useStoreContext();
   const theDate = dates.find((d) => d.dateId === props.date);
 
   const waitingstyle = {

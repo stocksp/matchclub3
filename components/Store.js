@@ -29,7 +29,6 @@ function useStore() {
   const [hasAllMembers, setHasAllMembers] = useState(false)
   const [clubsLocations, setClubsLocations] = useState(null)
   const [highScores, setHighScores] = useState(null)
-  const [user, setUser] = useState(null)
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined,
@@ -40,7 +39,7 @@ function useStore() {
   useEffect(() => {
     getDates()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    checkUser()
+    //checkUser()
     // Handler to call on window resize
     function handleResize() {
       // Set window width/height to state
@@ -57,53 +56,7 @@ function useStore() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const checkUser = async () => {
-    const response = await fetch("/api/user")
-    const theUser = await response.json()
-    //console.log("checkUser", theUser)
-    setUser(theUser.user)
-  }
-
-  const doLoggin = async (email) => {
-    if (user) {
-      setActive("0")
-      console.log("logging out from store doLoggin")
-      await fetch("/api/logout")
-      setUser(null)
-      Router.push("/")
-      return
-    }
-    const body = {
-      email: email,
-    }
-    try {
-      const didToken = await new Magic(
-        process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
-      ).auth.loginWithMagicLink({ email })
-      const authRequest = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + didToken,
-        },
-        body: JSON.stringify(body),
-      })
-      console.log("authRequest", authRequest)
-      if (authRequest.ok) {
-        console.log("we have logged in!")
-        console.log("authRequest", authRequest)
-        // TODO why can't we get the user out of the authRequest response!!
-        // for now just call checkUser ...
-        await checkUser()
-        return true
-      } else {
-        return false
-      }
-    } catch (error) {
-      console.log("doLoggin failed", error)
-      return error
-    }
-  }
+  
   const getDates = async (force = false) => {
     if (!hasDates || force) {
       try {
@@ -494,7 +447,7 @@ function useStore() {
     updateClub,
     getHighScores,
     highScores,
-    user,
+   // user,
     windowSize,
     hasScores,
   }

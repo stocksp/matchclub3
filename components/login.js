@@ -1,25 +1,21 @@
 import React, { useState } from "react"
 import { Form, Button, ButtonToolbar } from "react-bootstrap"
+import { Magic } from "magic-sdk"
 
-import { useStoreContext } from "./Store"
+import { useAtom } from "jotai"
+import { userAtom } from "jotai/user"
 import { useForm } from "react-hook-form"
-import type { SubmitHandler, DefaultValues } from "react-hook-form"
+//import type { SubmitHandler, DefaultValues } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-
 
 import Router from "next/router"
 
-type FormValues = {
-  email: string
-}
-
-const defaultValues: DefaultValues<FormValues> = {
+const defaultValues = {
   email: "",
 }
 
-const Login = (props) => {
-  const { doLoggin } = useStoreContext()
-
+const Login = () => {
+  const [user, setUser] = useAtom(userAtom)
   const handleClose = () => {
     Router.push("/")
   }
@@ -29,10 +25,8 @@ const Login = (props) => {
     getFieldState,
     setError,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
-    defaultValues,
-  })
-  const onSubmit: SubmitHandler<FormValues> = async (data: FormValues) => {
+  } = useForm(defaultValues)
+  const onSubmit = async (data) => {
     const response = await fetch(
       `/api/getData?name=emailExists&email=${encodeURIComponent(data.email.toLowerCase())}`
     )
@@ -41,9 +35,10 @@ const Login = (props) => {
       setError("email", { message: "User Not found!!" }, { shouldFocus: true })
       return
     }
-    const resp = await doLoggin(data.email.toLowerCase())
+    const resp = await login(data.email.toLowerCase())
     console.log(resp)
     if (resp) {
+      setUser(resp.user)
       data.email = ""
       Router.push("/")
       return
@@ -77,6 +72,39 @@ const Login = (props) => {
       </ButtonToolbar>
     </form>
   )
+  async function login(email) {
+    console.log("logging in from user login")
+    const body = {
+      email: email,
+    }
+    
+    try {
+      const didToken = await new Magic(
+        process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
+      ).auth.loginWithMagicLink({ email })
+      const authResponse = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + didToken,
+        },
+        body: JSON.stringify(body),
+      })
+      console.log("authRequest", authResponse)
+      if (authResponse.ok) {
+        console.log("we have logged in!")
+        console.log("authRequest", authResponse)
+        setUser(authResponse.user)
+        return true
+      } else {
+        return false
+      }
+    } catch (error) {
+      console.log("doLoggin failed", error)
+      return error
+    }
+    return
+  }
 }
 
 export default Login

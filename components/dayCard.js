@@ -2,9 +2,11 @@ import { Badge, Card } from "react-bootstrap"
 import { format, getMinutes } from "date-fns"
 import { useState, useEffect } from "react"
 import { useStoreContext } from "components/Store"
+import {theUserRead} from "jotai/user"
+import { useAtom } from 'jotai';
 
 function DayCard(props) {
-  const { user } = useStoreContext()
+  const [user] = useAtom(theUserRead);
 
   const [signedUp, setsignedUp] = useState(false)
   const { host, guest, location, date, hasmeeting } = props.data.date
